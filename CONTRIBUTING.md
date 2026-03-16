@@ -1,39 +1,41 @@
 # Contributing to Cody's Meats
 
-Thanks for your interest in contributing! Here's how you can help.
+Thanks for your interest in contributing recipes!
 
-## Suggesting New Recipes
+## Adding a Recipe
 
-Have a killer jerky recipe? Open an issue with:
+1. Fork this repository
+2. Edit `index.html` and add your recipe to the `R` array in the `<script>` section
+3. Follow the existing format:
+   ```json
+   {
+     "id": 161,
+     "name": "Your Recipe Name",
+     "meat": "Beef",
+     "style": "Classic",
+     "spice": 2,
+     "desc": "Short description of the flavor profile.",
+     "t": 160,
+     "d": "5-7",
+     "m": "8-24 hrs",
+     "i": [
+       ["2 lbs", "Beef top round, sliced 1/4\" thick"],
+       ["1/4 cup", "Soy sauce"]
+     ]
+   }
+   ```
+4. Submit a pull request
 
-- **Recipe name**
-- **Meat type** (Beef, Venison, Turkey, Pork, Fish, Buffalo, or Game)
-- **Flavor style** (Classic, Sweet, Spicy, Sweet & Spicy, BBQ, International, Savory, or Smoked)
-- **Spice level** (1–5)
-- **Brief description**
-- **Key ingredients** (top 5)
-- **Approximate dry time**
+## Recipe Guidelines
 
-## Reporting Bugs
+- Include exact measurements for all ingredients
+- Specify dehydrator temperature in °F
+- Include drying time range in hours
+- Include marinate time
+- Spice scale: 1=Mild, 2=Medium, 3=Hot, 4=Very Hot, 5=Extreme
+- Valid meat types: Beef, Venison, Turkey, Pork, Fish, Buffalo, Game
+- Valid styles: Classic, Sweet, Spicy, Sweet & Spicy, BBQ, International, Savory, Smoked
 
-If something looks off on the site, open an issue with:
+## Bug Reports
 
-- What you expected to happen
-- What actually happened
-- Your browser and device
-- A screenshot if possible
-
-## Pull Requests
-
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/my-recipe`)
-3. Commit your changes (`git commit -m 'Add amazing new recipe'`)
-4. Push to the branch (`git push origin feature/my-recipe`)
-5. Open a Pull Request
-
-## Code Style
-
-- The site is a single `index.html` file — keep it that way for simplicity
-- Use vanilla HTML/CSS/JS — no frameworks or build tools
-- Follow the existing naming conventions in the recipe data array
-- Test on both desktop and mobile before submitting
+Open an issue with details about what's broken and how to reproduce it.

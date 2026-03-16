@@ -6,51 +6,48 @@
 
 **[https://reece323.github.io/codysmeats](https://reece323.github.io/codysmeats)**
 
-## What's Inside
-
-| Stat | Count |
-|------|-------|
-| Total Recipes | 210 |
-| Meat Types | 7 (Beef, Venison, Turkey, Pork, Fish, Buffalo, Game) |
-| Flavor Styles | 8 (Classic, Sweet, Spicy, Sweet & Spicy, BBQ, International, Savory, Smoked) |
-| Spice Levels | 5 (Mild to Extreme) |
-
-### Recipes by Meat Type
-
-- **Beef**: 105 recipes
-- **Pork/Bacon**: 20 recipes
-- **Fish/Seafood**: 20 recipes
-- **Venison**: 18 recipes
-- **Turkey**: 18 recipes
-- **Game** (Elk, Lamb, Goose, Duck, Wild Boar, Alligator, Ostrich): 17 recipes
-- **Buffalo/Bison**: 12 recipes
-
 ## Features
 
-- Full-text search across names, descriptions, ingredients, meat types, and styles
-- Filter by meat type, flavor style, and spice level
-- Every recipe includes exact ingredient measurements
-- Dehydrator temperature and time for every recipe
-- Marinade time recommendations
-- Pro tips for each meat type
-- Mobile responsive dark theme
-- Zero dependencies — single HTML file, no build step
+- **210 recipes** across 7 meat types and 8 flavor styles
+- **Full ingredient lists** with exact measurements for every recipe
+- **Dehydrator temp & time** for every recipe
+- **User accounts** — Sign in with Google or email (Firebase Auth)
+- **Heart favorites** — Click the ❤️ on any recipe to save it
+- **Smart recommendations** — Get suggestions based on your favorites
+- **Share your list** — Copy a link to share favorites with friends
+- **Sync across devices** — Favorites follow you everywhere
+- **Full-text search** across names, descriptions, and ingredients
+- **Filter** by meat type, flavor style, and spice level
+- **Mobile responsive** dark theme
+- **Zero dependencies** — single HTML file, no build step
+
+## Recipes by Meat Type
+
+| Meat | Count |
+|------|-------|
+| Beef | 105 |
+| Pork/Bacon | 20 |
+| Fish/Seafood | 20 |
+| Venison | 18 |
+| Turkey | 18 |
+| Game (Elk, Lamb, Goose, Duck, Wild Boar, Alligator, Ostrich) | 17 |
+| Buffalo/Bison | 12 |
+
+## Setup
+
+This site uses **Firebase** for authentication and favorites storage. See **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** for step-by-step instructions.
 
 ## Tech Stack
 
-Pure HTML, CSS, and vanilla JavaScript. No frameworks, no npm, no build tools. Just one file.
+HTML, CSS, vanilla JavaScript + Firebase (Auth + Firestore). No frameworks, no npm, no build tools.
 
 ## Deployment
 
-Hosted on GitHub Pages with automatic deployment via GitHub Actions.
+Hosted on GitHub Pages. Push to `gh-pages` branch for instant deployment.
 
 ## Shop (Coming Soon)
 
-Small-batch, hand-crafted jerky made in Oklahoma. Sign up for launch notifications on the site.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for recipe submission guidelines.
+Small-batch, hand-crafted jerky made in Oklahoma.
 
 ## License
 

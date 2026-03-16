@@ -2,12 +2,8 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in this project, please report it responsibly.
-
-**Email:** Open a private issue on GitHub or contact the repo owner directly.
-
-Please do not open public issues for security vulnerabilities.
+This is a static HTML site with no backend, database, or user authentication. If you find a security issue (e.g., XSS vulnerability), please open an issue on GitHub.
 
 ## Scope
 
-This is a static HTML site hosted on GitHub Pages. There is no backend, database, or user authentication. The attack surface is minimal, but we still take any reports seriously.
+This project is a single-page static website. There is no server-side code, no API, and no user data collection.
