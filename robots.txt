@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reece323.github.io/codysmeats/sitemap.xml
