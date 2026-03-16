@@ -1,38 +1,61 @@
-# 🥩 Cody's Meats
+# Cody's Meats — The Ultimate Jerky Recipe Collection
 
-**The Ultimate Jerky Recipe Collection**
+🥩 **210+ handcrafted jerky recipes** with full ingredients, dehydrator temps & times.
 
-A sleek, modern website showcasing 120+ handcrafted jerky recipes across 7 meat types and 8 flavor styles.
+## Live Site
 
-🔗 **Live Site:** [https://reece323.github.io/codysmeats](https://reece323.github.io/codysmeats)
+**[https://reece323.github.io/codysmeats](https://reece323.github.io/codysmeats)**
+
+## What's Inside
+
+| Stat | Count |
+|------|-------|
+| Total Recipes | 210 |
+| Meat Types | 7 (Beef, Venison, Turkey, Pork, Fish, Buffalo, Game) |
+| Flavor Styles | 8 (Classic, Sweet, Spicy, Sweet & Spicy, BBQ, International, Savory, Smoked) |
+| Spice Levels | 5 (Mild to Extreme) |
+
+### Recipes by Meat Type
+
+- **Beef**: 105 recipes
+- **Pork/Bacon**: 20 recipes
+- **Fish/Seafood**: 20 recipes
+- **Venison**: 18 recipes
+- **Turkey**: 18 recipes
+- **Game** (Elk, Lamb, Goose, Duck, Wild Boar, Alligator, Ostrich): 17 recipes
+- **Buffalo/Bison**: 12 recipes
 
 ## Features
 
-- **120+ Recipes** — Beef, Venison, Turkey, Pork/Bacon, Fish, Buffalo, and Exotic Game
-- **8 Flavor Styles** — Classic, Sweet, Spicy, Sweet & Spicy, BBQ, International, Savory, Smoked
-- **Spice Ratings** — Every recipe rated 1-5 on the heat scale (Mild → Extreme 💀)
-- **Advanced Filtering** — Search by name, ingredient, meat type, style, or spice level
-- **Recipe Details** — Click any card for ingredients, dry time, pro tips
-- **Shop Page** — Coming soon landing page for future homemade jerky sales
-- **Fully Responsive** — Looks great on desktop, tablet, and mobile
-- **Zero Dependencies** — Pure HTML, CSS, and vanilla JavaScript
+- Full-text search across names, descriptions, ingredients, meat types, and styles
+- Filter by meat type, flavor style, and spice level
+- Every recipe includes exact ingredient measurements
+- Dehydrator temperature and time for every recipe
+- Marinade time recommendations
+- Pro tips for each meat type
+- Mobile responsive dark theme
+- Zero dependencies — single HTML file, no build step
 
-## Meat Types
+## Tech Stack
 
-| Meat | Recipes |
-|------|---------|
-| 🥩 Beef | 74 |
-| 🦌 Venison | 11 |
-| 🦃 Turkey | 8 |
-| 🥓 Pork/Bacon | 8 |
-| 🐟 Fish | 7 |
-| 🦬 Buffalo | 5 |
-| 🎯 Game | 7 |
+Pure HTML, CSS, and vanilla JavaScript. No frameworks, no npm, no build tools. Just one file.
 
 ## Deployment
 
-This site is designed to run on GitHub Pages. Simply enable Pages in your repo settings pointing to the `main` branch root.
+Hosted on GitHub Pages with automatic deployment via GitHub Actions.
+
+## Shop (Coming Soon)
+
+Small-batch, hand-crafted jerky made in Oklahoma. Sign up for launch notifications on the site.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for recipe submission guidelines.
 
 ## License
 
-© Cody's Meats. All rights reserved.
+MIT — see [LICENSE](LICENSE)
+
+---
+
+**Handcrafted in Oklahoma** 🥩
