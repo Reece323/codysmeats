@@ -2,222 +2,404 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Cody's Meats — The Ultimate Jerky Recipe Collection</title>
-<meta name="description" content="210+ handcrafted jerky recipes with full ingredients, dehydrator temps, and times. Save favorites, get recommendations, share lists with friends.">
+<meta name="description" content="210+ handcrafted jerky recipes with full ingredients, dehydrator temps, and times. Save favorites, create your own, share with friends.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f0f0f">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥩</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0f0f0f;--card:rgba(255,255,255,0.04);--card-border:rgba(255,255,255,0.08);--card-hover:rgba(255,255,255,0.08);--text:#fff;--text-dim:rgba(255,255,255,0.55);--text-dimmer:rgba(255,255,255,0.35);--text-dimmest:rgba(255,255,255,0.25);--red:#e8534a;--red-dark:#b4281e;--red-darkest:#8b1a12;--red-glow:rgba(180,40,30,0.08)}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+:root{--bg:#0f0f0f;--card:rgba(255,255,255,0.04);--card-border:rgba(255,255,255,0.08);--card-hover:rgba(255,255,255,0.08);--text:#fff;--text-dim:rgba(255,255,255,0.55);--text-dimmer:rgba(255,255,255,0.35);--text-dimmest:rgba(255,255,255,0.25);--red:#e8534a;--red-dark:#b4281e;--red-darkest:#8b1a12;--red-glow:rgba(180,40,30,0.08);--safe-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:80px}
 ::selection{background:var(--red-dark);color:#fff}
-input::placeholder{color:rgba(255,255,255,0.3)}input:focus{border-color:rgba(255,255,255,0.2)!important;outline:none}
-button{font-family:inherit;cursor:pointer}
+input::placeholder{color:rgba(255,255,255,0.3)}
+input:focus,select:focus,textarea:focus{border-color:rgba(255,255,255,0.25)!important;outline:none}
+select{-webkit-appearance:none;appearance:none}
+button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{-webkit-tap-highlight-color:transparent}
+
+/* === NAV (desktop top bar) === */
 .nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);background:rgba(15,15,15,0.85);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 24px}
-.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
-.nav-logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--red-dark),var(--red-darkest));display:flex;align-items:center;justify-content:center;font-size:18px}
-.nav-logo-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;letter-spacing:-0.02em}
-.nav-links{display:flex;gap:4px;align-items:center}
-.nav-link{background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.5);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.2s}
+.nav-logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--red-dark),var(--red-darkest));display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;letter-spacing:-0.02em}
+.desktop-links{display:flex;gap:4px;align-items:center}
+.nav-link{background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.5);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.2s}
 .nav-link.active{background:rgba(180,40,30,0.2);border-color:rgba(180,40,30,0.4);color:var(--red)}
 .nav-link:hover:not(.active){color:rgba(255,255,255,0.8)}
-.nav-fav-count{background:var(--red-dark);color:#fff;font-size:10px;font-weight:700;border-radius:50%;min-width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;padding:0 5px}
-.auth-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;transition:all 0.2s;display:flex;align-items:center;gap:8px;margin-left:8px}
+.nav-fav-count{background:var(--red-dark);color:#fff;font-size:10px;font-weight:700;border-radius:50%;min-width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;padding:0 4px}
+.auth-area{display:flex;align-items:center;gap:8px}
+.auth-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:500;transition:all 0.2s;display:flex;align-items:center;gap:8px}
 .auth-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
 .auth-btn .avatar{width:24px;height:24px;border-radius:50%;object-fit:cover}
-.auth-btn .user-name{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.auth-dropdown{position:absolute;top:56px;right:0;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:8px;min-width:200px;display:none;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.auth-btn .user-name{max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.auth-dropdown{position:absolute;top:50px;right:0;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:8px;min-width:200px;display:none;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
 .auth-dropdown.open{display:block}
-.auth-dropdown button{width:100%;text-align:left;background:none;border:none;color:rgba(255,255,255,0.7);padding:10px 12px;border-radius:8px;font-size:13px;transition:all 0.2s}
+.auth-dropdown button{width:100%;text-align:left;background:none;border:none;color:rgba(255,255,255,0.7);padding:10px 12px;border-radius:8px;font-size:13px;transition:all 0.15s}
 .auth-dropdown button:hover{background:rgba(255,255,255,0.08);color:#fff}
 .auth-dropdown .user-email{padding:10px 12px;font-size:11px;color:rgba(255,255,255,0.3);font-family:'DM Mono',monospace;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px}
-.hero{background:linear-gradient(180deg,var(--red-glow) 0%,transparent 60%);padding:60px 24px 40px;text-align:center;animation:fadeUp .8s cubic-bezier(.4,0,.2,1) both}
+
+/* === MOBILE BOTTOM TAB BAR === */
+.tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(15,15,15,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:6px 0 calc(6px + var(--safe-bottom));height:calc(64px + var(--safe-bottom))}
+.tab-bar-inner{display:flex;justify-content:space-around;align-items:center;max-width:500px;margin:0 auto}
+.tab-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:rgba(255,255,255,0.4);padding:6px 12px;border-radius:10px;transition:all 0.2s;min-width:60px;position:relative}
+.tab-btn.active{color:var(--red)}
+.tab-btn .tab-icon{font-size:22px;line-height:1}
+.tab-btn .tab-label{font-size:10px;font-weight:600;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.03em}
+.tab-btn .tab-badge{position:absolute;top:2px;right:8px;background:var(--red-dark);color:#fff;font-size:9px;font-weight:700;border-radius:50%;min-width:16px;height:16px;display:none;align-items:center;justify-content:center;padding:0 4px}
+
+/* === HERO === */
+.hero{background:linear-gradient(180deg,var(--red-glow) 0%,transparent 60%);padding:48px 20px 32px;text-align:center;animation:fadeUp .8s cubic-bezier(.4,0,.2,1) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .hero-inner{max-width:800px;margin:0 auto}
-.hero-eyebrow{font-size:13px;font-family:'DM Mono',monospace;color:var(--text-dimmer);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,72px);font-weight:900;margin:0 0 16px;line-height:1;letter-spacing:-.03em}
+.hero-eyebrow{font-size:12px;font-family:'DM Mono',monospace;color:var(--text-dimmer);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,6vw,72px);font-weight:900;margin:0 0 12px;line-height:1;letter-spacing:-.03em}
 .hero h1 .grad{background:linear-gradient(135deg,var(--red),var(--red-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:17px;color:var(--text-dim);max-width:500px;margin:0 auto 32px;line-height:1.6}
-.stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
-.stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;color:var(--red)}
-.stat-label{font-size:11px;font-family:'DM Mono',monospace;color:var(--text-dimmer);text-transform:uppercase;letter-spacing:.1em}
-.filters-wrap{max-width:1400px;margin:0 auto;padding:0 24px 32px}
-.filters{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.hero p{font-size:15px;color:var(--text-dim);max-width:500px;margin:0 auto 24px;line-height:1.6}
+.stats{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.stat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:var(--red)}
+.stat-label{font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dimmer);text-transform:uppercase;letter-spacing:.1em}
+
+/* === FILTERS === */
+.filters-wrap{max-width:1400px;margin:0 auto;padding:0 16px 24px}
+.filters{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .search-wrap{position:relative}
 .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.3;pointer-events:none}
 .search-input{width:100%;padding:12px 16px 12px 40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif}
-.filter-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
-.filter-group{flex:1;min-width:200px}.filter-group.narrow{flex:0;min-width:180px}
-.filter-label{font-size:11px;color:var(--text-dimmer);font-family:'DM Mono',monospace;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em}
+.filter-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.filter-group{flex:1;min-width:160px}.filter-group.narrow{flex:0;min-width:140px}
+.filter-label{font-size:11px;color:var(--text-dimmer);font-family:'DM Mono',monospace;margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
 .filter-btns{display:flex;gap:4px;flex-wrap:wrap}
-.fbtn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all .2s}
-.fbtn:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)}
+.fbtn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.fbtn:hover,.fbtn:active{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)}
 .fbtn.active{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.3);color:#fff}
 .filter-count{font-size:12px;color:var(--text-dimmer);font-family:'DM Mono',monospace}
-.grid-wrap{max-width:1400px;margin:0 auto;padding:0 24px 60px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.empty{text-align:center;padding:60px 20px;display:none}
-.empty-icon{font-size:48px;margin-bottom:16px}
-.empty h3{font-family:'Playfair Display',serif;font-size:24px;color:rgba(255,255,255,0.6)}
-.empty p{color:var(--text-dimmer);font-size:14px}
-.card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:20px;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:10px;min-height:200px;position:relative}
-.card:hover{background:var(--card-hover);transform:translateY(-3px)}
+
+/* === RECIPE GRID === */
+.grid-wrap{max-width:1400px;margin:0 auto;padding:0 16px 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.empty{text-align:center;padding:48px 20px;display:none}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.empty h3{font-family:'Playfair Display',serif;font-size:22px;color:rgba(255,255,255,0.6)}
+.empty p{color:var(--text-dimmer);font-size:13px}
+
+/* === RECIPE CARDS === */
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:8px;min-height:180px;position:relative;-webkit-tap-highlight-color:transparent}
+.card:hover{background:var(--card-hover);transform:translateY(-2px)}
+.card:active{transform:scale(0.98)}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start}
-.card-tags{display:flex;gap:6px;flex-wrap:wrap}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap}
 .tag{border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em}
 .tag-style{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)}
-.card h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;line-height:1.2;padding-right:36px}
+.card h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2;padding-right:36px}
 .card-desc{font-size:13px;color:var(--text-dim);line-height:1.5;flex:1}
 .card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
 .card-time{font-size:11px;color:var(--text-dimmer);font-family:'DM Mono',monospace}
-.card-spice-label{font-size:12px}
 .spice-dots{display:flex;gap:3px;align-items:center}
 .spice-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);transition:background .3s}
-.fav-btn{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .25s;z-index:10;color:rgba(255,255,255,0.25);line-height:1}
-.fav-btn:hover{background:rgba(180,40,30,0.15);border-color:rgba(180,40,30,0.3);transform:scale(1.15)}
+
+/* === HEART BUTTON === */
+.fav-btn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .2s;z-index:10;color:rgba(255,255,255,0.25);line-height:1;-webkit-tap-highlight-color:transparent}
+.fav-btn:active{transform:scale(1.2)}
 .fav-btn.active{color:var(--red);background:rgba(180,40,30,0.15);border-color:rgba(180,40,30,0.3);animation:heartPop .4s cubic-bezier(.17,.67,.35,1.5)}
 @keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+
+/* === MODAL === */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;z-index:1000;padding:0}
 .modal-overlay.open{display:flex}
-.modal{background:#1a1a1a;border-radius:20px;max-width:640px;width:100%;max-height:90vh;overflow:auto;position:relative}
-.modal-head{padding:32px 32px 24px}
-.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}
+.modal{background:#1a1a1a;border-radius:20px 20px 0 0;max-width:640px;width:100%;max-height:92vh;overflow:auto;position:relative;animation:slideUp .3s ease-out}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-head{padding:28px 24px 20px}
+.modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
 .modal-close:hover{background:rgba(255,255,255,0.2)}
-.modal-tags{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.modal-tags{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .modal-tags .tag{padding:3px 10px;font-size:12px}
-.modal h2{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,32px);font-weight:800;margin:0 0 8px}
-.modal-desc{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.6}
-.modal-body{padding:24px 32px 32px;display:flex;flex-direction:column;gap:24px}
-.modal-meta{display:flex;gap:16px;flex-wrap:wrap}
-.meta-box{flex:1;min-width:100px;background:rgba(255,255,255,0.04);border-radius:12px;padding:16px}
+.modal h2{font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,30px);font-weight:800;margin:0 0 8px}
+.modal-desc{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.6}
+.modal-body{padding:20px 24px 32px;display:flex;flex-direction:column;gap:20px}
+.modal-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.meta-box{background:rgba(255,255,255,0.04);border-radius:12px;padding:14px}
 .meta-label{font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Mono',monospace;margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
-.meta-val{font-size:14px;color:#fff;font-weight:600;display:flex;align-items:center;gap:8px}
+.meta-val{font-size:14px;color:#fff;font-weight:600;display:flex;align-items:center;gap:6px}
 .ing-table{width:100%;border-collapse:collapse}
 .ing-table th{text-align:left;font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
 .ing-table td{padding:8px 0;font-size:13px;color:rgba(255,255,255,0.75);border-bottom:1px solid rgba(255,255,255,0.04)}
-.ing-table td:first-child{color:var(--red);font-weight:600;font-family:'DM Mono',monospace;white-space:nowrap;width:120px}
-.pro-tip{border-radius:12px;padding:20px}
-.pro-tip .meta-label{margin-bottom:8px}
+.ing-table td:first-child{color:var(--red);font-weight:600;font-family:'DM Mono',monospace;white-space:nowrap;width:100px}
+.pro-tip{border-radius:12px;padding:16px}
+.pro-tip .meta-label{margin-bottom:6px}
 .pro-tip p{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6}
-.modal-fav-btn{display:flex;align-items:center;gap:8px;background:rgba(180,40,30,0.12);border:1px solid rgba(180,40,30,0.3);color:var(--red);border-radius:10px;padding:12px 20px;font-size:14px;font-weight:600;transition:all .2s;margin-top:8px}
-.modal-fav-btn:hover{background:rgba(180,40,30,0.2)}
+.modal-fav-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(180,40,30,0.12);border:1px solid rgba(180,40,30,0.3);color:var(--red);border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;transition:all .15s;width:100%}
+.modal-fav-btn:active{transform:scale(0.97)}
 .modal-fav-btn.active{background:var(--red-dark);border-color:var(--red-dark);color:#fff}
 .modal-fav-btn .heart{font-size:18px;line-height:1}
-/* Favorites page */
-.fav-page{max-width:1400px;margin:0 auto;padding:40px 24px 60px;display:none}
-.fav-page.visible{display:block}
-.fav-page-header{margin-bottom:32px}
-.fav-page-header h2{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:900;margin:0 0 8px}
-.fav-page-header h2 .grad{background:linear-gradient(135deg,var(--red),var(--red-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.fav-page-header p{color:var(--text-dim);font-size:15px}
-.fav-section{margin-bottom:40px}
-.fav-section-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin:0 0 4px}
-.fav-section-sub{font-size:13px;color:var(--text-dimmer);margin-bottom:16px;font-family:'DM Mono',monospace}
-.share-bar{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
-.share-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;transition:all .2s}
-.share-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
-.share-btn .icon{font-size:16px}
-.login-prompt{text-align:center;padding:60px 20px;background:var(--card);border:1px solid var(--card-border);border-radius:16px}
-.login-prompt .icon{font-size:48px;margin-bottom:16px}
-.login-prompt h3{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px}
-.login-prompt p{color:var(--text-dimmer);margin-bottom:24px;font-size:14px}
+
+/* === FAVORITES PAGE === */
+.page{max-width:1400px;margin:0 auto;padding:32px 16px 40px;display:none}
+.page.visible{display:block}
+.page-header{margin-bottom:24px}
+.page-header h2{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,38px);font-weight:900;margin:0 0 6px}
+.page-header h2 .grad{background:linear-gradient(135deg,var(--red),var(--red-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-header p{color:var(--text-dim);font-size:14px}
+.fav-section{margin-bottom:32px}
+.fav-section-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin:0 0 4px}
+.fav-section-sub{font-size:12px;color:var(--text-dimmer);margin-bottom:12px;font-family:'DM Mono',monospace}
+.share-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.share-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.share-btn:active{transform:scale(0.97)}
+.login-prompt{text-align:center;padding:48px 20px;background:var(--card);border:1px solid var(--card-border);border-radius:14px}
+.login-prompt .icon{font-size:40px;margin-bottom:12px}
+.login-prompt h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px}
+.login-prompt p{color:var(--text-dimmer);margin-bottom:20px;font-size:13px}
 .login-prompt .login-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;color:#fff;border-radius:10px;padding:14px 28px;font-size:15px;font-weight:600;transition:opacity .2s}
-.login-prompt .login-btn:hover{opacity:.9}
 .rec-tag{display:inline-block;background:rgba(232,83,74,0.12);border:1px solid rgba(232,83,74,0.25);color:var(--red);font-size:10px;font-weight:700;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:6px;margin-bottom:4px}
-/* Shared list view */
-.shared-banner{background:linear-gradient(135deg,rgba(180,40,30,0.15),rgba(180,40,30,0.05));border:1px solid rgba(180,40,30,0.2);border-radius:12px;padding:20px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.shared-banner .avatar{width:40px;height:40px;border-radius:50%;background:var(--red-dark);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.shared-banner .info h4{font-family:'Playfair Display',serif;font-size:18px;font-weight:700}
-.shared-banner .info p{font-size:13px;color:var(--text-dim)}
-/* Toast */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:500;z-index:2000;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 32px rgba(0,0,0,0.4);display:flex;align-items:center;gap:8px}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.shop{max-width:800px;margin:0 auto;padding:80px 24px;text-align:center;display:none}
+.shared-banner{background:linear-gradient(135deg,rgba(180,40,30,0.15),rgba(180,40,30,0.05));border:1px solid rgba(180,40,30,0.2);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.shared-banner .avatar{width:36px;height:36px;border-radius:50%;background:var(--red-dark);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.shared-banner .info h4{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
+.shared-banner .info p{font-size:12px;color:var(--text-dim)}
+
+/* === CREATE RECIPE PAGE === */
+.create-page{max-width:640px;margin:0 auto;padding:32px 16px 40px;display:none}
+.create-page.visible{display:block}
+.create-header{margin-bottom:28px}
+.create-header h2{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,38px);font-weight:900;margin:0 0 6px}
+.create-header p{color:var(--text-dim);font-size:14px}
+.form-section{margin-bottom:28px}
+.form-section-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:8px}
+.form-section-title .num{background:var(--red-dark);color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:'DM Mono',monospace}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;color:var(--text-dimmer);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.form-input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;transition:border-color .15s}
+.form-textarea{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:80px;transition:border-color .15s}
+.form-select{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;cursor:pointer}
+.form-select option{background:#1a1a1a;color:#fff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.spice-picker{display:flex;gap:6px}
+.spice-pick{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:rgba(255,255,255,0.4);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.spice-pick.active{border-color:var(--red);color:#fff;background:rgba(180,40,30,0.15)}
+.spice-pick:active{transform:scale(0.93)}
+
+/* Ingredient rows */
+.ing-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.ing-row{display:flex;gap:8px;align-items:center}
+.ing-row .amount{width:100px;flex-shrink:0;padding:12px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:14px;font-family:'DM Mono',monospace;text-align:center}
+.ing-row .ingredient{flex:1;padding:12px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif}
+.ing-row .remove-ing{width:36px;height:36px;border-radius:8px;background:rgba(255,60,60,0.1);border:1px solid rgba(255,60,60,0.2);color:rgba(255,60,60,0.6);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;flex-shrink:0}
+.ing-row .remove-ing:active{transform:scale(0.9)}
+.add-ing-btn{background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);border-radius:10px;padding:12px;font-size:14px;font-weight:500;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.add-ing-btn:active{background:rgba(255,255,255,0.08)}
+
+/* Submit */
+.create-submit{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;color:#fff;border-radius:12px;padding:16px;font-size:16px;font-weight:700;width:100%;transition:opacity .15s;margin-top:8px}
+.create-submit:active{opacity:.85;transform:scale(0.98)}
+.create-submit:disabled{opacity:.4;cursor:not-allowed}
+
+/* Preview card */
+.preview-section{margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.06)}
+.preview-label{font-size:12px;color:var(--text-dimmer);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+
+/* === SHOP === */
+.shop{max-width:800px;margin:0 auto;padding:60px 20px;text-align:center;display:none}
 .shop.visible{display:block}
-.shop h2{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,52px);font-weight:900;margin:0 0 16px;line-height:1.1}
+.shop h2{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,48px);font-weight:900;margin:0 0 12px;line-height:1.1}
 .shop h2 .grad{background:linear-gradient(135deg,var(--red),var(--red-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.shop>p{font-size:18px;color:var(--text-dim);max-width:500px;margin:0 auto 40px;line-height:1.7}
-.coming-soon{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:40px;margin-bottom:32px}
-.coming-soon h3{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin:0 0 12px}
-.coming-soon p{color:rgba(255,255,255,0.45);font-size:15px;line-height:1.7;max-width:400px;margin:0 auto 24px}
+.shop>p{font-size:16px;color:var(--text-dim);max-width:500px;margin:0 auto 32px;line-height:1.7}
+.coming-soon{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:32px 20px;margin-bottom:24px}
+.coming-soon h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin:0 0 10px}
+.coming-soon p{color:rgba(255,255,255,0.45);font-size:14px;line-height:1.7;max-width:400px;margin:0 auto 20px}
 .email-row{display:flex;gap:8px;max-width:400px;margin:0 auto}
 .email-input{flex:1;padding:14px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif}
-.email-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;color:#fff;border-radius:10px;padding:14px 24px;font-size:14px;font-weight:600;white-space:nowrap;transition:opacity .2s}
-.email-btn:hover{opacity:.9}
-.shop-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
-.feature-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:24px;text-align:center}
-.feature-card .icon{font-size:32px;margin-bottom:12px}
-.feature-card h4{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin:0 0 8px}
-.feature-card p{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.5}
-footer{border-top:1px solid rgba(255,255,255,0.06);padding:32px 24px;text-align:center}
-.footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
-.footer-logo-icon{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--red-dark),var(--red-darkest));display:flex;align-items:center;justify-content:center;font-size:12px}
-.footer-logo-text{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
-footer p{font-size:12px;color:var(--text-dimmest);font-family:'DM Mono',monospace}
-/* Auth modal */
-.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:3000;padding:20px}
+.email-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;color:#fff;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;white-space:nowrap;transition:opacity .15s}
+.shop-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.feature-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px;text-align:center}
+.feature-card .icon{font-size:28px;margin-bottom:10px}
+.feature-card h4{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin:0 0 6px}
+.feature-card p{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.5}
+
+/* === FOOTER === */
+footer{border-top:1px solid rgba(255,255,255,0.06);padding:24px 16px;text-align:center}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px}
+.footer-logo-icon{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--red-dark),var(--red-darkest));display:flex;align-items:center;justify-content:center;font-size:11px}
+.footer-logo-text{font-family:'Playfair Display',serif;font-size:15px;font-weight:700}
+footer p{font-size:11px;color:var(--text-dimmest);font-family:'DM Mono',monospace}
+
+/* === AUTH MODAL === */
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;z-index:3000;padding:0}
 .auth-overlay.open{display:flex}
-.auth-modal{background:#1a1a1a;border-radius:20px;max-width:400px;width:100%;padding:40px;text-align:center}
-.auth-modal h3{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;margin:0 0 8px}
-.auth-modal p{color:var(--text-dim);font-size:14px;margin-bottom:28px}
-.auth-modal .google-btn{width:100%;background:#fff;border:none;color:#333;border-radius:10px;padding:14px;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .2s;margin-bottom:12px}
-.auth-modal .google-btn:hover{opacity:.9}
+.auth-modal{background:#1a1a1a;border-radius:20px 20px 0 0;max-width:400px;width:100%;padding:32px 24px calc(32px + var(--safe-bottom));text-align:center;position:relative;animation:slideUp .3s ease-out}
+.auth-modal h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;margin:0 0 6px}
+.auth-modal p{color:var(--text-dim);font-size:13px;margin-bottom:24px}
+.auth-modal .google-btn{width:100%;background:#fff;border:none;color:#333;border-radius:10px;padding:14px;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .15s;margin-bottom:12px}
 .auth-modal .google-btn svg{width:20px;height:20px}
-.auth-modal .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-dimmer);font-size:12px;font-family:'DM Mono',monospace}
+.auth-modal .divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--text-dimmer);font-size:11px;font-family:'DM Mono',monospace}
 .auth-modal .divider::before,.auth-modal .divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .auth-modal .email-form{display:flex;flex-direction:column;gap:10px}
-.auth-modal .email-form input{padding:12px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:14px;font-family:'DM Sans',sans-serif}
-.auth-modal .email-form .submit-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;color:#fff;border-radius:10px;padding:14px;font-size:15px;font-weight:600;transition:opacity .2s}
-.auth-modal .email-form .submit-btn:hover{opacity:.9}
-.auth-modal .close-auth{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.auth-modal .toggle-mode{background:none;border:none;color:var(--red);font-size:13px;margin-top:12px;text-decoration:underline;cursor:pointer}
+.auth-modal .email-form input{padding:14px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:15px;font-family:'DM Sans',sans-serif}
+.auth-modal .email-form .submit-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;color:#fff;border-radius:10px;padding:14px;font-size:15px;font-weight:600}
+.auth-modal .close-auth{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.auth-modal .toggle-mode{background:none;border:none;color:var(--red);font-size:13px;margin-top:10px;cursor:pointer}
 .auth-modal .auth-error{color:#ef4444;font-size:13px;margin-top:8px;display:none}
-@media(max-width:640px){
-.filter-row{flex-direction:column;gap:12px}
+
+/* === TOAST === */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:2000;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 32px rgba(0,0,0,0.4);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* === MOBILE RESPONSIVE === */
+@media(max-width:768px){
+body{padding-bottom:calc(72px + var(--safe-bottom))}
+.tab-bar{display:block}
+.desktop-links{display:none}
+.nav-inner{height:48px}
+.nav-logo-icon{width:28px;height:28px;font-size:14px;border-radius:6px}
+.nav-logo-text{font-size:17px}
+.hero{padding:32px 16px 24px}
+.hero h1{font-size:clamp(28px,8vw,42px)}
+.stats{gap:16px}
+.stat-num{font-size:24px}
+.filter-row{flex-direction:column;gap:10px}
 .filter-group,.filter-group.narrow{min-width:0;flex:auto}
 .grid{grid-template-columns:1fr}
-.stats{gap:20px}
-.modal h2{font-size:24px}
-.modal-head,.modal-body{padding:20px}
-.modal-meta{flex-direction:column;gap:12px}
+.modal{max-height:95vh;border-radius:16px 16px 0 0}
+.modal h2{font-size:22px}
+.modal-head{padding:24px 20px 16px}
+.modal-body{padding:16px 20px 28px}
+.modal-meta{grid-template-columns:1fr 1fr;gap:10px}
+.ing-table td:first-child{width:80px;font-size:12px}
 .email-row{flex-direction:column}
-.nav-logo-text{font-size:18px}
-.ing-table td:first-child{width:90px;font-size:12px}
-.nav-links{gap:2px}
-.nav-link{padding:6px 10px;font-size:11px}
-.auth-btn{padding:6px 10px;font-size:12px}
-.auth-btn .user-name{display:none}
+.auth-modal{max-width:100%;border-radius:16px 16px 0 0}
+.form-row{grid-template-columns:1fr 1fr;gap:10px}
 .share-bar{flex-direction:column}
+.ing-row .amount{width:80px;padding:10px 8px;font-size:13px}
+.ing-row .ingredient{padding:10px 8px;font-size:13px}
+}
+@media(min-width:769px){
+.desktop-links{display:flex}
+.tab-bar{display:none!important}
+body{padding-bottom:0}
+.modal-overlay{align-items:center;padding:20px}
+.modal{border-radius:20px}
+.auth-overlay{align-items:center;padding:20px}
+.auth-modal{border-radius:20px;padding:36px 32px}
 }
 </style>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner"><div class="nav-logo"><div class="nav-logo-icon">&#x1F969;</div><span class="nav-logo-text">CODY'S MEATS</span></div><div class="nav-links"><button class="nav-link active" data-page="recipes">Recipes</button><button class="nav-link" data-page="favorites">&#x2764; Favorites <span class="nav-fav-count" id="nav-fav-count" style="display:none">0</span></button><button class="nav-link" data-page="shop">Shop</button><div style="position:relative"><button class="auth-btn" id="auth-btn" onclick="handleAuthClick()">Sign In</button><div class="auth-dropdown" id="auth-dropdown"><div class="user-email" id="dropdown-email"></div><button onclick="copyShareLink()">&#x1F517; Share My Favorites</button><button onclick="signOut()">&#x1F6AA; Sign Out</button></div></div></div></div></nav>
+<!-- NAV -->
+<nav class="nav"><div class="nav-inner">
+<div class="nav-logo"><div class="nav-logo-icon">&#x1F969;</div><span class="nav-logo-text">CODY'S MEATS</span></div>
+<div class="desktop-links">
+<button class="nav-link active" data-page="recipes">Recipes</button>
+<button class="nav-link" data-page="favorites">&#x2764; Favorites <span class="nav-fav-count" id="nav-fav-count" style="display:none">0</span></button>
+<button class="nav-link" data-page="create">+ Create</button>
+<button class="nav-link" data-page="shop">Shop</button>
+</div>
+<div class="auth-area" style="position:relative">
+<button class="auth-btn" id="auth-btn" onclick="handleAuthClick()">Sign In</button>
+<div class="auth-dropdown" id="auth-dropdown"><div class="user-email" id="dropdown-email"></div><button onclick="copyShareLink()">&#x1F517; Share My Favorites</button><button onclick="signOut()">&#x1F6AA; Sign Out</button></div>
+</div>
+</div></nav>
+
+<!-- MOBILE TAB BAR -->
+<div class="tab-bar"><div class="tab-bar-inner">
+<button class="tab-btn active" data-page="recipes"><span class="tab-icon">&#x1F969;</span><span class="tab-label">Recipes</span></button>
+<button class="tab-btn" data-page="favorites"><span class="tab-icon">&#x2764;&#xFE0F;</span><span class="tab-label">Favorites</span><span class="tab-badge" id="tab-fav-badge">0</span></button>
+<button class="tab-btn" data-page="create"><span class="tab-icon">&#x2795;</span><span class="tab-label">Create</span></button>
+<button class="tab-btn" data-page="shop"><span class="tab-icon">&#x1F6D2;</span><span class="tab-label">Shop</span></button>
+</div></div>
+
+<!-- RECIPES PAGE -->
 <div id="recipes-page">
 <div class="hero"><div class="hero-inner"><div class="hero-eyebrow">The Ultimate Collection</div><h1><span>Jerky </span><span class="grad">Recipes</span></h1><p id="hero-desc"></p><div class="stats" id="hero-stats"></div></div></div>
 <div class="filters-wrap"><div class="filters"><div class="search-wrap"><span class="search-icon">&#x1F50D;</span><input class="search-input" id="search" placeholder="Search recipes, ingredients, styles..." autocomplete="off"></div><div class="filter-row"><div class="filter-group"><div class="filter-label">Meat Type</div><div class="filter-btns" id="meat-filters"></div></div><div class="filter-group"><div class="filter-label">Flavor Style</div><div class="filter-btns" id="style-filters"></div></div><div class="filter-group narrow"><div class="filter-label">Spice Level</div><div class="filter-btns" id="spice-filters"></div></div></div><div class="filter-count" id="filter-count"></div></div></div>
 <div class="grid-wrap"><div class="grid" id="recipe-grid"></div><div class="empty" id="empty-state"><div class="empty-icon">&#x1F937;</div><h3>No recipes found</h3><p>Try adjusting your filters or search terms.</p></div></div>
 </div>
-<div class="fav-page" id="fav-page">
-<div class="fav-page-header"><h2>My <span class="grad">Favorites</span></h2><p id="fav-page-desc">Your saved recipes, synced across all your devices.</p></div>
+
+<!-- FAVORITES PAGE -->
+<div class="page" id="fav-page">
+<div class="page-header"><h2>My <span class="grad">Favorites</span></h2><p id="fav-page-desc">Your saved recipes, synced across all your devices.</p></div>
 <div id="fav-login-prompt" class="login-prompt" style="display:none"><div class="icon">&#x1F512;</div><h3>Sign in to save favorites</h3><p>Your favorites sync across all devices and you can share your list with friends.</p><button class="login-btn" onclick="showAuthModal()">Sign In</button></div>
 <div id="fav-content" style="display:none">
-<div class="share-bar"><button class="share-btn" onclick="copyShareLink()"><span class="icon">&#x1F517;</span> Copy Share Link</button><button class="share-btn" onclick="shareNative()"><span class="icon">&#x1F4E4;</span> Share</button></div>
+<div class="share-bar"><button class="share-btn" onclick="copyShareLink()"><span>&#x1F517;</span> Copy Share Link</button><button class="share-btn" onclick="shareNative()"><span>&#x1F4E4;</span> Share</button></div>
 <div id="fav-recs" class="fav-section" style="display:none"><div class="fav-section-title">&#x2728; Recommended For You</div><div class="fav-section-sub">Based on your favorites</div><div class="grid" id="rec-grid"></div></div>
-<div class="fav-section"><div class="fav-section-title">&#x2764;&#xFE0F; My Saved Recipes</div><div class="fav-section-sub" id="fav-count-label">0 recipes</div><div class="grid" id="fav-grid"></div><div class="empty" id="fav-empty" style="display:none"><div class="empty-icon">&#x1F494;</div><h3>No favorites yet</h3><p>Click the heart on any recipe to save it here.</p></div></div>
+<div class="fav-section"><div class="fav-section-title">&#x2764;&#xFE0F; My Saved Recipes</div><div class="fav-section-sub" id="fav-count-label">0 recipes</div><div class="grid" id="fav-grid"></div><div class="empty" id="fav-empty" style="display:none"><div class="empty-icon">&#x1F494;</div><h3>No favorites yet</h3><p>Tap the heart on any recipe to save it here.</p></div></div>
 </div>
 <div id="shared-view" style="display:none">
 <div class="shared-banner" id="shared-banner"><div class="avatar">&#x1F969;</div><div class="info"><h4 id="shared-name">Someone's Favorites</h4><p id="shared-count">0 recipes</p></div></div>
 <div class="grid" id="shared-grid"></div>
 </div>
 </div>
-<div class="shop" id="shop-page"><div style="font-size:64px;margin-bottom:24px">&#x1F969;</div><h2><span>Cody's </span><span class="grad">Homemade Jerky</span></h2><p>Small-batch, hand-crafted jerky made right here in Oklahoma. Every batch is made with premium cuts and our signature recipes.</p><div class="coming-soon"><div style="font-size:48px;margin-bottom:20px">&#x1F6A7;</div><h3>Coming Soon</h3><p>We're setting up our kitchen and getting all the permits in order. Sign up below to be the first to know when Cody's homemade jerky is available.</p><div class="email-row"><input class="email-input" placeholder="your@email.com"><button class="email-btn" onclick="alert('Thanks! We will notify you when we launch.')">Notify Me</button></div></div><div class="shop-features"><div class="feature-card"><div class="icon">&#x1F525;</div><h4>Small Batch</h4><p>Every bag is made by hand in small batches for maximum quality.</p></div><div class="feature-card"><div class="icon">&#x1F33F;</div><h4>Premium Cuts</h4><p>Only the best cuts of meat make it into our jerky.</p></div><div class="feature-card"><div class="icon">&#x1F4E6;</div><h4>Ships Fresh</h4><p>Vacuum sealed and shipped within 48 hours of production.</p></div></div></div>
+
+<!-- CREATE RECIPE PAGE -->
+<div class="create-page" id="create-page">
+<div class="create-header"><h2><span class="grad">Create</span> Recipe</h2><p>Build your own custom jerky recipe. It'll be saved to your account and show up in your favorites.</p></div>
+<div id="create-login-prompt" class="login-prompt" style="display:none"><div class="icon">&#x270D;&#xFE0F;</div><h3>Sign in to create recipes</h3><p>Your custom recipes are saved to your account and synced across devices.</p><button class="login-btn" onclick="showAuthModal()">Sign In</button></div>
+<div id="create-form" style="display:none">
+
+<div class="form-section">
+<div class="form-section-title"><span class="num">1</span> Basics</div>
+<div class="form-group"><label class="form-label">Recipe Name</label><input class="form-input" id="cr-name" placeholder="e.g. Oklahoma Thunder Jerky" maxlength="60"></div>
+<div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="cr-desc" placeholder="A short description of what makes this recipe special..." maxlength="200"></textarea></div>
+</div>
+
+<div class="form-section">
+<div class="form-section-title"><span class="num">2</span> Category</div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">Meat Type</label><select class="form-select" id="cr-meat"><option value="">Select...</option><option>Beef</option><option>Venison</option><option>Turkey</option><option>Pork</option><option>Fish</option><option>Buffalo</option><option>Game</option></select></div>
+<div class="form-group"><label class="form-label">Flavor Style</label><select class="form-select" id="cr-style"><option value="">Select...</option><option>Classic</option><option>Sweet</option><option>Spicy</option><option>Sweet &amp; Spicy</option><option>BBQ</option><option>International</option><option>Savory</option><option>Smoked</option></select></div>
+</div>
+<div class="form-group"><label class="form-label">Spice Level</label>
+<div class="spice-picker" id="cr-spice-picker">
+<button class="spice-pick" data-spice="1" onclick="pickSpice(1)"><span>1</span></button>
+<button class="spice-pick" data-spice="2" onclick="pickSpice(2)"><span>2</span></button>
+<button class="spice-pick" data-spice="3" onclick="pickSpice(3)"><span>3</span></button>
+<button class="spice-pick" data-spice="4" onclick="pickSpice(4)"><span>4</span></button>
+<button class="spice-pick" data-spice="5" onclick="pickSpice(5)"><span>5</span></button>
+</div>
+<div style="margin-top:6px;font-size:12px;color:var(--text-dimmer);font-family:'DM Mono',monospace" id="cr-spice-label">Tap to select: 1=Mild &#x1F336; &nbsp; 2=Medium &#x1F336;&#x1F336; &nbsp; 3=Hot &#x1F525; &nbsp; 4=Very Hot &#x1F525;&#x1F525; &nbsp; 5=Extreme &#x1F480;</div>
+</div>
+</div>
+
+<div class="form-section">
+<div class="form-section-title"><span class="num">3</span> Dehydrator Settings</div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">Temperature (&#x00b0;F)</label><input class="form-input" id="cr-temp" type="number" placeholder="e.g. 160" min="100" max="300"></div>
+<div class="form-group"><label class="form-label">Dry Time (hours)</label><input class="form-input" id="cr-time" placeholder="e.g. 4-6"></div>
+</div>
+<div class="form-group"><label class="form-label">Marinate Time</label><input class="form-input" id="cr-marinate" placeholder="e.g. 12-24 hrs"></div>
+</div>
+
+<div class="form-section">
+<div class="form-section-title"><span class="num">4</span> Ingredients</div>
+<div class="ing-rows" id="cr-ingredients">
+<div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">&#x2715;</button></div>
+<div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">&#x2715;</button></div>
+<div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">&#x2715;</button></div>
+</div>
+<button class="add-ing-btn" onclick="addIngRow()">+ Add Ingredient</button>
+</div>
+
+<button class="create-submit" id="cr-submit" onclick="submitRecipe()">&#x1F969; Save Recipe</button>
+<div id="cr-error" style="color:#ef4444;font-size:13px;text-align:center;margin-top:10px;display:none"></div>
+
+<div class="preview-section" id="cr-preview" style="display:none">
+<div class="preview-label">&#x1F440; Preview</div>
+<div id="cr-preview-card"></div>
+</div>
+</div>
+</div>
+
+<!-- SHOP PAGE -->
+<div class="shop" id="shop-page"><div style="font-size:52px;margin-bottom:20px">&#x1F969;</div><h2><span>Cody's </span><span class="grad">Homemade Jerky</span></h2><p>Small-batch, hand-crafted jerky made right here in Oklahoma. Every batch is made with premium cuts and our signature recipes.</p><div class="coming-soon"><div style="font-size:40px;margin-bottom:16px">&#x1F6A7;</div><h3>Coming Soon</h3><p>We're setting up our kitchen and getting all the permits in order. Sign up below to be the first to know when Cody's homemade jerky is available.</p><div class="email-row"><input class="email-input" placeholder="your@email.com"><button class="email-btn" onclick="alert('Thanks! We will notify you when we launch.')">Notify Me</button></div></div><div class="shop-features"><div class="feature-card"><div class="icon">&#x1F525;</div><h4>Small Batch</h4><p>Every bag is made by hand in small batches.</p></div><div class="feature-card"><div class="icon">&#x1F33F;</div><h4>Premium Cuts</h4><p>Only the best cuts make it into our jerky.</p></div><div class="feature-card"><div class="icon">&#x1F4E6;</div><h4>Ships Fresh</h4><p>Vacuum sealed, shipped within 48 hours.</p></div></div></div>
+
 <footer><div class="footer-logo"><div class="footer-logo-icon">&#x1F969;</div><span class="footer-logo-text">CODY'S MEATS</span></div><p>Handcrafted in Oklahoma &middot; <span id="footer-count"></span> recipes and counting</p></footer>
+
+<!-- OVERLAYS -->
 <div class="modal-overlay" id="modal-overlay"><div class="modal" id="modal"></div></div>
-<div class="auth-overlay" id="auth-overlay"><div class="auth-modal" style="position:relative"><button class="close-auth" onclick="hideAuthModal()">&#x2715;</button><h3>&#x1F969; Welcome</h3><p>Sign in to save favorites and share with friends</p><button class="google-btn" onclick="signInWithGoogle()"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button><div class="divider">or</div><div class="email-form" id="email-form"><input type="email" id="auth-email" placeholder="Email address"><input type="password" id="auth-password" placeholder="Password"><button class="submit-btn" id="auth-submit" onclick="emailAuth()">Sign In</button><button class="toggle-mode" id="auth-toggle" onclick="toggleAuthMode()">Need an account? Sign up</button><div class="auth-error" id="auth-error"></div></div></div></div>
+<div class="auth-overlay" id="auth-overlay"><div class="auth-modal" style="position:relative"><button class="close-auth" onclick="hideAuthModal()">&#x2715;</button><h3>&#x1F969; Welcome</h3><p>Sign in to save favorites and create recipes</p><button class="google-btn" onclick="signInWithGoogle()"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button><div class="divider">or</div><div class="email-form" id="email-form"><input type="email" id="auth-email" placeholder="Email address"><input type="password" id="auth-password" placeholder="Password"><button class="submit-btn" id="auth-submit" onclick="emailAuth()">Sign In</button><button class="toggle-mode" id="auth-toggle" onclick="toggleAuthMode()">Need an account? Sign up</button><div class="auth-error" id="auth-error"></div></div></div></div>
 <div class="toast" id="toast"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -242,7 +424,6 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 </script>
 <script>
-// Recipe data
 const R=[{"id":1,"name":"Old School Original","meat":"Beef","style":"Classic","spice":1,"desc":"Traditional soy and Worcestershire base with garlic and onion. The timeless jerky that started it all.","t":165,"d":"4-6","m":"4-24 hrs","i":[["1 lb","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Soy sauce"],["1/3 cup","Worcestershire sauce"],["2 tbsp","Brown sugar"],["1 1/4 tsp","Garlic powder"],["1 1/4 tsp","Onion powder"],["2 1/3 tsp","Black pepper"],["1 tsp","Liquid mesquite smoke"]]},{"id":2,"name":"Best Ever Classic","meat":"Beef","style":"Classic","spice":1,"desc":"Brown sugar meets smoked paprika for sweet-savory balance. Uses meat tenderizer for soft chew.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/8\" thick"],["1/3 cup","Soy sauce"],["1/3 cup","Worcestershire sauce"],["1/3 cup","Brown sugar"],["1 tbsp","Smoked paprika"],["1 tsp","Meat tenderizer"],["1 tsp","Black pepper"],["1 tsp","Red pepper flakes"],["1 tsp","Onion powder"],["1 tsp","Garlic powder"]]},{"id":3,"name":"Alton Brown Classic","meat":"Beef","style":"Classic","spice":2,"desc":"The Good Eats legend's recipe. Worcestershire, soy, honey, and liquid smoke.","t":160,"d":"6-8","m":"3-6 hrs","i":[["1.5 lbs","Flank steak, sliced 1/8\" thick"],["2/3 cup","Worcestershire sauce"],["2/3 cup","Soy sauce"],["1 tbsp","Honey"],["2 tsp","Black pepper"],["2 tsp","Onion powder"],["1 tsp","Liquid smoke"],["1 tsp","Red pepper flakes"]]},{"id":4,"name":"Garlic Pepper","meat":"Beef","style":"Classic","spice":2,"desc":"Heavy on garlic and freshly cracked pepper. Bold and savory in every bite.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["6 cloves","Fresh garlic, minced"],["1 tbsp","Cracked black pepper"],["1 tsp","Onion powder"],["1 tbsp","Olive oil"]]},{"id":5,"name":"Cowboy Style","meat":"Beef","style":"Classic","spice":2,"desc":"Rugged, smoky, salt-forward. The kind of jerky you'd find on a cattle drive.","t":165,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Soy sauce"],["2 tbsp","Liquid smoke"],["1 tbsp","Sea salt"],["1 tbsp","Cracked pepper"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["1/2 tsp","Cayenne"]]},{"id":6,"name":"Simple Salt & Pepper","meat":"Beef","style":"Classic","spice":1,"desc":"Just two seasonings done right. Lets the beef flavor truly shine.","t":160,"d":"4-6","m":"2-6 hrs","i":[["2 lbs","Beef eye of round, sliced 1/8\" thick"],["2 tsp","Coarse sea salt"],["2 tsp","Cracked black pepper"]]},{"id":7,"name":"Savory No-Sugar","meat":"Beef","style":"Classic","spice":2,"desc":"Zero sweeteners \u2014 pure soy, Worcestershire, pepper, and garlic. Pure savory beef.","t":160,"d":"5-7","m":"4-24 hrs","i":[["2 lbs","Flank steak, sliced 1/8\" thick"],["1/2 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["2 tsp","Black pepper"],["1 tsp","Liquid smoke"],["1 tsp","Onion powder"],["1 tsp","Seasoned salt"],["1 tsp","Garlic powder"]]},{"id":8,"name":"Garlic Mustard","meat":"Beef","style":"Classic","spice":2,"desc":"Tangy whole grain mustard meets roasted garlic. Surprisingly addictive.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["3 tbsp","Whole grain mustard"],["1/4 cup","Soy sauce"],["2 tbsp","Honey"],["4 cloves","Roasted garlic, mashed"],["1 tsp","Black pepper"]]},{"id":9,"name":"Smoky Mountain","meat":"Beef","style":"Classic","spice":1,"desc":"Double smoke from hickory liquid smoke and smoked salt. A campfire in every bite.","t":165,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Soy sauce"],["2 tsp","Hickory liquid smoke"],["1 tsp","Smoked salt"],["2 tbsp","Brown sugar"],["1 tsp","Smoked paprika"],["1 tsp","Garlic powder"]]},{"id":10,"name":"Competition Style","meat":"Beef","style":"Classic","spice":2,"desc":"Award-winning blend with curing salt for classic red jerky color and flavor.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/8\" thick"],["1/2 cup","Soy sauce"],["1/4 cup","Brown sugar"],["2 tbsp","Worcestershire sauce"],["1 tsp","Curing salt (Prague #1)"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["1/2 tsp","Cayenne"],["2 tsp","Black pepper"]]},{"id":11,"name":"Rosemary Garlic","meat":"Beef","style":"Classic","spice":1,"desc":"Fresh rosemary and garlic with lemon zest. Steakhouse quality in jerky form.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Olive oil"],["2 tbsp","Fresh rosemary, minced"],["4 cloves","Garlic, minced"],["1 tsp","Lemon zest"],["1 tsp","Black pepper"]]},{"id":12,"name":"Montreal Steak Spice","meat":"Beef","style":"Classic","spice":2,"desc":"Classic Canadian steak seasoning \u2014 cracked pepper, coriander, dill, garlic.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Montreal steak seasoning"],["1 tbsp","Worcestershire sauce"],["1 tsp","Liquid smoke"]]},{"id":13,"name":"Balsamic Herb","meat":"Beef","style":"Classic","spice":1,"desc":"Aged balsamic vinegar with Italian herbs. Refined and tangy.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Balsamic vinegar"],["1/4 cup","Soy sauce"],["2 tbsp","Olive oil"],["1 tbsp","Italian herb blend"],["1 tsp","Garlic powder"],["1 tsp","Black pepper"]]},{"id":14,"name":"Homestyle Comfort","meat":"Beef","style":"Classic","spice":1,"desc":"Simple pantry staples for nostalgic jerky that tastes like grandma's kitchen.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["2 tbsp","Brown sugar"],["2 tbsp","Liquid smoke"],["2 tsp","Salt"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["1 tsp","Smoked paprika"]]},{"id":15,"name":"Organic Pure Beef","meat":"Beef","style":"Classic","spice":1,"desc":"Grass-fed beef with organic seasonings for the health-conscious jerky lover.","t":155,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Grass-fed beef, sliced 1/4\" thick"],["1/4 cup","Organic tamari"],["1 tbsp","Organic garlic powder"],["1 tsp","Sea salt"],["1 tsp","Black pepper"],["1 tsp","Organic onion powder"]]},{"id":16,"name":"Brown Sugar Bourbon","meat":"Beef","style":"Sweet","spice":1,"desc":"Rich bourbon with deep caramelized brown sugar. Smooth, sweet, irresistible.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Bourbon whiskey"],["1/4 cup","Soy sauce"],["1/4 cup","Brown sugar"],["2 tbsp","Worcestershire sauce"],["1 tbsp","Molasses"],["1 tsp","Vanilla extract"],["1 tsp","Black pepper"]]},{"id":17,"name":"Pure Maple Syrup","meat":"Beef","style":"Sweet","spice":1,"desc":"Real maple syrup and molasses create caramelly, smoky sweetness.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/3 cup","Pure maple syrup"],["1/4 cup","Soy sauce"],["1 tbsp","Molasses"],["1 tsp","Liquid smoke"],["1 tsp","Black pepper"]]},{"id":18,"name":"Honey Glazed","meat":"Beef","style":"Sweet","spice":1,"desc":"Golden wildflower honey creates a beautiful glaze and tender chew.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Wildflower honey"],["1/4 cup","Soy sauce"],["1 tbsp","Sesame oil"],["1 tsp","Ginger powder"],["1 tsp","Garlic powder"]]},{"id":19,"name":"Teriyaki Classic","meat":"Beef","style":"Sweet","spice":1,"desc":"Sweet and tangy homemade teriyaki with ginger and sesame. World's most popular jerky flavor.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 cup","Soy sauce"],["1/2 cup","Brown sugar"],["1/4 cup","Rice wine vinegar"],["1 inch","Fresh ginger, grated"],["4 cloves","Garlic, minced"],["1 tbsp","Sesame oil"],["1 tbsp","Sesame seeds"]]},{"id":20,"name":"Kikkoman Teriyaki","meat":"Beef","style":"Sweet","spice":1,"desc":"Iconic Kikkoman teriyaki as base for quick, consistently delicious jerky.","t":160,"d":"5-7","m":"6-24 hrs","i":[["1 lb","Beef bottom round, sliced 1/4\" thick"],["1/2 cup","Kikkoman teriyaki marinade"],["2 tbsp","Honey"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"]]},{"id":21,"name":"Pineapple Teriyaki","meat":"Beef","style":"Sweet","spice":1,"desc":"Tropical pineapple juice adds sweetness and tenderizes beautifully.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Pineapple juice"],["1/4 cup","Teriyaki sauce"],["2 tbsp","Brown sugar"],["1 tsp","Ginger powder"],["1 tsp","Garlic powder"]]},{"id":22,"name":"Jack & Coke","meat":"Beef","style":"Sweet","spice":1,"desc":"Whiskey and cola reduced to a glaze. Uniquely addictive.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 cup","Jack Daniels whiskey"],["2 cans","Coca-Cola (simmer to reduce by half)"],["2 tbsp","Brown sugar"],["1 tsp","Black pepper"],["1 tsp","Salt"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"]]},{"id":23,"name":"Root Beer Float","meat":"Beef","style":"Sweet","spice":1,"desc":"Root beer reduction creates nostalgic, creamy-sweet flavor.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 cups","Root beer (reduced to half)"],["1 tsp","Vanilla extract"],["2 tbsp","Brown sugar"],["1/4 cup","Soy sauce"],["1 tsp","Liquid smoke"]]},{"id":24,"name":"Kentucky Bourbon","meat":"Beef","style":"Sweet","spice":1,"desc":"Real Kentucky bourbon with Worcestershire and molasses. Southern gentleman's jerky.","t":160,"d":"5-7","m":"12-24 hrs","i":[["1 lb","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Kentucky bourbon"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tbsp","Molasses"],["1 tsp","Brown sugar"],["1 tsp","Black pepper"]]},{"id":25,"name":"IPA Craft Beer","meat":"Beef","style":"Sweet","spice":1,"desc":"Hoppy IPA marinade with brown sugar and citrus zest. Craft beer dream jerky.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1 cup","IPA beer"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Orange zest"],["1 tsp","Garlic powder"],["1 tsp","Black pepper"]]},{"id":26,"name":"Red Wine Rosemary","meat":"Beef","style":"Sweet","spice":1,"desc":"Cabernet reduction with fresh rosemary. Elegant and complex.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 cup","Cabernet (reduce to half)"],["2 tbsp","Olive oil"],["1 tbsp","Fresh rosemary, minced"],["1 tsp","Salt"],["1 tsp","Black pepper"],["2 cloves","Garlic, minced"]]},{"id":27,"name":"Coca-Cola Glaze","meat":"Beef","style":"Sweet","spice":1,"desc":"Reduced Coca-Cola creates incredible sticky-sweet marinade with depth.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 cups","Coca-Cola (reduced to half)"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["1 tbsp","Worcestershire sauce"]]},{"id":28,"name":"Candied Meat","meat":"Beef","style":"Sweet","spice":1,"desc":"Brown sugar and maple syrup create meat candy. Dangerously addictive.","t":155,"d":"6-8","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Brown sugar"],["1/4 cup","Maple syrup"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"],["1 tsp","Smoked paprika"]]},{"id":29,"name":"Brisket Teriyaki","meat":"Beef","style":"Sweet","spice":1,"desc":"Brisket in rich teriyaki with molasses and sesame. Melt-in-your-mouth tender.","t":160,"d":"6-8","m":"24 hrs","i":[["2 lbs","Beef brisket, sliced 1/4\" thick"],["1/4 cup","Worcestershire sauce"],["1/4 cup","Soy sauce"],["1/4 cup","Teriyaki sauce"],["1 tbsp","Liquid smoke"],["1 tbsp","Molasses"],["2 tbsp","Brown sugar"],["1 tbsp","Sesame seeds"]]},{"id":30,"name":"Triple Sweet","meat":"Beef","style":"Sweet","spice":1,"desc":"Three sweeteners \u2014 honey, maple, and brown sugar \u2014 with a whisper of cayenne.","t":155,"d":"6-8","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 tbsp","Honey"],["2 tbsp","Maple syrup"],["2 tbsp","Brown sugar"],["1/4 cup","Soy sauce"],["1/2 tsp","Cayenne"],["1 tsp","Garlic powder"]]},{"id":31,"name":"Carolina Reaper Inferno","meat":"Beef","style":"Spicy","spice":5,"desc":"World's former hottest pepper. Face-melting heat. Only for the truly brave.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1","Carolina Reaper pepper, minced"],["1/2 cup","Soy sauce"],["2 tbsp","Brown sugar"],["4 cloves","Garlic, minced"],["2 tbsp","White vinegar"],["1 tsp","Salt"]]},{"id":32,"name":"Ghost Pepper Extreme","meat":"Beef","style":"Spicy","spice":5,"desc":"Bhut Jolokia brings slow-building, relentless heat that lingers for minutes.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1","Ghost pepper, seeded & minced"],["1/2 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"]]},{"id":33,"name":"Habanero Tabasco","meat":"Beef","style":"Spicy","spice":4,"desc":"Habanero Tabasco delivers bright, fruity heat with vinegar tang.","t":160,"d":"4-6","m":"8-24 hrs","i":[["1 lb","Beef top round, sliced 1/4\" thick"],["3 tbsp","Habanero Tabasco"],["2 tbsp","Worcestershire sauce"],["1 tsp","Smoked paprika"],["1 tsp","Garlic powder"],["1 tsp","Salt"]]},{"id":34,"name":"Dr. Pepper Jalapeno","meat":"Beef","style":"Spicy","spice":3,"desc":"Sweet Dr. Pepper meets fresh jalapeno. An adventure in every bite.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 cups","Dr. Pepper (reduce to half)"],["2","Fresh jalapenos, sliced with seeds"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"],["1 tsp","Salt"]]},{"id":35,"name":"Sriracha Fire","meat":"Beef","style":"Spicy","spice":3,"desc":"Thai Sriracha brings garlic-forward heat with sesame oil richness.","t":160,"d":"4-6","m":"4-12 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Sriracha sauce"],["1/4 cup","Soy sauce"],["1 tbsp","Sesame oil"],["4 cloves","Garlic, minced"],["2 tbsp","Cilantro, chopped"]]},{"id":36,"name":"Cholula Chipotle","meat":"Beef","style":"Spicy","spice":3,"desc":"Smoky chipotle meets tangy Cholula hot sauce.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["3 tbsp","Cholula hot sauce"],["1 tbsp","Chipotle powder"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"]]},{"id":37,"name":"Cayenne Hellfire","meat":"Beef","style":"Spicy","spice":4,"desc":"Pure cayenne heat. Unapologetic and intense.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 tbsp","Cayenne pepper"],["1 tbsp","Red pepper flakes"],["1/2 cup","Soy sauce"],["2 cloves","Garlic, minced"],["2 tbsp","White vinegar"]]},{"id":38,"name":"Pineapple Jalapeno","meat":"Beef","style":"Spicy","spice":3,"desc":"Tropical pineapple balances the jalapeno kick perfectly.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Pineapple juice"],["2","Jalapenos, sliced"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Ginger powder"]]},{"id":39,"name":"Frank's RedHot Buffalo","meat":"Beef","style":"Spicy","spice":3,"desc":"Classic buffalo wing flavor. Perfect game day snack.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Frank's RedHot sauce"],["2 tbsp","Melted butter"],["1 tsp","Garlic powder"],["1 tsp","Celery salt"]]},{"id":40,"name":"Nashville Hot","meat":"Beef","style":"Spicy","spice":4,"desc":"Inspired by Nashville hot chicken. Cayenne, paprika, brown sugar sweet heat.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["3 tbsp","Cayenne pepper"],["2 tbsp","Paprika"],["2 tbsp","Brown sugar"],["1 tbsp","Garlic powder"],["1/4 cup","Soy sauce"],["2 tbsp","Hot sauce"]]},{"id":41,"name":"Spicy Teriyaki","meat":"Beef","style":"Spicy","spice":3,"desc":"Sweet teriyaki with mirin, jalapeno, and red pepper.","t":160,"d":"4-6","m":"4-12 hrs","i":[["1 lb","Beef top round, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Sugar"],["2 tbsp","Mirin rice wine"],["1/2 tsp","Red pepper flakes"],["1 tsp","Ginger, grated"],["2 cloves","Garlic, minced"],["1","Jalapeno, sliced"]]},{"id":42,"name":"Scorpion Pepper","meat":"Beef","style":"Spicy","spice":5,"desc":"Trinidad Moruga Scorpion \u2014 one of the hottest on earth.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1","Scorpion pepper, minced"],["1/2 cup","Soy sauce"],["2 tbsp","Brown sugar"],["2 tbsp","Lime juice"],["1 tsp","Garlic powder"]]},{"id":43,"name":"Cajun Blackened","meat":"Beef","style":"Spicy","spice":3,"desc":"Louisiana Cajun blackening spice with a bold, peppery kick.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["3 tbsp","Cajun seasoning"],["1 tsp","Cayenne"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"],["1 tsp","Paprika"]]},{"id":44,"name":"Tequila Lime Habanero","meat":"Beef","style":"Spicy","spice":4,"desc":"Tequila and fresh lime with habanero heat. A fiesta in every strip.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Tequila"],["3 tbsp","Fresh lime juice"],["1","Habanero, minced"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Cumin"]]},{"id":45,"name":"Serrano Pineapple Tequila","meat":"Beef","style":"Spicy","spice":3,"desc":"Fresh serrano, pineapple, and top-shelf tequila.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Tequila"],["1/2 cup","Pineapple juice"],["2","Serrano peppers, sliced"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"]]},{"id":46,"name":"Sweet & Spicy Habanero","meat":"Beef","style":"Sweet & Spicy","spice":4,"desc":"Brown sugar and habanero create addictive sweet-heat.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2","Habanero peppers, minced"],["1/2 cup","Brown sugar"],["1/2 cup","Soy sauce"],["1 tbsp","Crushed red pepper"],["1 tsp","Garlic powder"],["1 tsp","Liquid smoke"]]},{"id":47,"name":"Honey Peppered","meat":"Beef","style":"Sweet & Spicy","spice":2,"desc":"Honey sweetness with cayenne and lemon juice.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Honey"],["1/4 cup","Soy sauce"],["1 tsp","Cayenne"],["2 tbsp","Lemon juice"],["2 cloves","Garlic, minced"]]},{"id":48,"name":"Teriyaki Sweet Hot","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Bold teriyaki meets Cholula heat. Perfectly balanced.","t":160,"d":"5-7","m":"24-48 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Teriyaki sauce"],["3 tbsp","Cholula hot sauce"],["1 tsp","Liquid smoke"],["1 tsp","Garlic powder"],["1/2 tsp","Red pepper flakes"]]},{"id":49,"name":"Mango Habanero","meat":"Beef","style":"Sweet & Spicy","spice":4,"desc":"Tropical mango puree tames habanero fury.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Mango puree"],["1","Habanero, minced"],["2 tbsp","Lime juice"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":50,"name":"Hot Honey","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Trending hot honey flavor. Sweet, sticky, and spicy.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Honey"],["2 tsp","Cayenne"],["1 tbsp","Red pepper flakes"],["2 tbsp","Apple cider vinegar"],["1/4 cup","Soy sauce"]]},{"id":51,"name":"Peanut Butter Sriracha","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Creamy peanut butter meets Sriracha. Asian-fusion masterpiece.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["3 tbsp","Peanut butter"],["3 tbsp","Sriracha"],["1/4 cup","Soy sauce"],["2 tbsp","Honey"],["1 tbsp","Lime juice"]]},{"id":52,"name":"Cherry Chipotle","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Tart cherry preserves meet smoky chipotle.","t":160,"d":"6-8","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Cherry preserves"],["2","Chipotle in adobo, chopped"],["1/4 cup","Soy sauce"],["2 cloves","Garlic, minced"],["1 tbsp","Lime juice"]]},{"id":53,"name":"Peach Habanero","meat":"Beef","style":"Sweet & Spicy","spice":4,"desc":"Georgia peach clashes beautifully with Caribbean habanero fire.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Peach preserves"],["1","Habanero, minced"],["2 tbsp","Apple cider vinegar"],["1/4 cup","Soy sauce"],["1 tsp","Ginger"]]},{"id":54,"name":"Bourbon Cinnamon Fire","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Bourbon with warm cinnamon and spicy finish. Fireball in jerky form.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Bourbon"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Cinnamon"],["1 tsp","Cayenne"]]},{"id":55,"name":"Spicy Maple","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Pure maple with red pepper flake kick.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/3 cup","Maple syrup"],["1/4 cup","Soy sauce"],["1 tbsp","Red pepper flakes"],["1 tsp","Garlic powder"]]},{"id":56,"name":"Thai Sweet Chili","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Thai sweet chili sauce creates sticky, tangy glaze with gentle heat.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Thai sweet chili sauce"],["2 tbsp","Soy sauce"],["1 tbsp","Rice vinegar"],["1 tsp","Ginger powder"]]},{"id":57,"name":"Blackberry Habanero","meat":"Beef","style":"Sweet & Spicy","spice":4,"desc":"Wild blackberry jam and fresh habanero. Beautiful sweet-hot combo.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Blackberry jam"],["1","Habanero, minced"],["1/4 cup","Soy sauce"],["1 tbsp","Balsamic vinegar"]]},{"id":58,"name":"Smokey Sweet Mustard","meat":"Beef","style":"Sweet & Spicy","spice":2,"desc":"Maple and mustard create tangy-sweet magic.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["3 tbsp","Whole grain mustard"],["1/4 cup","Maple syrup"],["1 tsp","Liquid smoke"],["1/2 tsp","Cayenne"],["1/4 cup","Soy sauce"]]},{"id":59,"name":"Peach Bourbon","meat":"Beef","style":"Sweet & Spicy","spice":2,"desc":"Sweet peach and smoky bourbon. Perfect Southern summer combo.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Bourbon"],["1/4 cup","Peach preserves"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"],["1/2 tsp","Red pepper flakes"]]},{"id":60,"name":"Spicy Orange Ginger","meat":"Beef","style":"Sweet & Spicy","spice":3,"desc":"Fresh orange juice with ginger and red pepper flakes. Bright and zingy.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Fresh orange juice"],["2 tbsp","Soy sauce"],["1 tbsp","Fresh ginger, grated"],["1 tbsp","Red pepper flakes"],["1 tbsp","Honey"]]},{"id":61,"name":"Classic BBQ","meat":"Beef","style":"BBQ","spice":2,"desc":"Kansas City-style BBQ sauce creates tangy, smoky jerky.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["2 tbsp","Brown sugar"],["1 tsp","Smoked paprika"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"]]},{"id":62,"name":"Texas Mesquite","meat":"Beef","style":"BBQ","spice":2,"desc":"Bold mesquite smoke with Texas dry rub.","t":165,"d":"6-8","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 tsp","Mesquite liquid smoke"],["2 tbsp","Chili powder"],["1 tsp","Cumin"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"],["1 tsp","Garlic powder"]]},{"id":63,"name":"Memphis Dry Rub","meat":"Beef","style":"BBQ","spice":2,"desc":"No sauce needed. Memphis spice blend creates incredible depth.","t":165,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 tbsp","Paprika"],["1 tbsp","Garlic powder"],["1 tbsp","Onion powder"],["1 tsp","Cumin"],["2 tbsp","Brown sugar"],["1/2 tsp","Cayenne"],["1 tsp","Salt"]]},{"id":64,"name":"Carolina Vinegar","meat":"Beef","style":"BBQ","spice":2,"desc":"Tangy apple cider vinegar with red pepper flakes.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Apple cider vinegar"],["1 tbsp","Red pepper flakes"],["2 tbsp","Brown sugar"],["1 tsp","Salt"],["1 tsp","Garlic powder"]]},{"id":65,"name":"Hickory Smoked","meat":"Beef","style":"BBQ","spice":1,"desc":"Double hickory from liquid smoke and smoked salt.","t":165,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 tsp","Hickory liquid smoke"],["1 tsp","Smoked salt"],["2 tbsp","Brown sugar"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"]]},{"id":66,"name":"Mississippi Pot Roast","meat":"Beef","style":"BBQ","spice":2,"desc":"The viral pot roast \u2014 ranch, pepperoncini, butter.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 packet","Ranch seasoning mix"],["1/4 cup","Pepperoncini juice"],["1 tbsp","Butter powder"],["1 packet","Au jus mix"]]},{"id":67,"name":"Bourbon BBQ","meat":"Beef","style":"BBQ","spice":2,"desc":"Tangy bourbon-infused BBQ sauce. Rich, smoky-sweet.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["1/4 cup","Bourbon"],["2 tbsp","Brown sugar"],["1 tsp","Smoked paprika"],["1 tsp","Garlic powder"]]},{"id":68,"name":"Stout Beer BBQ","meat":"Beef","style":"BBQ","spice":2,"desc":"Rich, malty stout beer with BBQ spices. Bold and deep.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 cup","Stout beer"],["1/4 cup","BBQ sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["1/2 tsp","Smoked paprika"]]},{"id":69,"name":"Applewood Bacon BBQ","meat":"Beef","style":"BBQ","spice":2,"desc":"Applewood smoke and bacon seasoning. Breakfast-meets-BBQ.","t":165,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1 tsp","Applewood liquid smoke"],["2 tbsp","Bacon seasoning"],["1/4 cup","BBQ sauce"],["2 tbsp","Brown sugar"]]},{"id":70,"name":"Smoked Paprika Rub","meat":"Beef","style":"BBQ","spice":2,"desc":"Heavy smoked paprika dry rub for deep, rusty-red bark.","t":165,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["3 tbsp","Smoked paprika"],["1 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["1 tsp","Black pepper"],["1 tsp","Salt"]]},{"id":71,"name":"Korean BBQ Gochujang","meat":"Beef","style":"International","spice":3,"desc":"Fermented gochujang paste brings deep, savory Korean heat.","t":160,"d":"5-7","m":"24-72 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["3 tbsp","Gochujang paste"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tbsp","Fish sauce"],["1 tsp","Ginger"],["1/2 tsp","Chili flakes"]]},{"id":72,"name":"Thai Basil Chili","meat":"Beef","style":"International","spice":4,"desc":"Fresh Thai basil and bird's eye chili. Aromatic, fiery.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Thai basil, chopped"],["3","Bird's eye chilies, minced"],["3 tbsp","Fish sauce"],["2 tbsp","Lime juice"],["2 tbsp","Palm sugar"]]},{"id":73,"name":"Japanese Bachan's","meat":"Beef","style":"International","spice":1,"desc":"Bachan's BBQ sauce makes the easiest, most umami-rich jerky.","t":160,"d":"5-7","m":"6-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Bachan's Japanese BBQ sauce"],["1 tsp","Ginger, grated"],["2 cloves","Garlic, minced"],["1 tbsp","Sesame seeds"]]},{"id":74,"name":"Birria Style","meat":"Beef","style":"International","spice":3,"desc":"Guajillo and ancho chiles create rich, complex Mexican heat.","t":160,"d":"6-8","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["3","Guajillo chiles, rehydrated & blended"],["2","Ancho chiles, rehydrated & blended"],["1 tsp","Cumin"],["1/2 tsp","Oregano"],["1/4 tsp","Cinnamon"],["2 cloves","Garlic"],["1/4 cup","Beef broth"]]},{"id":75,"name":"Red Wine & Fish Sauce","meat":"Beef","style":"International","spice":1,"desc":"Cabernet and fish sauce umami bomb. Dyes jerky deep red.","t":160,"d":"5-7","m":"12-24 hrs","i":[["1 lb","Beef eye of round, sliced 1/4\" thick"],["1 cup","Cabernet Sauvignon"],["2 tbsp","Fish sauce"],["2 cloves","Garlic, minced"],["1 tbsp","Brown sugar"]]},{"id":76,"name":"South African Biltong","meat":"Beef","style":"International","spice":2,"desc":"Coriander, vinegar, thick-cut beef. Traditional biltong method.","t":110,"d":"48-72","m":"12-24 hrs","i":[["2 lbs","Beef silverside, sliced 1/2\" thick"],["2 tbsp","Coriander, toasted & cracked"],["1/2 cup","Malt vinegar"],["2 tbsp","Coarse salt"],["1 tbsp","Brown sugar"],["1 tsp","Black pepper"]]},{"id":77,"name":"Jamaican Jerk","meat":"Beef","style":"International","spice":4,"desc":"Scotch bonnet, allspice, thyme. Caribbean island heat.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1","Scotch bonnet, minced"],["1 tsp","Allspice"],["1 tsp","Dried thyme"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["2 cloves","Garlic, minced"]]},{"id":78,"name":"Indian Tandoori","meat":"Beef","style":"International","spice":3,"desc":"Yogurt-marinated with garam masala and turmeric.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Plain yogurt"],["2 tsp","Garam masala"],["1 tsp","Turmeric"],["1 tsp","Cumin"],["1 tsp","Cayenne"],["1 tsp","Salt"]]},{"id":79,"name":"Vietnamese Lemongrass","meat":"Beef","style":"International","spice":2,"desc":"Fresh lemongrass and fish sauce. Bright, aromatic.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 stalks","Lemongrass, minced"],["3 tbsp","Fish sauce"],["2 cloves","Garlic, minced"],["2 tbsp","Brown sugar"],["1 tsp","Chili flakes"]]},{"id":80,"name":"Hawaiian Pineapple","meat":"Beef","style":"International","spice":1,"desc":"Island-style with pineapple tenderizer and coconut aminos.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Pineapple juice"],["1/4 cup","Coconut aminos"],["1 tsp","Ginger"],["1 tsp","Garlic powder"],["2 tbsp","Brown sugar"]]},{"id":81,"name":"Citrus Basil","meat":"Beef","style":"International","spice":1,"desc":"Fresh citrus and basil. Bright, herby Mediterranean-inspired.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 tbsp","Orange zest"],["1 tbsp","Lemon zest"],["1/4 cup","Fresh basil, chopped"],["1/4 cup","Soy sauce"],["2 cloves","Garlic, minced"]]},{"id":82,"name":"Chinese Five Spice","meat":"Beef","style":"International","spice":2,"desc":"Aromatic five spice with hoisin and rice wine.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 tsp","Five spice powder"],["1/4 cup","Soy sauce"],["2 tbsp","Hoisin sauce"],["2 tbsp","Rice wine"]]},{"id":83,"name":"Silk Road Sumac","meat":"Beef","style":"International","spice":2,"desc":"Middle Eastern sumac, cinnamon, tomato powder. Tangy and exotic.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 tbsp","Sumac"],["1 tbsp","Tomato powder"],["1/4 tsp","Cinnamon"],["1 tsp","Cumin"],["1/4 cup","Soy sauce"]]},{"id":84,"name":"Bak Kwa Malaysian","meat":"Beef","style":"International","spice":2,"desc":"Malaysian-Chinese dried meat. Sweet, savory, charcoal-grilled style.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Ground beef (lean)"],["3 tbsp","Sugar"],["2 tbsp","Soy sauce"],["1 tbsp","Fish sauce"],["1 tsp","Five spice powder"],["2 tbsp","Honey"],["1 tsp","Sesame oil"]]},{"id":85,"name":"Lamb Shawarma","meat":"Beef","style":"International","spice":2,"desc":"Middle Eastern shawarma spices. Exotic and aromatic.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 tsp","Cumin"],["1 tsp","Coriander"],["1 tsp","Turmeric"],["2 tsp","Paprika"],["1/2 tsp","Cinnamon"],["1/4 cup","Soy sauce"],["1 tsp","Salt"]]},{"id":86,"name":"V8 Vegetable","meat":"Beef","style":"Savory","spice":1,"desc":"V8 juice adds unique vegetable-forward depth.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1 cup","V8 juice"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["1 tsp","Black pepper"]]},{"id":87,"name":"Bloody Mary","meat":"Beef","style":"Savory","spice":2,"desc":"Tomato, celery salt, horseradish, vodka. Brunch in jerky form.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","Tomato juice"],["1 tsp","Celery salt"],["1 tbsp","Horseradish"],["2 tbsp","Vodka"],["2 tbsp","Worcestershire sauce"]]},{"id":88,"name":"Bread & Butter Pickle","meat":"Beef","style":"Savory","spice":1,"desc":"Tangy pickle brine creates unexpectedly addictive jerky.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Pickle brine"],["1 tsp","Dill"],["1/2 tsp","Mustard seed"],["1/4 tsp","Turmeric"],["1/4 cup","Soy sauce"]]},{"id":89,"name":"Coffee Crusted","meat":"Beef","style":"Savory","spice":2,"desc":"Coarsely ground coffee amplifies beef with earthy, bitter depth.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 tbsp","Coarse ground coffee"],["2 tbsp","Brown sugar"],["1 tsp","Smoked paprika"],["1 tsp","Garlic powder"],["1/4 cup","Soy sauce"]]},{"id":90,"name":"Everything Bagel","meat":"Beef","style":"Savory","spice":1,"desc":"Sesame, poppy, garlic, onion, salt on jerky.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["3 tbsp","Everything bagel seasoning"],["1/4 cup","Soy sauce"],["1 tsp","Cream cheese powder"]]},{"id":91,"name":"A-1 Steakhouse","meat":"Beef","style":"Savory","spice":1,"desc":"A-1 steak sauce for tangy, rich steakhouse-style jerky.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/2 cup","A-1 steak sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"],["1 tsp","Black pepper"]]},{"id":92,"name":"Garlic Parmesan","meat":"Beef","style":"Savory","spice":1,"desc":"Roasted garlic and parmesan. Italian-inspired.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["3 tbsp","Grated parmesan"],["4 cloves","Roasted garlic, mashed"],["1 tbsp","Italian herbs"],["2 tbsp","Olive oil"]]},{"id":93,"name":"Ranch Seasoned","meat":"Beef","style":"Savory","spice":1,"desc":"Cool, herbaceous ranch flavor on savory beef.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 packet","Ranch seasoning mix"],["2 tbsp","Buttermilk powder"],["1/4 cup","Soy sauce"],["1 tsp","Dill"]]},{"id":94,"name":"Burger Style","meat":"Beef","style":"Savory","spice":1,"desc":"Ketchup, mustard, pickles, onion. Backyard burger in jerky form.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["3 tbsp","Ketchup"],["1 tbsp","Yellow mustard"],["1 tbsp","Pickle relish"],["1 tsp","Onion powder"]]},{"id":95,"name":"Horseradish & Herb","meat":"Beef","style":"Savory","spice":2,"desc":"Bold horseradish with rosemary and thyme.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 tbsp","Prepared horseradish"],["1 tsp","Rosemary, minced"],["1 tsp","Thyme"],["2 cloves","Garlic, minced"],["1 tbsp","Dijon mustard"],["1/4 cup","Soy sauce"]]},{"id":96,"name":"Dill Pickle","meat":"Beef","style":"Savory","spice":1,"desc":"Dill pickle brine-soaked beef for true pickle lovers.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1 cup","Dill pickle brine"],["2 tsp","Dried dill"],["1 tsp","Garlic powder"]]},{"id":97,"name":"Nutella Bacon","meat":"Beef","style":"Savory","spice":1,"desc":"Chocolate hazelnut spread on beef jerky. Crazy but incredible.","t":155,"d":"6-8","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["3 tbsp","Nutella"],["2 tbsp","Bacon bits"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"]]},{"id":98,"name":"Peppered Stout","meat":"Beef","style":"Savory","spice":2,"desc":"Rich stout beer with cracked pepper. Roasted malt and umami.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1 cup","Stout beer"],["2 tbsp","Cracked black pepper"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":99,"name":"Rosemary Garlic Pilsner","meat":"Beef","style":"Savory","spice":1,"desc":"Pilsner beer with rosemary and garlic. Steakhouse buttery finish.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1 cup","Pilsner beer"],["2 tbsp","Rosemary, minced"],["4 cloves","Garlic, minced"],["2 tbsp","Butter, melted"],["1 tsp","Salt"]]},{"id":100,"name":"Worcestershire Classic","meat":"Beef","style":"Savory","spice":1,"desc":"Heavy Worcestershire with balsamic. Deep, complex umami.","t":160,"d":"6-8","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/2 cup","Worcestershire sauce"],["3/4 cup","Balsamic vinegar"],["1/2 cup","Liquid smoke"],["2 tbsp","Onion powder"],["2 tbsp","Garlic powder"],["1/2 cup","Brown sugar"],["1 1/4 cup","Soy sauce"]]},{"id":101,"name":"Applewood Smoked","meat":"Beef","style":"Smoked","spice":1,"desc":"Light, fruity applewood smoke gives delicate sweetness.","t":180,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["1 tsp","Black pepper"],["","Applewood chips for smoker"]]},{"id":102,"name":"Mesquite Smoked","meat":"Beef","style":"Smoked","spice":2,"desc":"Bold, intense mesquite smoke for deep Texas-style flavor.","t":180,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["1 tbsp","Chili powder"],["1 tsp","Garlic powder"],["","Mesquite wood chips"]]},{"id":103,"name":"Cherry Wood Smoked","meat":"Beef","style":"Smoked","spice":1,"desc":"Sweet, mild cherry wood imparts fruity undertone.","t":180,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["","Cherry wood chips"]]},{"id":104,"name":"Pecan Sweet Java","meat":"Beef","style":"Smoked","spice":3,"desc":"Pecan smoke meets coffee and brown sugar.","t":180,"d":"4-5","m":"12-24 hrs","i":[["2 lbs","Beef eye of round, sliced 1/4\" thick"],["2 tbsp","Espresso powder"],["1/4 cup","Brown sugar"],["1/4 cup","Soy sauce"],["1 tsp","Cayenne"],["","Pecan wood chips"]]},{"id":105,"name":"Hickory Peppered","meat":"Beef","style":"Smoked","spice":2,"desc":"Classic hickory with heavy cracked pepper crust.","t":180,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Beef top round, sliced 1/4\" thick"],["2 tbsp","Cracked pepper"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"],["","Hickory wood chips"]]},{"id":106,"name":"Classic Venison","meat":"Venison","style":"Classic","spice":2,"desc":"Traditional deer jerky with soy, Worcestershire, coriander. Hunter's staple.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["2/3 cup","Soy sauce"],["1/2 cup","Brown sugar"],["2 tbsp","Worcestershire sauce"],["2 tsp","Black pepper"],["2 tsp","Garlic powder"],["1 tsp","Coriander"],["1 tsp","Red pepper flakes"]]},{"id":107,"name":"Ghost Pepper Deer","meat":"Venison","style":"Spicy","spice":5,"desc":"Ghost peppers in venison. Extreme heat for the fearless hunter.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["1","Ghost pepper, blended"],["1/2 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"]]},{"id":108,"name":"Sweet & Smoky Venison","meat":"Venison","style":"Sweet","spice":2,"desc":"Brown sugar and smoked paprika bring out wild richness.","t":170,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["2/3 cup","Soy sauce"],["1/2 cup","Brown sugar"],["2 tsp","Smoked paprika"],["2 tsp","Black pepper"],["1 tsp","Red pepper flakes"]]},{"id":109,"name":"Teriyaki Deer","meat":"Venison","style":"Sweet","spice":1,"desc":"Sweet teriyaki tames wild flavor. Family-friendly.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["1/2 cup","Teriyaki sauce"],["1/4 cup","Brown sugar"],["1 tsp","Ginger"],["1 tbsp","Sesame seeds"]]},{"id":110,"name":"Peppered Venison","meat":"Venison","style":"Classic","spice":2,"desc":"Heavy cracked pepper crust on tender venison strips.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["2 tbsp","Cracked pepper"],["1/2 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"]]},{"id":111,"name":"BBQ Venison","meat":"Venison","style":"BBQ","spice":2,"desc":"Smoky BBQ pairs perfectly with venison's lean flavor.","t":165,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["2 tbsp","Brown sugar"],["1 tsp","Smoked salt"],["1 tsp","Garlic powder"]]},{"id":112,"name":"Chipotle Venison","meat":"Venison","style":"Spicy","spice":3,"desc":"Smoky chipotle in adobo create rich, spicy deer jerky.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["2","Chipotle in adobo, chopped"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Cumin"]]},{"id":113,"name":"Cranberry Pemmican","meat":"Venison","style":"Sweet","spice":1,"desc":"Ground venison with cranberries and bacon. Native American inspired.","t":160,"d":"6-8","m":"24-48 hrs","i":[["2 lbs","Ground venison"],["1/2 lb","Bacon, ground"],["1 cup","Dried cranberries, chopped"],["2 tsp","Salt"],["1 tsp","Black pepper"]]},{"id":114,"name":"Spicy Traeger Venison","meat":"Venison","style":"Spicy","spice":4,"desc":"Smoked on Traeger with cayenne, habanero, red pepper flakes.","t":180,"d":"4-5","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["2 tsp","Cayenne"],["1 tbsp","Red pepper flakes"],["1","Habanero, minced"],["1/4 cup","Apple cider vinegar"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"]]},{"id":115,"name":"White-tail Original","meat":"Venison","style":"Classic","spice":1,"desc":"Clean seasonings let natural white-tail flavor come through.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","White-tail venison, sliced 1/4\" thick"],["1/2 cup","Soy sauce"],["1 tsp","Liquid smoke"],["1 tsp","Garlic powder"],["1 tsp","Salt"],["1 tsp","Black pepper"]]},{"id":116,"name":"Canadian Whiskey Venison","meat":"Venison","style":"Sweet","spice":1,"desc":"Smooth Canadian whiskey adds warmth to lean venison.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["1/2 cup","Canadian whiskey"],["1/4 cup","Brown sugar"],["1/4 cup","Soy sauce"],["2 tbsp","Maple syrup"]]},{"id":117,"name":"Whiskey Soaked Venison","meat":"Venison","style":"Savory","spice":2,"desc":"Full cup of whiskey with garlic and cayenne. Bold and spirit-forward.","t":150,"d":"6-8","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/8\" thick"],["1 cup","Whiskey"],["1 cup","Water"],["2 tbsp","Worcestershire sauce"],["2 tbsp","Soy sauce"],["1 tbsp","Salt"],["1 tsp","Cayenne"],["2 cloves","Garlic, sliced"]]},{"id":118,"name":"BBQ Smoked Venison","meat":"Venison","style":"BBQ","spice":2,"desc":"Hickory smoked salt and BBQ spices for smokehouse venison.","t":180,"d":"5-6","m":"24-72 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["1/4 cup","Low-sodium soy sauce"],["1 tbsp","Hickory smoked salt"],["2 tbsp","Brown sugar"],["1 tsp","Paprika"],["1/2 tsp","Cayenne"],["1 tsp","Black pepper"]]},{"id":119,"name":"Original Turkey","meat":"Turkey","style":"Classic","spice":1,"desc":"Light, lean turkey jerky with classic seasonings.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["1 tsp","Black pepper"]]},{"id":120,"name":"Texas Turkey","meat":"Turkey","style":"BBQ","spice":2,"desc":"Lone Star BBQ spices on lean turkey breast.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["2 tsp","Chili powder"],["1 tsp","Cumin"],["1 tsp","Paprika"],["2 tbsp","Brown sugar"],["1/4 cup","Soy sauce"]]},{"id":121,"name":"Cajun Turkey","meat":"Turkey","style":"Spicy","spice":3,"desc":"Louisiana Cajun seasoning brings bayou heat.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["2 tbsp","Cajun seasoning"],["1 tsp","Cayenne"],["1/4 cup","Soy sauce"]]},{"id":122,"name":"Cranberry Turkey","meat":"Turkey","style":"Sweet","spice":1,"desc":"Thanksgiving in jerky form. Cranberry and sage.","t":155,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/4 cup","Cranberry sauce"],["1 tsp","Dried sage"],["1/2 tsp","Thyme"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"]]},{"id":123,"name":"Lemon Pepper Turkey","meat":"Turkey","style":"Classic","spice":1,"desc":"Bright lemon zest and cracked pepper. Light and refreshing.","t":160,"d":"4-5","m":"6-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["2 tbsp","Lemon zest"],["2 tsp","Cracked pepper"],["1 tbsp","Olive oil"],["1 tsp","Salt"]]},{"id":124,"name":"Sweet Chili Turkey","meat":"Turkey","style":"Sweet & Spicy","spice":3,"desc":"Thai sweet chili sauce glazed turkey. Sticky and spicy.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/2 cup","Sweet chili sauce"],["2 tbsp","Soy sauce"],["1 tsp","Ginger"],["1 tsp","Garlic powder"]]},{"id":125,"name":"Maple Glazed Turkey","meat":"Turkey","style":"Sweet","spice":1,"desc":"Pure maple syrup creates candied coating on lean turkey.","t":155,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/4 cup","Maple syrup"],["1/4 cup","Soy sauce"],["1/2 tsp","Cinnamon"],["1 tsp","Black pepper"]]},{"id":126,"name":"Honey Mustard Turkey","meat":"Turkey","style":"Sweet & Spicy","spice":2,"desc":"Sweet honey and tangy mustard. Deli classic in jerky form.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["3 tbsp","Honey"],["2 tbsp","Dijon mustard"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":127,"name":"Ground Turkey Combo","meat":"Turkey","style":"Classic","spice":2,"desc":"Ground turkey with jerky gun. Easy, chewy, flavorful.","t":160,"d":"5-7","m":"8-24 hrs","i":[["3 lbs","Ground turkey"],["3 tbsp","Curing mix"],["2 tbsp","Garlic pepper seasoning"],["1 tsp","Celery salt"],["1 tbsp","Worcestershire sauce"],["1/4 cup","Water"]]},{"id":128,"name":"Smoked Turkey","meat":"Turkey","style":"Smoked","spice":1,"desc":"Applewood-smoked turkey breast. Deli-style flavor.","t":180,"d":"3-4","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["","Applewood chips"]]},{"id":129,"name":"Maple Pork Jerky","meat":"Pork","style":"Sweet","spice":1,"desc":"Maple syrup and pork loin. Sweet, tender, melt-in-your-mouth.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["1/4 cup","Maple syrup"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["1 tsp","Black pepper"]]},{"id":130,"name":"Chinese Five Spice Pork","meat":"Pork","style":"International","spice":2,"desc":"Traditional Chinese five spice on pork. Aromatic and complex.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["2 tsp","Five spice powder"],["1/4 cup","Soy sauce"],["2 tbsp","Hoisin sauce"],["2 tbsp","Rice wine"]]},{"id":131,"name":"Bacon Jerky Original","meat":"Pork","style":"Classic","spice":1,"desc":"Thick-cut bacon dehydrated into chewy, smoky jerky.","t":160,"d":"3-5","m":"None","i":[["2 lbs","Thick-cut bacon"],["2 tbsp","Brown sugar"],["1 tsp","Black pepper"],["1 tsp","Garlic powder"],["1 tsp","Smoked paprika"]]},{"id":132,"name":"Sriracha Bacon","meat":"Pork","style":"Spicy","spice":3,"desc":"Spicy Sriracha glaze on thick bacon strips.","t":160,"d":"3-5","m":"2-4 hrs","i":[["2 lbs","Thick-cut bacon"],["3 tbsp","Sriracha"],["2 tbsp","Brown sugar"],["1 tbsp","Soy sauce"]]},{"id":133,"name":"Candied Bacon","meat":"Pork","style":"Sweet","spice":1,"desc":"Brown sugar and maple create ultimate meat candy.","t":155,"d":"3-5","m":"1-2 hrs","i":[["2 lbs","Thick-cut bacon"],["1/2 cup","Brown sugar"],["2 tbsp","Maple syrup"],["1 tsp","Black pepper"],["1/2 tsp","Cayenne"]]},{"id":134,"name":"PB Sriracha Bacon","meat":"Pork","style":"Sweet & Spicy","spice":3,"desc":"Peanut butter and Sriracha glazed bacon.","t":160,"d":"3-5","m":"2-4 hrs","i":[["2 lbs","Thick-cut bacon"],["2 tbsp","Peanut butter"],["2 tbsp","Sriracha"],["1 tbsp","Honey"],["1 tbsp","Soy sauce"]]},{"id":135,"name":"BBQ Pork Jerky","meat":"Pork","style":"BBQ","spice":2,"desc":"Southern BBQ on lean pork loin.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["2 tbsp","Brown sugar"],["1 tsp","Liquid smoke"],["1 tsp","Garlic powder"]]},{"id":136,"name":"Teriyaki Pork","meat":"Pork","style":"Sweet","spice":1,"desc":"Teriyaki-glazed pork with sesame and ginger.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["1/2 cup","Teriyaki sauce"],["1 tsp","Ginger"],["1 tbsp","Sesame seeds"]]},{"id":137,"name":"Korean Pork Belly","meat":"Pork","style":"International","spice":3,"desc":"Gochujang-marinated pork belly. Rich, fatty, deeply flavored.","t":165,"d":"5-7","m":"24-48 hrs","i":[["2 lbs","Pork belly, sliced 1/4\" thick"],["3 tbsp","Gochujang"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Sesame oil"],["1 tsp","Ginger"]]},{"id":138,"name":"Maple Montreal Pork","meat":"Pork","style":"Sweet & Spicy","spice":2,"desc":"Montreal spice with maple glaze. Canadian-inspired.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["2 tbsp","Montreal steak seasoning"],["1/4 cup","Maple syrup"],["1 cup","Lager beer"],["1 tsp","Garlic powder"]]},{"id":139,"name":"Classic Salmon Jerky","meat":"Fish","style":"Classic","spice":1,"desc":"Wild-caught salmon with soy, lemon, and liquid smoke.","t":150,"d":"8-10","m":"3-6 hrs","i":[["2 lbs","Wild salmon fillet"],["1/2 cup","Soy sauce"],["2 tbsp","Lemon juice"],["1 tsp","Liquid smoke"],["1 tsp","Black pepper"]]},{"id":140,"name":"Honey Miso Salmon","meat":"Fish","style":"Sweet","spice":1,"desc":"Japanese miso and honey glaze. Umami-rich and sweet.","t":150,"d":"8-10","m":"8-24 hrs","i":[["2 lbs","Wild salmon fillet"],["2 tbsp","White miso paste"],["2 tbsp","Honey"],["2 tbsp","Rice vinegar"],["1 tbsp","Sesame oil"],["1 tbsp","Sesame seeds"]]},{"id":141,"name":"Maple Smoked Salmon","meat":"Fish","style":"Smoked","spice":1,"desc":"Maple-basted salmon smoked low and slow. PNW classic.","t":180,"d":"5-6","m":"12 hrs brine","i":[["2 lbs","Wild salmon fillet"],["4 cups","Water"],["1/4 cup","Kosher salt"],["1/4 cup","Brown sugar"],["1 cup","Maple syrup"],["","Alder wood chips"]]},{"id":142,"name":"Sriracha Salmon","meat":"Fish","style":"Spicy","spice":3,"desc":"Sweet-spicy Sriracha on wild salmon.","t":150,"d":"8-10","m":"4-8 hrs","i":[["2 lbs","Wild salmon fillet"],["3 tbsp","Sriracha"],["2 tbsp","Brown sugar"],["1/4 cup","Soy sauce"],["1 tbsp","Sesame oil"]]},{"id":143,"name":"Lemon Dill Salmon","meat":"Fish","style":"Savory","spice":1,"desc":"Fresh dill and bright lemon. Light and elegant.","t":150,"d":"8-10","m":"4-8 hrs","i":[["2 lbs","Wild salmon fillet"],["2 tbsp","Fresh dill, chopped"],["3 tbsp","Lemon juice"],["2 cloves","Garlic, minced"],["1 tsp","Sea salt"]]},{"id":144,"name":"Smoked Trout Jerky","meat":"Fish","style":"Smoked","spice":1,"desc":"Delicate rainbow trout smoked to perfection.","t":150,"d":"6-8","m":"6-12 hrs brine","i":[["2 lbs","Rainbow trout fillets"],["4 cups","Water"],["1/4 cup","Salt"],["1/4 cup","Brown sugar"],["1 tsp","Black pepper"]]},{"id":145,"name":"Cajun Catfish Jerky","meat":"Fish","style":"Spicy","spice":3,"desc":"Southern catfish with bold Cajun seasoning.","t":150,"d":"8-10","m":"4-8 hrs","i":[["2 lbs","Catfish fillets"],["2 tbsp","Cajun seasoning"],["1 tsp","Cayenne"],["2 tbsp","Lemon juice"],["1 tsp","Salt"]]},{"id":146,"name":"Alton Brown Salmon","meat":"Fish","style":"Classic","spice":1,"desc":"Good Eats approach \u2014 soy, molasses, lemon, liquid smoke.","t":150,"d":"12-18","m":"1.5-3 hrs","i":[["1 lb","Salmon fillet, sliced thin"],["1/3 cup","Soy sauce"],["1 tbsp","Molasses"],["2 tbsp","Lemon juice"],["1 tsp","Black pepper"],["1/2 tsp","Liquid smoke"]]},{"id":147,"name":"Sweet Salmon Candy","meat":"Fish","style":"Sweet","spice":1,"desc":"Maple-glazed salmon smoked until sticky and sweet.","t":180,"d":"5-6","m":"12 hrs brine","i":[["2 lbs","Wild salmon fillet"],["4 cups","Water"],["1/4 cup","Kosher salt"],["1 cup","Brown sugar"],["2 cups","Maple syrup for glaze"],["","Alder wood chips"]]},{"id":148,"name":"Teriyaki Tuna Jerky","meat":"Fish","style":"Sweet","spice":1,"desc":"Ahi tuna in teriyaki. Lean, high-protein, and delicious.","t":145,"d":"6-8","m":"4-8 hrs","i":[["2 lbs","Ahi tuna, sliced 1/4\" thick"],["1/2 cup","Teriyaki sauce"],["1 tbsp","Sesame oil"],["1 tsp","Ginger"],["1 tbsp","Sesame seeds"]]},{"id":149,"name":"5 Gold Star Buffalo","meat":"Buffalo","style":"Classic","spice":2,"desc":"Award-worthy buffalo with balanced spice blend.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["1/2 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["2 tsp","Black pepper"]]},{"id":150,"name":"Low Sodium Buffalo","meat":"Buffalo","style":"Classic","spice":1,"desc":"Heart-healthy, low-sodium buffalo for health-conscious snackers.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["1/4 cup","Coconut aminos"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["1 tsp","Black pepper"]]},{"id":151,"name":"Kid's Favorite Buffalo","meat":"Buffalo","style":"Sweet","spice":1,"desc":"Mild and slightly sweet buffalo that picky eaters love.","t":155,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["2 tbsp","Brown sugar"],["1/4 cup","Soy sauce"],["2 tbsp","Maple syrup"],["1 tsp","Garlic powder"]]},{"id":152,"name":"Southern BBQ Buffalo","meat":"Buffalo","style":"BBQ","spice":2,"desc":"BBQ sauce on lean bison. Healthier BBQ option.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["2 tbsp","Brown sugar"],["1 tsp","Liquid smoke"],["1 tsp","Garlic powder"]]},{"id":153,"name":"Jalapeno Buffalo","meat":"Buffalo","style":"Spicy","spice":3,"desc":"Fresh jalapenos meet lean bison. Spicy and protein-packed.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["2","Jalapenos, sliced with seeds"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"],["1 tsp","Cumin"]]},{"id":154,"name":"Goose Breast Curry","meat":"Game","style":"Spicy","spice":3,"desc":"Wild goose breast with jalapeno and curry powder.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Goose breast, sliced 1/4\" thick"],["2 tsp","Curry powder"],["1","Jalapeno, sliced"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":155,"name":"Maple Goose Jerky","meat":"Game","style":"Sweet","spice":1,"desc":"Pure maple on wild goose breast. Sweet with savory finish.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Goose breast, sliced 1/4\" thick"],["1/4 cup","Maple syrup"],["1/4 cup","Soy sauce"],["1 tsp","Ginger"],["1 tsp","Black pepper"]]},{"id":156,"name":"Wild Boar Jerky","meat":"Game","style":"Classic","spice":2,"desc":"Rich, gamey wild boar with juniper berries.","t":165,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Wild boar, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1/2 tsp","Juniper berries, crushed"],["1 tsp","Black pepper"],["1 tsp","Garlic powder"]]},{"id":157,"name":"Elk Teriyaki","meat":"Game","style":"Sweet","spice":1,"desc":"Lean elk in sweet teriyaki. Mild, tender, delicious.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Elk, sliced 1/4\" thick"],["1/2 cup","Teriyaki sauce"],["2 tbsp","Brown sugar"],["1 tsp","Ginger"],["1 tsp","Sesame oil"]]},{"id":158,"name":"Alligator Cajun","meat":"Game","style":"Spicy","spice":3,"desc":"Cajun-spiced alligator meat. True Southern delicacy.","t":160,"d":"6-8","m":"12-24 hrs","i":[["2 lbs","Alligator tail, sliced 1/4\" thick"],["2 tbsp","Cajun seasoning"],["1 tsp","Cayenne"],["2 tbsp","Lemon juice"],["1 tsp","Salt"]]},{"id":159,"name":"Ostrich Peppered","meat":"Game","style":"Classic","spice":2,"desc":"Ultra-lean ostrich with bold cracked pepper.","t":160,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Ostrich, sliced 1/4\" thick"],["2 tbsp","Cracked pepper"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"]]},{"id":160,"name":"Lamb Shawarma Jerky","meat":"Game","style":"International","spice":2,"desc":"Middle Eastern shawarma spices on tender lamb.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Lamb leg, sliced 1/4\" thick"],["2 tsp","Cumin"],["1 tsp","Coriander"],["1 tsp","Turmeric"],["2 tsp","Paprika"],["1/2 tsp","Cinnamon"],["1/4 cup","Soy sauce"],["1 tsp","Salt"]]},{"id":161,"name":"Honey Sriracha Venison","meat":"Venison","style":"Sweet & Spicy","spice":3,"desc":"Sweet honey meets fiery Sriracha on lean venison. Perfect sweet-heat balance.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["3 tbsp","Sriracha"],["2 tbsp","Honey"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"],["1 tsp","Sesame oil"]]},{"id":162,"name":"Juniper & Sage Venison","meat":"Venison","style":"Savory","spice":1,"desc":"Wild herbs meet wild game. Earthy juniper and sage elevate deer meat.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["1 tsp","Juniper berries, crushed"],["1 tbsp","Fresh sage, minced"],["1/4 cup","Soy sauce"],["2 tbsp","Olive oil"],["1 tsp","Black pepper"]]},{"id":163,"name":"Smoked Venison Hickory","meat":"Venison","style":"Smoked","spice":2,"desc":"Hickory-smoked deer with cracked pepper crust. Hunter's pride.","t":180,"d":"4-5","m":"12-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["2 tbsp","Cracked pepper"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["","Hickory wood chips"]]},{"id":164,"name":"Venison Gochujang","meat":"Venison","style":"International","spice":3,"desc":"Korean fermented chili paste on wild deer. Bold and funky.","t":160,"d":"5-7","m":"24-48 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["3 tbsp","Gochujang paste"],["2 tbsp","Soy sauce"],["2 tbsp","Brown sugar"],["1 tbsp","Rice vinegar"],["1 tsp","Sesame oil"]]},{"id":165,"name":"Coffee Rubbed Venison","meat":"Venison","style":"Savory","spice":2,"desc":"Coarse ground coffee brings out deep, earthy flavors in venison.","t":160,"d":"5-7","m":"8-24 hrs","i":[["2 lbs","Venison, sliced 1/4\" thick"],["2 tbsp","Coarse ground coffee"],["1 tbsp","Brown sugar"],["1 tsp","Smoked paprika"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":166,"name":"Garlic Herb Turkey","meat":"Turkey","style":"Savory","spice":1,"desc":"Fresh garlic and Italian herbs on lean turkey. Simple and delicious.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["4 cloves","Garlic, minced"],["1 tbsp","Italian herb blend"],["2 tbsp","Olive oil"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"]]},{"id":167,"name":"Teriyaki Turkey","meat":"Turkey","style":"Sweet","spice":1,"desc":"Sweet teriyaki on lean turkey breast. Crowd-pleasing every time.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/2 cup","Teriyaki sauce"],["2 tbsp","Brown sugar"],["1 tsp","Ginger"],["1 tbsp","Sesame seeds"]]},{"id":168,"name":"Buffalo Wing Turkey","meat":"Turkey","style":"Spicy","spice":3,"desc":"Frank's RedHot and butter on turkey. Game day in jerky form.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/2 cup","Frank's RedHot sauce"],["2 tbsp","Melted butter"],["1 tsp","Celery salt"],["1 tsp","Garlic powder"]]},{"id":169,"name":"Chipotle Lime Turkey","meat":"Turkey","style":"Spicy","spice":3,"desc":"Smoky chipotle with bright lime juice. Zesty and bold.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["2","Chipotle in adobo, chopped"],["3 tbsp","Fresh lime juice"],["1/4 cup","Soy sauce"],["1 tsp","Cumin"]]},{"id":170,"name":"Ranch Turkey","meat":"Turkey","style":"Savory","spice":1,"desc":"Cool, herbaceous ranch seasoning on lean turkey breast.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1 packet","Ranch seasoning mix"],["1/4 cup","Soy sauce"],["1 tsp","Dill"],["1 tsp","Garlic powder"]]},{"id":171,"name":"Peppered Turkey","meat":"Turkey","style":"Classic","spice":2,"desc":"Heavy cracked pepper on turkey. Bold and straightforward.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["2 tbsp","Cracked black pepper"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"]]},{"id":172,"name":"BBQ Turkey","meat":"Turkey","style":"BBQ","spice":2,"desc":"Smoky BBQ sauce on lean turkey. Backyard cookout vibes.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["1 tbsp","Brown sugar"],["1 tsp","Smoked paprika"],["1 tsp","Garlic powder"]]},{"id":173,"name":"Thai Peanut Turkey","meat":"Turkey","style":"International","spice":2,"desc":"Peanut butter, soy, and ginger. Thai-inspired lean protein.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Turkey breast, sliced 1/4\" thick"],["3 tbsp","Peanut butter"],["2 tbsp","Soy sauce"],["1 tbsp","Lime juice"],["1 tsp","Ginger"],["1 tsp","Garlic powder"],["1/2 tsp","Red pepper flakes"]]},{"id":174,"name":"Honey Garlic Pork","meat":"Pork","style":"Sweet","spice":1,"desc":"Golden honey and roasted garlic on tender pork loin.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["3 tbsp","Honey"],["4 cloves","Garlic, minced"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"]]},{"id":175,"name":"Jamaican Jerk Pork","meat":"Pork","style":"International","spice":4,"desc":"Caribbean jerk spices with scotch bonnet on pork. Island fire.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["1","Scotch bonnet, minced"],["1 tsp","Allspice"],["1 tsp","Thyme"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"]]},{"id":176,"name":"Peppered Pork","meat":"Pork","style":"Classic","spice":2,"desc":"Heavy cracked pepper on lean pork loin. Simple perfection.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["2 tbsp","Cracked black pepper"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"]]},{"id":177,"name":"Sweet & Spicy Bacon","meat":"Pork","style":"Sweet & Spicy","spice":3,"desc":"Brown sugar and cayenne on thick-cut bacon. Meat candy with a kick.","t":155,"d":"3-5","m":"1-2 hrs","i":[["2 lbs","Thick-cut bacon"],["1/2 cup","Brown sugar"],["1 tsp","Cayenne"],["1 tsp","Smoked paprika"],["1/2 tsp","Black pepper"]]},{"id":178,"name":"Cajun Pork","meat":"Pork","style":"Spicy","spice":3,"desc":"Bold Cajun seasoning on pork loin. Louisiana bayou heat.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["2 tbsp","Cajun seasoning"],["1 tsp","Cayenne"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":179,"name":"Apple Cider Pork","meat":"Pork","style":"Sweet","spice":1,"desc":"Fresh apple cider and cinnamon. Fall harvest flavor.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["1/2 cup","Apple cider"],["2 tbsp","Brown sugar"],["1/2 tsp","Cinnamon"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":180,"name":"Smoked Pork Loin","meat":"Pork","style":"Smoked","spice":1,"desc":"Cherry wood smoked pork loin. Delicate, fruity smoke flavor.","t":180,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"],["","Cherry wood chips"]]},{"id":181,"name":"Habanero Bacon","meat":"Pork","style":"Spicy","spice":4,"desc":"Fresh habanero on thick-cut bacon. Fiery and irresistible.","t":160,"d":"3-5","m":"2-4 hrs","i":[["2 lbs","Thick-cut bacon"],["1","Habanero, minced"],["2 tbsp","Brown sugar"],["1 tbsp","Soy sauce"]]},{"id":182,"name":"Garlic Parmesan Pork","meat":"Pork","style":"Savory","spice":1,"desc":"Roasted garlic and parmesan on pork. Italian-inspired.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Pork loin, sliced 1/4\" thick"],["3 tbsp","Grated parmesan"],["4 cloves","Roasted garlic, mashed"],["1 tbsp","Italian herbs"],["2 tbsp","Olive oil"]]},{"id":183,"name":"Bourbon Glazed Bacon","meat":"Pork","style":"Sweet","spice":1,"desc":"Kentucky bourbon and brown sugar on thick bacon. Southern gentleman's snack.","t":155,"d":"3-5","m":"2-4 hrs","i":[["2 lbs","Thick-cut bacon"],["1/4 cup","Bourbon"],["1/4 cup","Brown sugar"],["1 tsp","Black pepper"]]},{"id":184,"name":"Teriyaki Salmon","meat":"Fish","style":"Sweet","spice":1,"desc":"Classic teriyaki on wild salmon. Sweet, savory, and tender.","t":150,"d":"8-10","m":"6-12 hrs","i":[["2 lbs","Wild salmon fillet"],["1/2 cup","Teriyaki sauce"],["1 tsp","Ginger"],["1 tbsp","Sesame seeds"],["1 tsp","Garlic powder"]]},{"id":185,"name":"Peppered Salmon","meat":"Fish","style":"Classic","spice":2,"desc":"Cracked pepper crust on wild salmon. Bold and clean.","t":150,"d":"8-10","m":"4-8 hrs","i":[["2 lbs","Wild salmon fillet"],["2 tbsp","Cracked black pepper"],["1/4 cup","Soy sauce"],["1 tbsp","Lemon juice"],["1 tsp","Salt"]]},{"id":186,"name":"Maple Mustard Salmon","meat":"Fish","style":"Sweet","spice":1,"desc":"Sweet maple and tangy Dijon on wild salmon.","t":150,"d":"8-10","m":"6-12 hrs","i":[["2 lbs","Wild salmon fillet"],["2 tbsp","Maple syrup"],["2 tbsp","Dijon mustard"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"]]},{"id":187,"name":"Blackened Catfish","meat":"Fish","style":"Spicy","spice":3,"desc":"Southern blackening spices on catfish. Bold and peppery.","t":150,"d":"8-10","m":"4-8 hrs","i":[["2 lbs","Catfish fillets"],["2 tbsp","Blackening seasoning"],["1 tsp","Cayenne"],["1 tbsp","Lemon juice"],["1 tsp","Garlic powder"]]},{"id":188,"name":"Sweet Chili Tilapia","meat":"Fish","style":"Sweet & Spicy","spice":2,"desc":"Thai sweet chili sauce on mild tilapia. Easy fish jerky starter.","t":145,"d":"6-8","m":"4-8 hrs","i":[["2 lbs","Tilapia fillets"],["1/2 cup","Sweet chili sauce"],["2 tbsp","Soy sauce"],["1 tsp","Ginger"],["1 tsp","Garlic powder"]]},{"id":189,"name":"Wasabi Tuna","meat":"Fish","style":"International","spice":4,"desc":"Fiery wasabi paste on ahi tuna. Japanese-inspired heat bomb.","t":145,"d":"6-8","m":"4-8 hrs","i":[["2 lbs","Ahi tuna, sliced 1/4\" thick"],["2 tbsp","Wasabi paste"],["1/4 cup","Soy sauce"],["1 tbsp","Rice vinegar"],["1 tsp","Sesame oil"]]},{"id":190,"name":"Garlic Butter Shrimp","meat":"Fish","style":"Savory","spice":1,"desc":"Garlic butter seasoned shrimp jerky. Unique and delicious.","t":145,"d":"6-8","m":"4-8 hrs","i":[["2 lbs","Large shrimp, peeled & deveined"],["3 tbsp","Melted butter"],["4 cloves","Garlic, minced"],["1 tbsp","Lemon juice"],["1 tsp","Salt"],["1 tsp","Parsley"]]},{"id":191,"name":"BBQ Salmon","meat":"Fish","style":"BBQ","spice":2,"desc":"Smoky BBQ sauce on wild salmon. Surf meets turf flavors.","t":150,"d":"8-10","m":"6-12 hrs","i":[["2 lbs","Wild salmon fillet"],["1/4 cup","BBQ sauce"],["1 tbsp","Brown sugar"],["1 tsp","Liquid smoke"],["1 tsp","Garlic powder"]]},{"id":192,"name":"Coconut Curry Cod","meat":"Fish","style":"International","spice":3,"desc":"Coconut milk and yellow curry on Pacific cod. Tropical and aromatic.","t":145,"d":"8-10","m":"6-12 hrs","i":[["2 lbs","Pacific cod fillets"],["1/4 cup","Coconut milk"],["2 tsp","Yellow curry powder"],["1 tbsp","Fish sauce"],["1 tbsp","Lime juice"],["1 tsp","Ginger"]]},{"id":193,"name":"Old Bay Shrimp","meat":"Fish","style":"Classic","spice":2,"desc":"Classic Old Bay seasoning on shrimp. Chesapeake Bay in jerky form.","t":145,"d":"6-8","m":"4-8 hrs","i":[["2 lbs","Large shrimp, peeled & deveined"],["2 tbsp","Old Bay seasoning"],["1 tbsp","Lemon juice"],["1 tsp","Garlic powder"],["1 tsp","Salt"]]},{"id":194,"name":"Teriyaki Buffalo","meat":"Buffalo","style":"Sweet","spice":1,"desc":"Sweet teriyaki on ultra-lean bison. Best of both worlds.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["1/2 cup","Teriyaki sauce"],["2 tbsp","Brown sugar"],["1 tsp","Ginger"],["1 tbsp","Sesame seeds"]]},{"id":195,"name":"Smoked Buffalo","meat":"Buffalo","style":"Smoked","spice":2,"desc":"Hickory-smoked bison with simple seasoning. Smoky and lean.","t":180,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["1 tbsp","Brown sugar"],["2 tsp","Cracked pepper"],["","Hickory wood chips"]]},{"id":196,"name":"Chipotle Buffalo","meat":"Buffalo","style":"Spicy","spice":3,"desc":"Smoky chipotle in adobo on lean bison. Deep, complex heat.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["2","Chipotle in adobo, chopped"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Cumin"]]},{"id":197,"name":"Coffee Rubbed Buffalo","meat":"Buffalo","style":"Savory","spice":2,"desc":"Espresso and cocoa powder rub on bison. Rich and complex.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["2 tbsp","Espresso powder"],["1 tsp","Cocoa powder"],["1 tbsp","Brown sugar"],["1/4 cup","Soy sauce"],["1 tsp","Smoked paprika"]]},{"id":198,"name":"Maple Bourbon Buffalo","meat":"Buffalo","style":"Sweet","spice":1,"desc":"Pure maple and bourbon on lean bison. Sweet and warming.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["2 tbsp","Maple syrup"],["1/4 cup","Bourbon"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"]]},{"id":199,"name":"Habanero Lime Buffalo","meat":"Buffalo","style":"Spicy","spice":4,"desc":"Fresh habanero and lime on bison. Bright citrus tames fierce heat.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["1","Habanero, minced"],["3 tbsp","Lime juice"],["1/4 cup","Soy sauce"],["1 tsp","Cumin"],["1 tsp","Garlic powder"]]},{"id":200,"name":"Sweet & Spicy Buffalo","meat":"Buffalo","style":"Sweet & Spicy","spice":3,"desc":"Brown sugar and cayenne on bison. The ultimate sweet-heat lean snack.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Buffalo, sliced 1/4\" thick"],["1/4 cup","Brown sugar"],["1 tsp","Cayenne"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"],["1 tsp","Smoked paprika"]]},{"id":201,"name":"Elk Peppered","meat":"Game","style":"Classic","spice":2,"desc":"Heavy cracked pepper on lean elk. Classic and bold.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Elk, sliced 1/4\" thick"],["2 tbsp","Cracked pepper"],["1/4 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"]]},{"id":202,"name":"Elk BBQ","meat":"Game","style":"BBQ","spice":2,"desc":"Smoky BBQ sauce on lean elk meat. Campfire meets cookout.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Elk, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["2 tbsp","Brown sugar"],["1 tsp","Liquid smoke"],["1 tsp","Garlic powder"]]},{"id":203,"name":"Smoked Elk","meat":"Game","style":"Smoked","spice":1,"desc":"Mesquite-smoked elk with simple seasoning. Pure wild flavor.","t":180,"d":"4-5","m":"8-24 hrs","i":[["2 lbs","Elk, sliced 1/4\" thick"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"],["1 tsp","Black pepper"],["","Mesquite wood chips"]]},{"id":204,"name":"Elk Habanero","meat":"Game","style":"Spicy","spice":4,"desc":"Fresh habanero on lean elk. Intense heat meets wild game.","t":160,"d":"4-6","m":"12-24 hrs","i":[["2 lbs","Elk, sliced 1/4\" thick"],["1","Habanero, minced"],["1/4 cup","Soy sauce"],["2 tbsp","Brown sugar"],["1 tsp","Garlic powder"]]},{"id":205,"name":"Lamb Rosemary Garlic","meat":"Game","style":"Classic","spice":1,"desc":"Fresh rosemary and garlic on tender lamb. Mediterranean classic.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Lamb leg, sliced 1/4\" thick"],["2 tbsp","Fresh rosemary, minced"],["4 cloves","Garlic, minced"],["2 tbsp","Olive oil"],["1/4 cup","Soy sauce"],["1 tsp","Black pepper"]]},{"id":206,"name":"Lamb Curry","meat":"Game","style":"International","spice":3,"desc":"Bold curry powder and cumin on lamb. Indian-inspired warmth.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Lamb leg, sliced 1/4\" thick"],["2 tsp","Curry powder"],["1 tsp","Cumin"],["1/2 tsp","Turmeric"],["1/4 cup","Yogurt"],["1/4 cup","Soy sauce"]]},{"id":207,"name":"Goose Classic","meat":"Game","style":"Classic","spice":2,"desc":"Traditional seasonings on wild goose breast. Hunter's reward.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Goose breast, sliced 1/4\" thick"],["1/2 cup","Soy sauce"],["2 tbsp","Worcestershire sauce"],["1 tsp","Garlic powder"],["1 tsp","Onion powder"],["2 tsp","Black pepper"]]},{"id":208,"name":"Wild Boar BBQ","meat":"Game","style":"BBQ","spice":2,"desc":"Smoky BBQ on rich wild boar. Feral and flavorful.","t":165,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Wild boar, sliced 1/4\" thick"],["1/2 cup","BBQ sauce"],["2 tbsp","Brown sugar"],["1 tsp","Smoked paprika"],["1 tsp","Garlic powder"]]},{"id":209,"name":"Elk Honey Sriracha","meat":"Game","style":"Sweet & Spicy","spice":3,"desc":"Honey and Sriracha on elk. Sweet heat on lean wild game.","t":160,"d":"4-6","m":"8-24 hrs","i":[["2 lbs","Elk, sliced 1/4\" thick"],["3 tbsp","Sriracha"],["2 tbsp","Honey"],["1/4 cup","Soy sauce"],["1 tsp","Garlic powder"]]},{"id":210,"name":"Duck Breast Orange","meat":"Game","style":"Sweet","spice":1,"desc":"Duck l'Orange in jerky form. Fresh orange on rich duck breast.","t":160,"d":"5-7","m":"12-24 hrs","i":[["2 lbs","Duck breast, sliced 1/4\" thick"],["1/2 cup","Fresh orange juice"],["2 tbsp","Orange zest"],["2 tbsp","Brown sugar"],["1/4 cup","Soy sauce"],["1 tsp","Ginger"]]}];
 
 const MC={Beef:{bg:"rgba(180,40,30,0.12)",bd:"#b4281e",tx:"#b4281e"},Venison:{bg:"rgba(120,70,30,0.12)",bd:"#78461e",tx:"#78461e"},Turkey:{bg:"rgba(200,150,50,0.12)",bd:"#c89632",tx:"#a07828"},Pork:{bg:"rgba(220,120,140,0.12)",bd:"#dc788c",tx:"#b44060"},Fish:{bg:"rgba(40,120,180,0.12)",bd:"#2878b4",tx:"#2878b4"},Buffalo:{bg:"rgba(100,60,30,0.12)",bd:"#643c1e",tx:"#643c1e"},Game:{bg:"rgba(60,100,60,0.12)",bd:"#3c643c",tx:"#3c643c"}};
@@ -250,420 +431,116 @@ const SL=["","Mild","Medium","Hot","Very Hot","Extreme"];
 const SE=["","\u{1F336}","\u{1F336}\u{1F336}","\u{1F525}","\u{1F525}\u{1F525}","\u{1F480}"];
 const SI={Classic:"\u{1F969}",Sweet:"\u{1F36F}",Spicy:"\u{1F336}","Sweet & Spicy":"\u{1F36F}\u{1F336}",BBQ:"\u{1F525}",International:"\u{1F30D}",Savory:"\u{1F9C2}",Smoked:"\u{1F4A8}"};
 const SC=["","#84cc16","#eab308","#f59e0b","#ea580c","#dc2626"];
-const TIPS={Fish:"Keep skin on during drying for structure. Peel before eating. Use wild-caught for best flavor. Fish dries at lower temps (145-150\u00b0F) than red meat.",Venison:"Marinate 24-48 hrs for best flavor. Trim all silver skin and fat. Freeze game meats 8 weeks before use for safety.",Turkey:"Very lean \u2014 don\u2019t over-dry or it becomes brittle. Check at minimum time. Done when it bends and cracks but doesn\u2019t snap.",Pork:"For bacon jerky, use thick-cut and reduce time. For pork loin, partially freeze before slicing for even strips.",Buffalo:"Leaner than beef so dries faster. Watch closely to avoid over-drying. Pairs well with bold, smoky flavors.",Game:"Exotic meats vary in fat content. Trim thoroughly and adjust drying times. When in doubt, dry less \u2014 you can always put it back.",Beef:"Slice 1/8-1/4\" thick. Against the grain = tender; with the grain = chewy. Partially freeze for easier slicing. Pat dry before dehydrating."};
+const TIPS={Fish:"Keep skin on during drying for structure. Fish dries at lower temps (145-150\u00b0F) than red meat.",Venison:"Marinate 24-48 hrs for best flavor. Trim all silver skin and fat. Freeze 8 weeks before use.",Turkey:"Very lean \u2014 don\u2019t over-dry. Done when it bends and cracks but doesn\u2019t snap.",Pork:"For bacon jerky, use thick-cut and reduce time. Partially freeze pork loin before slicing.",Buffalo:"Leaner than beef so dries faster. Watch closely to avoid over-drying.",Game:"Exotic meats vary in fat. Trim thoroughly and adjust drying times.",Beef:"Slice 1/8-1/4\" thick. Against the grain = tender; with the grain = chewy. Pat dry before dehydrating."};
 
 let state={search:"",meat:"All",style:"All",spice:0,page:"recipes"};
 let currentUser=null;
 let favorites=new Set();
+let userRecipes=[];
 let authMode="signin";
 let unsubFavorites=null;
+let unsubUserRecipes=null;
+let createSpice=0;
 
 const meats=["All",...[...new Set(R.map(r=>r.meat))]];
 const styles=["All",...[...new Set(R.map(r=>r.style))]];
 
+function getAllRecipes(){return [...R,...userRecipes]}
+
 // ===== Toast =====
-function showToast(msg,duration=2500){
-  const t=document.getElementById("toast");
-  t.textContent=msg;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),duration);
-}
+function showToast(msg,duration=2500){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),duration)}
 
 // ===== Auth =====
-function showAuthModal(){
-  document.getElementById("auth-overlay").classList.add("open");
-  document.getElementById("auth-error").style.display="none";
-}
-function hideAuthModal(){
-  document.getElementById("auth-overlay").classList.remove("open");
-}
-function handleAuthClick(){
-  if(currentUser){
-    const dd=document.getElementById("auth-dropdown");
-    dd.classList.toggle("open");
-  } else {
-    showAuthModal();
-  }
-}
-// Close dropdown on outside click
-document.addEventListener("click",e=>{
-  const dd=document.getElementById("auth-dropdown");
-  const btn=document.getElementById("auth-btn");
-  if(!dd.contains(e.target)&&!btn.contains(e.target)){
-    dd.classList.remove("open");
-  }
-});
-
-function signInWithGoogle(){
-  const provider=new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).then(()=>{
-    hideAuthModal();
-    showToast("Signed in successfully!");
-  }).catch(err=>{
-    showAuthError(err.message);
-  });
-}
-
-function toggleAuthMode(){
-  authMode=authMode==="signin"?"signup":"signin";
-  document.getElementById("auth-submit").textContent=authMode==="signin"?"Sign In":"Create Account";
-  document.getElementById("auth-toggle").textContent=authMode==="signin"?"Need an account? Sign up":"Already have an account? Sign in";
-  document.getElementById("auth-error").style.display="none";
-}
-
-function emailAuth(){
-  const email=document.getElementById("auth-email").value;
-  const pass=document.getElementById("auth-password").value;
-  if(!email||!pass){showAuthError("Please enter email and password");return}
-  const fn=authMode==="signin"?auth.signInWithEmailAndPassword.bind(auth):auth.createUserWithEmailAndPassword.bind(auth);
-  fn(email,pass).then(()=>{
-    hideAuthModal();
-    showToast(authMode==="signin"?"Signed in!":"Account created!");
-  }).catch(err=>{
-    let msg=err.message;
-    if(err.code==="auth/wrong-password")msg="Wrong password";
-    if(err.code==="auth/user-not-found")msg="No account found. Sign up instead?";
-    if(err.code==="auth/email-already-in-use")msg="Email already in use. Sign in instead?";
-    if(err.code==="auth/weak-password")msg="Password must be at least 6 characters";
-    showAuthError(msg);
-  });
-}
-
-function showAuthError(msg){
-  const el=document.getElementById("auth-error");
-  el.textContent=msg;
-  el.style.display="block";
-}
-
-function signOut(){
-  auth.signOut();
-  document.getElementById("auth-dropdown").classList.remove("open");
-  showToast("Signed out");
-}
-
-function updateAuthUI(user){
-  const btn=document.getElementById("auth-btn");
-  const dd=document.getElementById("dropdown-email");
-  if(user){
-    const name=user.displayName||user.email.split("@")[0];
-    const photo=user.photoURL;
-    btn.innerHTML=photo?'<img class="avatar" src="'+photo+'" alt=""><span class="user-name">'+name+'</span>':'<span class="user-name">'+name+'</span>';
-    dd.textContent=user.email;
-  } else {
-    btn.innerHTML="Sign In";
-  }
-}
+function showAuthModal(){document.getElementById("auth-overlay").classList.add("open");document.getElementById("auth-error").style.display="none"}
+function hideAuthModal(){document.getElementById("auth-overlay").classList.remove("open")}
+function handleAuthClick(){if(currentUser){document.getElementById("auth-dropdown").classList.toggle("open")}else{showAuthModal()}}
+document.addEventListener("click",e=>{const dd=document.getElementById("auth-dropdown");const btn=document.getElementById("auth-btn");if(!dd.contains(e.target)&&!btn.contains(e.target))dd.classList.remove("open")});
+function signInWithGoogle(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>{hideAuthModal();showToast("Signed in!")}).catch(err=>showAuthError(err.message))}
+function toggleAuthMode(){authMode=authMode==="signin"?"signup":"signin";document.getElementById("auth-submit").textContent=authMode==="signin"?"Sign In":"Create Account";document.getElementById("auth-toggle").textContent=authMode==="signin"?"Need an account? Sign up":"Already have an account? Sign in";document.getElementById("auth-error").style.display="none"}
+function emailAuth(){const email=document.getElementById("auth-email").value;const pass=document.getElementById("auth-password").value;if(!email||!pass){showAuthError("Please enter email and password");return}const fn=authMode==="signin"?auth.signInWithEmailAndPassword.bind(auth):auth.createUserWithEmailAndPassword.bind(auth);fn(email,pass).then(()=>{hideAuthModal();showToast(authMode==="signin"?"Signed in!":"Account created!")}).catch(err=>{let msg=err.message;if(err.code==="auth/wrong-password")msg="Wrong password";if(err.code==="auth/user-not-found")msg="No account found. Sign up instead?";if(err.code==="auth/email-already-in-use")msg="Email already in use. Sign in instead?";if(err.code==="auth/weak-password")msg="Password must be at least 6 characters";showAuthError(msg)})}
+function showAuthError(msg){const el=document.getElementById("auth-error");el.textContent=msg;el.style.display="block"}
+function signOut(){auth.signOut();document.getElementById("auth-dropdown").classList.remove("open");showToast("Signed out")}
+function updateAuthUI(user){const btn=document.getElementById("auth-btn");const dd=document.getElementById("dropdown-email");if(user){const name=user.displayName||user.email.split("@")[0];const photo=user.photoURL;btn.innerHTML=photo?'<img class="avatar" src="'+photo+'" alt=""><span class="user-name">'+name+'</span>':'<span class="user-name">'+name+'</span>';dd.textContent=user.email}else{btn.innerHTML="Sign In"}}
 
 // ===== Favorites =====
 function isFav(id){return favorites.has(id)}
+function toggleFav(id,e){if(e){e.stopPropagation();e.preventDefault()}if(!currentUser){showAuthModal();return}const ref=db.collection("users").doc(currentUser.uid).collection("favorites").doc(String(id));if(favorites.has(id)){ref.delete();favorites.delete(id);showToast("Removed from favorites")}else{const all=getAllRecipes();const recipe=all.find(r=>r.id===id);if(!recipe)return;ref.set({id:id,name:recipe.name,meat:recipe.meat,style:recipe.style,spice:recipe.spice,addedAt:firebase.firestore.FieldValue.serverTimestamp()});favorites.add(id);showToast("\u2764\uFE0F Added to favorites!")}updateFavUI();render();if(state.page==="favorites")renderFavPage()}
+function updateFavUI(){const count=favorites.size;const badge=document.getElementById("nav-fav-count");const tabBadge=document.getElementById("tab-fav-badge");if(count>0){badge.style.display="inline-flex";badge.textContent=count;tabBadge.style.display="flex";tabBadge.textContent=count}else{badge.style.display="none";tabBadge.style.display="none"}document.querySelectorAll(".fav-btn").forEach(b=>{const id=b.dataset.id;const isFaved=favorites.has(id.startsWith("user_")?id:+id);if(isFaved){b.classList.add("active");b.innerHTML="\u2764\uFE0F"}else{b.classList.remove("active");b.innerHTML="\u{1F90D}"}});const mfb=document.querySelector(".modal-fav-btn");if(mfb){const id=mfb.dataset.id;const isFaved=favorites.has(id.startsWith("user_")?id:+id);if(isFaved){mfb.classList.add("active");mfb.innerHTML='<span class="heart">\u2764\uFE0F</span> Saved to Favorites'}else{mfb.classList.remove("active");mfb.innerHTML='<span class="heart">\u{1F90D}</span> Add to Favorites'}}}
+function subscribeFavorites(uid){if(unsubFavorites)unsubFavorites();unsubFavorites=db.collection("users").doc(uid).collection("favorites").onSnapshot(snap=>{favorites=new Set();snap.forEach(doc=>{const d=doc.data();favorites.add(typeof d.id==="string"?d.id:+d.id)});updateFavUI();if(state.page==="favorites")renderFavPage()})}
 
-function toggleFav(id,e){
-  if(e){e.stopPropagation();e.preventDefault();}
-  if(!currentUser){
-    showAuthModal();
-    return;
-  }
-  const ref=db.collection("users").doc(currentUser.uid).collection("favorites").doc(String(id));
-  if(favorites.has(id)){
-    ref.delete();
-    favorites.delete(id);
-    showToast("Removed from favorites");
-  } else {
-    const recipe=R.find(r=>r.id===id);
-    ref.set({id:id,name:recipe.name,meat:recipe.meat,style:recipe.style,spice:recipe.spice,addedAt:firebase.firestore.FieldValue.serverTimestamp()});
-    favorites.add(id);
-    showToast("\u2764\uFE0F Added to favorites!");
-  }
-  updateFavUI();
-  render();
-  if(state.page==="favorites")renderFavPage();
-}
-
-function updateFavUI(){
-  const count=favorites.size;
-  const badge=document.getElementById("nav-fav-count");
-  if(count>0){
-    badge.style.display="inline-flex";
-    badge.textContent=count;
-  } else {
-    badge.style.display="none";
-  }
-  // Update all heart buttons
-  document.querySelectorAll(".fav-btn").forEach(b=>{
-    const id=+b.dataset.id;
-    if(favorites.has(id)){
-      b.classList.add("active");
-      b.innerHTML="\u2764\uFE0F";
-    } else {
-      b.classList.remove("active");
-      b.innerHTML="\u{1F90D}";
-    }
-  });
-  // Update modal fav button if open
-  const mfb=document.querySelector(".modal-fav-btn");
-  if(mfb){
-    const id=+mfb.dataset.id;
-    if(favorites.has(id)){
-      mfb.classList.add("active");
-      mfb.innerHTML='<span class="heart">\u2764\uFE0F</span> Saved to Favorites';
-    } else {
-      mfb.classList.remove("active");
-      mfb.innerHTML='<span class="heart">\u{1F90D}</span> Add to Favorites';
-    }
-  }
-}
-
-function subscribeFavorites(uid){
-  if(unsubFavorites)unsubFavorites();
-  unsubFavorites=db.collection("users").doc(uid).collection("favorites").onSnapshot(snap=>{
-    favorites=new Set();
-    snap.forEach(doc=>{
-      const data=doc.data();
-      favorites.add(data.id);
-    });
-    updateFavUI();
-    if(state.page==="favorites")renderFavPage();
-  });
-}
+// ===== User Recipes =====
+function subscribeUserRecipes(uid){if(unsubUserRecipes)unsubUserRecipes();unsubUserRecipes=db.collection("users").doc(uid).collection("recipes").orderBy("createdAt","desc").onSnapshot(snap=>{userRecipes=[];snap.forEach(doc=>{const d=doc.data();d.id=doc.id;userRecipes.push(d)});updateRecipeCount();render();if(state.page==="favorites")renderFavPage()})}
+function updateRecipeCount(){const all=getAllRecipes();document.getElementById("footer-count").textContent=all.length;document.getElementById("hero-desc").textContent=all.length+" handcrafted recipes with full ingredients, dehydrator temps & times. "+meats.length+" meat types, "+(styles.length-1)+" flavor styles.";document.getElementById("hero-stats").innerHTML=[{n:all.length,l:"Recipes"},{n:meats.length-1,l:"Meat Types"},{n:styles.length-1,l:"Styles"},{n:all.filter(r=>r.spice===5).length,l:"Extreme Heat"}].map(s=>'<div><div class="stat-num">'+s.n+'</div><div class="stat-label">'+s.l+'</div></div>').join("")}
 
 // ===== Recommendations =====
-function getRecommendations(){
-  if(favorites.size<2)return[];
-  const favRecipes=R.filter(r=>favorites.has(r.id));
-  // Analyze preferences
-  const meatPref={},stylePref={},spicePref={};
-  favRecipes.forEach(r=>{
-    meatPref[r.meat]=(meatPref[r.meat]||0)+1;
-    stylePref[r.style]=(stylePref[r.style]||0)+1;
-    spicePref[r.spice]=(spicePref[r.spice]||0)+1;
-  });
-  // Score non-favorited recipes
-  const scored=R.filter(r=>!favorites.has(r.id)).map(r=>{
-    let score=0;
-    score+=(meatPref[r.meat]||0)*3;
-    score+=(stylePref[r.style]||0)*2;
-    score+=(spicePref[r.spice]||0)*1;
-    return{...r,score};
-  }).filter(r=>r.score>0);
-  scored.sort((a,b)=>b.score-a.score);
-  return scored.slice(0,6);
-}
+function getRecommendations(){if(favorites.size<2)return[];const all=getAllRecipes();const favRecipes=all.filter(r=>favorites.has(r.id));const meatPref={},stylePref={},spicePref={};favRecipes.forEach(r=>{meatPref[r.meat]=(meatPref[r.meat]||0)+1;stylePref[r.style]=(stylePref[r.style]||0)+1;spicePref[r.spice]=(spicePref[r.spice]||0)+1});const scored=all.filter(r=>!favorites.has(r.id)).map(r=>{let score=0;score+=(meatPref[r.meat]||0)*3;score+=(stylePref[r.style]||0)*2;score+=(spicePref[r.spice]||0)*1;return{...r,score}}).filter(r=>r.score>0);scored.sort((a,b)=>b.score-a.score);return scored.slice(0,6)}
 
 // ===== Sharing =====
-function getShareUrl(){
-  if(!currentUser)return null;
-  const base=window.location.origin+window.location.pathname;
-  return base+"?share="+currentUser.uid;
-}
-
-function copyShareLink(){
-  if(!currentUser){showAuthModal();return}
-  const url=getShareUrl();
-  navigator.clipboard.writeText(url).then(()=>{
-    showToast("\u{1F517} Share link copied!");
-  }).catch(()=>{
-    showToast("Couldn't copy — check browser permissions");
-  });
-}
-
-function shareNative(){
-  if(!currentUser){showAuthModal();return}
-  if(navigator.share){
-    const name=currentUser.displayName||"someone";
-    navigator.share({
-      title:"Check out my jerky favorites!",
-      text:name+"'s favorite jerky recipes on Cody's Meats",
-      url:getShareUrl()
-    }).catch(()=>{});
-  } else {
-    copyShareLink();
-  }
-}
-
-async function loadSharedList(uid){
-  try{
-    const snap=await db.collection("users").doc(uid).collection("favorites").get();
-    const ids=[];
-    snap.forEach(doc=>{ids.push(doc.data().id)});
-    if(ids.length===0){
-      showToast("This user hasn't saved any favorites yet");
-      return;
-    }
-    // Try to get user display name
-    let userName="A Fellow Jerky Lover";
-    try{
-      const userDoc=await db.collection("users").doc(uid).get();
-      if(userDoc.exists&&userDoc.data().displayName){
-        userName=userDoc.data().displayName;
-      }
-    }catch(e){}
-    // Show shared view
-    state.page="favorites";
-    switchPage("favorites");
-    document.getElementById("fav-content").style.display="none";
-    document.getElementById("fav-login-prompt").style.display="none";
-    const sv=document.getElementById("shared-view");
-    sv.style.display="block";
-    document.getElementById("shared-name").textContent=userName+"'s Favorites";
-    document.getElementById("shared-count").textContent=ids.length+" recipes";
-    const sharedRecipes=R.filter(r=>ids.includes(r.id));
-    document.getElementById("shared-grid").innerHTML=sharedRecipes.map(r=>renderCard(r)).join("");
-    attachCardListeners(document.getElementById("shared-grid"));
-  }catch(e){
-    showToast("Couldn't load shared list");
-  }
-}
+function getShareUrl(){if(!currentUser)return null;return window.location.origin+window.location.pathname+"?share="+currentUser.uid}
+function copyShareLink(){if(!currentUser){showAuthModal();return}navigator.clipboard.writeText(getShareUrl()).then(()=>showToast("\u{1F517} Share link copied!")).catch(()=>showToast("Couldn't copy"))}
+function shareNative(){if(!currentUser){showAuthModal();return}if(navigator.share){navigator.share({title:"My jerky favorites!",text:(currentUser.displayName||"Someone")+"'s favorites on Cody's Meats",url:getShareUrl()}).catch(()=>{})}else copyShareLink()}
+async function loadSharedList(uid){try{const snap=await db.collection("users").doc(uid).collection("favorites").get();const ids=[];snap.forEach(doc=>ids.push(doc.data().id));if(!ids.length){showToast("No favorites found");return}let userName="A Fellow Jerky Lover";try{const u=await db.collection("users").doc(uid).get();if(u.exists&&u.data().displayName)userName=u.data().displayName}catch(e){}state.page="favorites";switchPage("favorites");document.getElementById("fav-content").style.display="none";document.getElementById("fav-login-prompt").style.display="none";const sv=document.getElementById("shared-view");sv.style.display="block";document.getElementById("shared-name").textContent=userName+"'s Favorites";document.getElementById("shared-count").textContent=ids.length+" recipes";const shared=R.filter(r=>ids.includes(r.id));document.getElementById("shared-grid").innerHTML=shared.map(renderCard).join("");attachCardListeners(document.getElementById("shared-grid"))}catch(e){showToast("Couldn't load shared list")}}
 
 // ===== Rendering =====
 function spiceDots(l){return [1,2,3,4,5].map(i=>'<div class="spice-dot" style="background:'+(i<=l?SC[l]:'rgba(255,255,255,0.15)')+'"></div>').join("")}
+function renderCard(r){const c=MC[r.meat]||MC.Beef;const fav=isFav(r.id);const isUser=typeof r.id==="string"&&r.id.startsWith("user_");return '<div class="card" data-id="'+r.id+'">'+(isUser?'<div class="rec-tag">\u270D\uFE0F My Recipe</div>':'')+'<button class="fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav(\''+(typeof r.id==="string"?"'+r.id+'":""+r.id)+'\',event)">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>'}
 
-function renderCard(r){
-  const c=MC[r.meat];
-  const fav=isFav(r.id);
-  return '<div class="card" data-id="'+r.id+'" onmouseenter="this.style.borderColor=\''+c.bd+'\'" onmouseleave="this.style.borderColor=\'\'"><button class="fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>';
-}
+function renderModal(r){const c=MC[r.meat]||MC.Beef;const fav=isFav(r.id);const favId=typeof r.id==="string"?"'"+r.id+"'":r.id;return '<div class="modal-head" style="background:linear-gradient(135deg,'+c.bd+'22,transparent);border-bottom:1px solid '+c.bd+'20"><button class="modal-close" onclick="closeModal()">\u2715</button><div class="modal-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+(SI[r.style]||"")+' '+r.style+'</span></div><h2>'+r.name+'</h2><p class="modal-desc">'+r.desc+'</p></div><div class="modal-body"><button class="modal-fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+favId+',event)"><span class="heart">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</span> '+(fav?"Saved to Favorites":"Add to Favorites")+'</button><div class="modal-meta"><div class="meta-box"><div class="meta-label">Spice Level</div><div class="meta-val"><div class="spice-dots">'+spiceDots(r.spice)+'</div>'+SL[r.spice]+' '+SE[r.spice]+'</div></div><div class="meta-box"><div class="meta-label">Dehydrator Temp</div><div class="meta-val">\u{1F321} '+r.t+'\u00b0F</div></div><div class="meta-box"><div class="meta-label">Dry Time</div><div class="meta-val">\u23F1 '+r.d+' hrs</div></div><div class="meta-box"><div class="meta-label">Marinate</div><div class="meta-val">\u{1F550} '+(r.m||"N/A")+'</div></div></div><div><div class="meta-label" style="margin-bottom:10px">Ingredients</div><table class="ing-table"><thead><tr><th>Amount</th><th>Ingredient</th></tr></thead><tbody>'+r.i.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>').join("")+'</tbody></table></div>'+(TIPS[r.meat]?'<div class="pro-tip" style="background:linear-gradient(135deg,'+c.bd+'15,'+c.bd+'08);border:1px solid '+c.bd+'30"><div class="meta-label" style="color:'+c.tx+'">Pro Tip</div><p>'+TIPS[r.meat]+'</p></div>':'')+'</div>'}
 
-function renderModal(r){
-  const c=MC[r.meat];
-  const fav=isFav(r.id);
-  return '<div class="modal-head" style="background:linear-gradient(135deg,'+c.bd+'22,transparent);border-bottom:1px solid '+c.bd+'20"><button class="modal-close" onclick="closeModal()">\u2715</button><div class="modal-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+(SI[r.style]||"")+' '+r.style+'</span></div><h2>'+r.name+'</h2><p class="modal-desc">'+r.desc+'</p></div><div class="modal-body"><button class="modal-fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)"><span class="heart">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</span> '+(fav?"Saved to Favorites":"Add to Favorites")+'</button><div class="modal-meta"><div class="meta-box"><div class="meta-label">Spice Level</div><div class="meta-val"><div class="spice-dots">'+spiceDots(r.spice)+'</div>'+SL[r.spice]+' '+SE[r.spice]+'</div></div><div class="meta-box"><div class="meta-label">Dehydrator Temp</div><div class="meta-val">\u{1F321} '+r.t+'\u00b0F</div></div><div class="meta-box"><div class="meta-label">Dry Time</div><div class="meta-val">\u23F1 '+r.d+' hrs</div></div><div class="meta-box"><div class="meta-label">Marinate</div><div class="meta-val">\u{1F550} '+r.m+'</div></div></div><div><div class="meta-label" style="margin-bottom:12px">Ingredients</div><table class="ing-table"><thead><tr><th>Amount</th><th>Ingredient</th></tr></thead><tbody>'+r.i.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>').join("")+'</tbody></table></div><div class="pro-tip" style="background:linear-gradient(135deg,'+c.bd+'15,'+c.bd+'08);border:1px solid '+c.bd+'30"><div class="meta-label" style="color:'+c.tx+'">Pro Tip</div><p>'+TIPS[r.meat]+'</p></div></div>';
-}
+function attachCardListeners(container){container.querySelectorAll(".card").forEach(c=>{c.addEventListener("click",e=>{if(e.target.closest(".fav-btn"))return;const all=getAllRecipes();const id=c.dataset.id;const r=all.find(x=>String(x.id)===id);if(r)openModal(r)})})}
+function filter(){const all=getAllRecipes();return all.filter(r=>{if(state.meat!=="All"&&r.meat!==state.meat)return false;if(state.style!=="All"&&r.style!==state.style)return false;if(state.spice>0&&r.spice!==state.spice)return false;if(state.search){const s=state.search.toLowerCase();return r.name.toLowerCase().includes(s)||r.desc.toLowerCase().includes(s)||r.i.some(x=>x[1].toLowerCase().includes(s))||r.meat.toLowerCase().includes(s)||r.style.toLowerCase().includes(s)}return true})}
+function render(){const f=filter();const g=document.getElementById("recipe-grid"),e=document.getElementById("empty-state");if(!f.length){g.innerHTML="";e.style.display="block"}else{e.style.display="none";g.innerHTML=f.map(renderCard).join("")}const all=getAllRecipes();document.getElementById("filter-count").textContent="Showing "+f.length+" of "+all.length+" recipes";attachCardListeners(g)}
+function openModal(r){const m=document.getElementById("modal"),o=document.getElementById("modal-overlay");m.innerHTML=renderModal(r);const c=MC[r.meat]||MC.Beef;m.style.borderColor=c.bd;o.classList.add("open");document.body.style.overflow="hidden"}
+function closeModal(){document.getElementById("modal-overlay").classList.remove("open");document.body.style.overflow=""}
+function renderFilters(){const mf=document.getElementById("meat-filters");mf.innerHTML=meats.map(m=>{const c=MC[m];const a=state.meat===m;const bg=a?(m==="All"?"rgba(255,255,255,0.12)":c?c.bg:""):"";const bd=a?(m==="All"?"rgba(255,255,255,0.3)":c?c.bd:""):"";const tx=a?(m==="All"?"#fff":c?c.tx:""):"";return '<button class="fbtn'+(a?" active":"")+'" data-meat="'+m+'" style="'+(a?"background:"+bg+";border-color:"+bd+";color:"+tx:"")+'">'+m+'</button>'}).join("");const sf=document.getElementById("style-filters");sf.innerHTML=styles.map(s=>'<button class="fbtn'+(state.style===s?" active":"")+'" data-style="'+s+'">'+(s!=="All"&&SI[s]?SI[s]+" ":"")+s+'</button>').join("");const pf=document.getElementById("spice-filters");pf.innerHTML='<button class="fbtn'+(state.spice===0?" active":"")+'" data-spice="0">All</button>'+[1,2,3,4,5].map(s=>'<button class="fbtn'+(state.spice===s?" active":"")+'" data-spice="'+s+'">'+SE[s]+'</button>').join("");mf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.meat=b.dataset.meat;renderFilters();render()}));sf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.style=b.dataset.style;renderFilters();render()}));pf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.spice=+b.dataset.spice;renderFilters();render()}))}
+function renderFavPage(){if(!currentUser){document.getElementById("fav-login-prompt").style.display="block";document.getElementById("fav-content").style.display="none";return}document.getElementById("fav-login-prompt").style.display="none";document.getElementById("fav-content").style.display="block";const all=getAllRecipes();const favRecipes=all.filter(r=>favorites.has(r.id));const fg=document.getElementById("fav-grid");const fe=document.getElementById("fav-empty");document.getElementById("fav-count-label").textContent=favRecipes.length+" recipe"+(favRecipes.length!==1?"s":"");if(!favRecipes.length){fg.innerHTML="";fe.style.display="block"}else{fe.style.display="none";fg.innerHTML=favRecipes.map(renderCard).join("");attachCardListeners(fg)}const recs=getRecommendations();const recS=document.getElementById("fav-recs");const recG=document.getElementById("rec-grid");if(recs.length>0){recS.style.display="block";recG.innerHTML=recs.map(r=>{const c=MC[r.meat]||MC.Beef;return '<div class="card" data-id="'+r.id+'"><div class="rec-tag">\u2728 Recommended</div><button class="fav-btn'+(isFav(r.id)?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(isFav(r.id)?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>'}).join("");attachCardListeners(recG)}else{recS.style.display="none"}}
 
-function attachCardListeners(container){
-  container.querySelectorAll(".card").forEach(c=>{
-    c.addEventListener("click",e=>{
-      if(e.target.closest(".fav-btn"))return;
-      const r=R.find(x=>x.id===+c.dataset.id);
-      if(r)openModal(r);
-    });
-  });
-}
+// ===== Create Recipe =====
+function pickSpice(n){createSpice=n;document.querySelectorAll(".spice-pick").forEach(b=>{b.classList.toggle("active",+b.dataset.spice===n)});const labels=["","Mild \u{1F336}","Medium \u{1F336}\u{1F336}","Hot \u{1F525}","Very Hot \u{1F525}\u{1F525}","Extreme \u{1F480}"];document.getElementById("cr-spice-label").textContent="Selected: "+labels[n]}
+function addIngRow(){const container=document.getElementById("cr-ingredients");const row=document.createElement("div");row.className="ing-row";row.innerHTML='<input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button>';container.appendChild(row);row.querySelector(".ingredient").focus()}
+function removeIng(btn){const rows=document.querySelectorAll("#cr-ingredients .ing-row");if(rows.length>1){btn.closest(".ing-row").remove()}else{showToast("Need at least one ingredient")}}
+function submitRecipe(){if(!currentUser){showAuthModal();return}const name=document.getElementById("cr-name").value.trim();const desc=document.getElementById("cr-desc").value.trim();const meat=document.getElementById("cr-meat").value;const style=document.getElementById("cr-style").value;const temp=document.getElementById("cr-temp").value;const time=document.getElementById("cr-time").value.trim();const marinate=document.getElementById("cr-marinate").value.trim();const errEl=document.getElementById("cr-error");errEl.style.display="none";
+if(!name){showCreateError("Give your recipe a name!");return}
+if(!meat){showCreateError("Select a meat type");return}
+if(!style){showCreateError("Select a flavor style");return}
+if(!createSpice){showCreateError("Tap a spice level (1-5)");return}
+if(!temp){showCreateError("Enter dehydrator temperature");return}
+if(!time){showCreateError("Enter dry time");return}
+const ings=[];document.querySelectorAll("#cr-ingredients .ing-row").forEach(row=>{const amt=row.querySelector(".amount").value.trim();const ing=row.querySelector(".ingredient").value.trim();if(ing)ings.push([amt,ing])});
+if(ings.length===0){showCreateError("Add at least one ingredient");return}
+const recipe={name:name,desc:desc,meat:meat,style:style,spice:createSpice,t:+temp,d:time,m:marinate||"N/A",i:ings,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:currentUser.uid};
+const btn=document.getElementById("cr-submit");btn.disabled=true;btn.textContent="Saving...";
+db.collection("users").doc(currentUser.uid).collection("recipes").add(recipe).then(doc=>{showToast("\u{1F969} Recipe saved!");clearCreateForm();btn.disabled=false;btn.textContent="\u{1F969} Save Recipe";switchPage("recipes")}).catch(err=>{showCreateError("Error saving: "+err.message);btn.disabled=false;btn.textContent="\u{1F969} Save Recipe"})}
+function showCreateError(msg){const el=document.getElementById("cr-error");el.textContent=msg;el.style.display="block";el.scrollIntoView({behavior:"smooth",block:"center"})}
+function clearCreateForm(){document.getElementById("cr-name").value="";document.getElementById("cr-desc").value="";document.getElementById("cr-meat").value="";document.getElementById("cr-style").value="";document.getElementById("cr-temp").value="";document.getElementById("cr-time").value="";document.getElementById("cr-marinate").value="";createSpice=0;document.querySelectorAll(".spice-pick").forEach(b=>b.classList.remove("active"));document.getElementById("cr-spice-label").textContent="Tap to select: 1=Mild \u{1F336}  2=Medium \u{1F336}\u{1F336}  3=Hot \u{1F525}  4=Very Hot \u{1F525}\u{1F525}  5=Extreme \u{1F480}";const container=document.getElementById("cr-ingredients");container.innerHTML='<div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div><div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div><div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div>';document.getElementById("cr-error").style.display="none"}
+function renderCreatePage(){if(!currentUser){document.getElementById("create-login-prompt").style.display="block";document.getElementById("create-form").style.display="none"}else{document.getElementById("create-login-prompt").style.display="none";document.getElementById("create-form").style.display="block"}}
 
-function filter(){return R.filter(r=>{if(state.meat!=="All"&&r.meat!==state.meat)return false;if(state.style!=="All"&&r.style!==state.style)return false;if(state.spice>0&&r.spice!==state.spice)return false;if(state.search){const s=state.search.toLowerCase();return r.name.toLowerCase().includes(s)||r.desc.toLowerCase().includes(s)||r.i.some(x=>x[1].toLowerCase().includes(s))||r.meat.toLowerCase().includes(s)||r.style.toLowerCase().includes(s)}return true})}
+// ===== Page Navigation =====
+function switchPage(page){state.page=page;
+document.querySelectorAll(".nav-link").forEach(x=>x.classList.remove("active"));document.querySelectorAll('.nav-link[data-page="'+page+'"]').forEach(x=>x.classList.add("active"));
+document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));document.querySelectorAll('.tab-btn[data-page="'+page+'"]').forEach(x=>x.classList.add("active"));
+document.getElementById("recipes-page").style.display=page==="recipes"?"block":"none";
+document.getElementById("fav-page").classList.toggle("visible",page==="favorites");
+document.getElementById("create-page").classList.toggle("visible",page==="create");
+document.getElementById("shop-page").classList.toggle("visible",page==="shop");
+if(page==="favorites"){document.getElementById("shared-view").style.display="none";renderFavPage()}
+if(page==="create")renderCreatePage();
+window.scrollTo({top:0,behavior:"smooth"})}
 
-function render(){
-  const f=filter();
-  const g=document.getElementById("recipe-grid"),e=document.getElementById("empty-state");
-  if(!f.length){g.innerHTML="";e.style.display="block"}
-  else{e.style.display="none";g.innerHTML=f.map(renderCard).join("")}
-  document.getElementById("filter-count").textContent="Showing "+f.length+" of "+R.length+" recipes";
-  attachCardListeners(g);
-}
-
-function openModal(r){
-  const m=document.getElementById("modal"),o=document.getElementById("modal-overlay");
-  m.innerHTML=renderModal(r);
-  m.style.borderColor=MC[r.meat].bd;
-  o.classList.add("open");
-  document.body.style.overflow="hidden";
-}
-function closeModal(){
-  document.getElementById("modal-overlay").classList.remove("open");
-  document.body.style.overflow="";
-}
-
-function renderFilters(){
-  const mf=document.getElementById("meat-filters");
-  mf.innerHTML=meats.map(m=>{const c=MC[m];const a=state.meat===m;const bg=a?(m==="All"?"rgba(255,255,255,0.12)":c?c.bg:"rgba(255,255,255,0.12)"):"";const bd=a?(m==="All"?"rgba(255,255,255,0.3)":c?c.bd:"rgba(255,255,255,0.3)"):"";const tx=a?(m==="All"?"#fff":c?c.tx:"#fff"):"";return '<button class="fbtn'+(a?" active":"")+'" data-meat="'+m+'" style="'+(a?"background:"+bg+";border-color:"+bd+";color:"+tx:"")+'">'+m+'</button>'}).join("");
-  const sf=document.getElementById("style-filters");
-  sf.innerHTML=styles.map(s=>'<button class="fbtn'+(state.style===s?" active":"")+'" data-style="'+s+'">'+(s!=="All"&&SI[s]?SI[s]+" ":"")+s+'</button>').join("");
-  const pf=document.getElementById("spice-filters");
-  pf.innerHTML='<button class="fbtn'+(state.spice===0?" active":"")+'" data-spice="0">All</button>'+[1,2,3,4,5].map(s=>'<button class="fbtn'+(state.spice===s?" active":"")+'" data-spice="'+s+'">'+SE[s]+'</button>').join("");
-  mf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.meat=b.dataset.meat;renderFilters();render()}));
-  sf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.style=b.dataset.style;renderFilters();render()}));
-  pf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.spice=+b.dataset.spice;renderFilters();render()}));
-}
-
-function renderFavPage(){
-  if(!currentUser){
-    document.getElementById("fav-login-prompt").style.display="block";
-    document.getElementById("fav-content").style.display="none";
-    return;
-  }
-  document.getElementById("fav-login-prompt").style.display="none";
-  document.getElementById("fav-content").style.display="block";
-  // My favorites
-  const favRecipes=R.filter(r=>favorites.has(r.id));
-  const fg=document.getElementById("fav-grid");
-  const fe=document.getElementById("fav-empty");
-  document.getElementById("fav-count-label").textContent=favRecipes.length+" recipe"+(favRecipes.length!==1?"s":"");
-  if(favRecipes.length===0){
-    fg.innerHTML="";
-    fe.style.display="block";
-  } else {
-    fe.style.display="none";
-    fg.innerHTML=favRecipes.map(renderCard).join("");
-    attachCardListeners(fg);
-  }
-  // Recommendations
-  const recs=getRecommendations();
-  const recSection=document.getElementById("fav-recs");
-  const recGrid=document.getElementById("rec-grid");
-  if(recs.length>0){
-    recSection.style.display="block";
-    recGrid.innerHTML=recs.map(r=>'<div class="card" data-id="'+r.id+'"><div class="rec-tag">\u2728 Recommended</div><button class="fav-btn'+(isFav(r.id)?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(isFav(r.id)?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+MC[r.meat].bg+';color:'+MC[r.meat].tx+';border:1px solid '+MC[r.meat].bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>').join("");
-    attachCardListeners(recGrid);
-  } else {
-    recSection.style.display="none";
-  }
-}
-
-function switchPage(page){
-  document.querySelectorAll(".nav-link").forEach(x=>x.classList.remove("active"));
-  document.querySelectorAll('.nav-link[data-page="'+page+'"]').forEach(x=>x.classList.add("active"));
-  state.page=page;
-  document.getElementById("recipes-page").style.display=page==="recipes"?"block":"none";
-  document.getElementById("fav-page").classList.toggle("visible",page==="favorites");
-  document.getElementById("shop-page").classList.toggle("visible",page==="shop");
-  if(page==="favorites"){
-    document.getElementById("shared-view").style.display="none";
-    renderFavPage();
-  }
-}
-
-// ===== Auth state listener =====
-auth.onAuthStateChanged(user=>{
-  currentUser=user;
-  updateAuthUI(user);
-  if(user){
-    // Save user profile for sharing
-    db.collection("users").doc(user.uid).set({
-      displayName:user.displayName||user.email.split("@")[0],
-      email:user.email,
-      photoURL:user.photoURL||null,
-      lastSeen:firebase.firestore.FieldValue.serverTimestamp()
-    },{merge:true});
-    subscribeFavorites(user.uid);
-    document.getElementById("fav-page-desc").textContent="Your saved recipes, synced across all your devices.";
-  } else {
-    if(unsubFavorites){unsubFavorites();unsubFavorites=null}
-    favorites=new Set();
-    updateFavUI();
-    if(state.page==="favorites")renderFavPage();
-  }
-  render();
-});
+// ===== Auth State =====
+auth.onAuthStateChanged(user=>{currentUser=user;updateAuthUI(user);if(user){db.collection("users").doc(user.uid).set({displayName:user.displayName||user.email.split("@")[0],email:user.email,photoURL:user.photoURL||null,lastSeen:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});subscribeFavorites(user.uid);subscribeUserRecipes(user.uid)}else{if(unsubFavorites){unsubFavorites();unsubFavorites=null}if(unsubUserRecipes){unsubUserRecipes();unsubUserRecipes=null}favorites=new Set();userRecipes=[];updateFavUI();updateRecipeCount();render();if(state.page==="favorites")renderFavPage();if(state.page==="create")renderCreatePage()}});
 
 // ===== Init =====
-document.getElementById("hero-desc").textContent=R.length+" handcrafted recipes with full ingredients, dehydrator temps & times. "+meats.length+" meat types, "+(styles.length-1)+" flavor styles. From mild to face-melting.";
-document.getElementById("hero-stats").innerHTML=[{n:R.length,l:"Recipes"},{n:meats.length-1,l:"Meat Types"},{n:styles.length-1,l:"Styles"},{n:R.filter(r=>r.spice===5).length,l:"Extreme Heat"}].map(s=>'<div><div class="stat-num">'+s.n+'</div><div class="stat-label">'+s.l+'</div></div>').join("");
-document.getElementById("footer-count").textContent=R.length;
+updateRecipeCount();
 document.getElementById("search").addEventListener("input",e=>{state.search=e.target.value;render()});
 document.getElementById("modal-overlay").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal()});
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"){closeModal();hideAuthModal()}
-});
-document.querySelectorAll(".nav-link").forEach(l=>{
-  l.addEventListener("click",()=>switchPage(l.dataset.page));
-});
-
-// Check for shared list URL
+document.getElementById("auth-overlay").addEventListener("click",e=>{if(e.target===e.currentTarget)hideAuthModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();hideAuthModal()}});
+document.querySelectorAll(".nav-link").forEach(l=>l.addEventListener("click",()=>switchPage(l.dataset.page)));
+document.querySelectorAll(".tab-btn").forEach(l=>l.addEventListener("click",()=>switchPage(l.dataset.page)));
 const urlParams=new URLSearchParams(window.location.search);
 const shareUid=urlParams.get("share");
-if(shareUid){
-  loadSharedList(shareUid);
-}
-
+if(shareUid)loadSharedList(shareUid);
 renderFilters();render();
 </script>
 </body>
