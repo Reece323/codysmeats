@@ -156,7 +156,7 @@ a{-webkit-tap-highlight-color:transparent}
 .login-prompt h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px}
 .login-prompt p{color:var(--text-dimmer);margin-bottom:20px;font-size:13px}
 .login-prompt .login-btn{background:linear-gradient(135deg,var(--red),var(--red-dark));border:none;color:#fff;border-radius:10px;padding:14px 28px;font-size:15px;font-weight:600;transition:opacity .2s}
-.rec-tag{display:inline-block;background:rgba(232,83,74,0.12);border:1px solid rgba(232,83,74,0.25);color:var(--red);font-size:10px;font-weight:700;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:6px;margin-bottom:4px}
+.rec-tag{display:inline-block;background:rgba(232,83,74,0.12);border:1px solid rgba(232,83,74,0.25);color:var(--red);font-size:9px;font-weight:700;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:4px;margin-bottom:2px;max-width:calc(100% - 48px)}
 .shared-banner{background:linear-gradient(135deg,rgba(180,40,30,0.15),rgba(180,40,30,0.05));border:1px solid rgba(180,40,30,0.2);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
 .shared-banner .avatar{width:36px;height:36px;border-radius:50%;background:var(--red-dark);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .shared-banner .info h4{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
@@ -326,8 +326,8 @@ body{padding-bottom:0}
 <div id="fav-login-prompt" class="login-prompt" style="display:none"><div class="icon">&#x1F512;</div><h3>Sign in to save favorites</h3><p>Your favorites sync across all devices and you can share your list with friends.</p><button class="login-btn" onclick="showAuthModal()">Sign In</button></div>
 <div id="fav-content" style="display:none">
 <div class="share-bar"><button class="share-btn" onclick="copyShareLink()"><span>&#x1F517;</span> Copy Share Link</button><button class="share-btn" onclick="shareNative()"><span>&#x1F4E4;</span> Share</button></div>
-<div id="fav-recs" class="fav-section" style="display:none"><div class="fav-section-title">&#x2728; Recommended For You</div><div class="fav-section-sub">Based on your favorites</div><div class="grid" id="rec-grid"></div></div>
 <div class="fav-section"><div class="fav-section-title">&#x2764;&#xFE0F; My Saved Recipes</div><div class="fav-section-sub" id="fav-count-label">0 recipes</div><div class="grid" id="fav-grid"></div><div class="empty" id="fav-empty" style="display:none"><div class="empty-icon">&#x1F494;</div><h3>No favorites yet</h3><p>Tap the heart on any recipe to save it here.</p></div></div>
+<div id="fav-recs" class="fav-section" style="display:none"><div class="fav-section-title">&#x2728; Recommended For You</div><div class="fav-section-sub">Based on your favorites</div><div class="grid" id="rec-grid"></div></div>
 </div>
 <div id="shared-view" style="display:none">
 <div class="shared-banner" id="shared-banner"><div class="avatar">&#x1F969;</div><div class="info"><h4 id="shared-name">Someone's Favorites</h4><p id="shared-count">0 recipes</p></div></div>
@@ -583,7 +583,7 @@ function renderCard(r){
   var fav=isFav(idStr);
   var isUser=typeof r.id==="string"&&!r.id.match(/^\d+$/);
   return '<div class="card" data-id="'+idStr+'">'
-    +(isUser?'<div class="rec-tag">\u270D\uFE0F My Recipe</div>':'')
+    +(isUser?'<div class="rec-tag">\u270D Mine</div>':'')
     +'<button class="fav-btn'+(fav?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)">'+(fav?'\u2764\uFE0F':'\u{1F90D}')+'</button>'
     +'<div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div>'
     +'<h3>'+r.name+'</h3>'
@@ -673,7 +673,7 @@ function renderFavPage(){
   var recs=getRecommendations();
   var recS=document.getElementById("fav-recs");
   var recG=document.getElementById("rec-grid");
-  if(recs.length>0){recS.style.display="block";recG.innerHTML=recs.map(function(r){var c=MC[r.meat]||MC.Beef;var idStr=String(r.id);return '<div class="card" data-id="'+idStr+'"><div class="rec-tag">\u2728 Recommended</div><button class="fav-btn'+(isFav(idStr)?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)">'+(isFav(idStr)?'\u2764\uFE0F':'\u{1F90D}')+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>'}).join("");attachCardListeners(recG)}
+  if(recs.length>0){recS.style.display="block";recG.innerHTML=recs.map(function(r){var c=MC[r.meat]||MC.Beef;var idStr=String(r.id);return '<div class="card" data-id="'+idStr+'"><div class="rec-tag">\u2728 Rec'd</div><button class="fav-btn'+(isFav(idStr)?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)">'+(isFav(idStr)?'\u2764\uFE0F':'\u{1F90D}')+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>'}).join("");attachCardListeners(recG)}
   else{recS.style.display="none"}
 }
 
