@@ -520,7 +520,7 @@ function spiceDots(l){return [1,2,3,4,5].map(i=>'<div class="spice-dot" style="b
 function renderCard(r){
   const c=MC[r.meat];
   const fav=isFav(r.id);
-  return '<div class="card" data-id="'+r.id+'" onmouseenter="this.style.borderColor=\''+c.bd+'\'" onmouseleave="this.style.borderColor=\'\'"><button class="fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div><div class="spice-dots">'+spiceDots(r.spice)+'</div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><span class="card-spice-label" style="color:'+c.tx+'">'+SE[r.spice]+' '+SL[r.spice]+'</span></div></div>';
+  return '<div class="card" data-id="'+r.id+'" onmouseenter="this.style.borderColor=\''+c.bd+'\'" onmouseleave="this.style.borderColor=\'\'"><button class="fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>';
 }
 
 function renderModal(r){
@@ -601,7 +601,7 @@ function renderFavPage(){
   const recGrid=document.getElementById("rec-grid");
   if(recs.length>0){
     recSection.style.display="block";
-    recGrid.innerHTML=recs.map(r=>'<div class="card" data-id="'+r.id+'"><div class="rec-tag">\u2728 Recommended</div><button class="fav-btn'+(isFav(r.id)?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(isFav(r.id)?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+MC[r.meat].bg+';color:'+MC[r.meat].tx+';border:1px solid '+MC[r.meat].bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div><div class="spice-dots">'+spiceDots(r.spice)+'</div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span></div></div>').join("");
+    recGrid.innerHTML=recs.map(r=>'<div class="card" data-id="'+r.id+'"><div class="rec-tag">\u2728 Recommended</div><button class="fav-btn'+(isFav(r.id)?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(isFav(r.id)?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+MC[r.meat].bg+';color:'+MC[r.meat].tx+';border:1px solid '+MC[r.meat].bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>').join("");
     attachCardListeners(recGrid);
   } else {
     recSection.style.display="none";
