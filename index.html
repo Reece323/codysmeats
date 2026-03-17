@@ -137,6 +137,8 @@ a{-webkit-tap-highlight-color:transparent}
 .modal-fav-btn:active{transform:scale(0.97)}
 .modal-fav-btn.active{background:var(--red-dark);border-color:var(--red-dark);color:#fff}
 .modal-fav-btn .heart{font-size:18px;line-height:1}
+.modal-delete-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,60,60,0.08);border:1px solid rgba(255,60,60,0.2);color:rgba(255,60,60,0.7);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;transition:all .15s;width:100%}
+.modal-delete-btn:active{transform:scale(0.97);background:rgba(255,60,60,0.15)}
 
 /* === FAVORITES PAGE === */
 .page{max-width:1400px;margin:0 auto;padding:32px 16px 40px;display:none}
@@ -595,8 +597,10 @@ function renderModal(r){
   var c=MC[r.meat]||MC.Beef;
   var idStr=String(r.id);
   var fav=isFav(idStr);
+  var isUser=typeof r.id==="string"&&!r.id.match(/^\d+$/);
   return '<div class="modal-head" style="background:linear-gradient(135deg,'+c.bd+'22,transparent);border-bottom:1px solid '+c.bd+'20"><button class="modal-close" onclick="closeModal()">\u2715</button><div class="modal-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+(SI[r.style]||'')+' '+r.style+'</span></div><h2>'+r.name+'</h2><p class="modal-desc">'+r.desc+'</p></div>'
     +'<div class="modal-body"><button class="modal-fav-btn'+(fav?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)"><span class="heart">'+(fav?'\u2764\uFE0F':'\u{1F90D}')+'</span> '+(fav?'Saved to Favorites':'Add to Favorites')+'</button>'
+    +(isUser?'<button class="modal-delete-btn" onclick="deleteRecipe(\''+idStr+'\')">\u{1F5D1} Delete This Recipe</button>':'')
     +'<div class="modal-meta"><div class="meta-box"><div class="meta-label">Spice Level</div><div class="meta-val"><div class="spice-dots">'+spiceDots(r.spice)+'</div>'+SL[r.spice]+' '+SE[r.spice]+'</div></div><div class="meta-box"><div class="meta-label">Dehydrator Temp</div><div class="meta-val">\u{1F321} '+r.t+'\u00b0F</div></div><div class="meta-box"><div class="meta-label">Dry Time</div><div class="meta-val">\u23F1 '+r.d+' hrs</div></div><div class="meta-box"><div class="meta-label">Marinate</div><div class="meta-val">\u{1F550} '+(r.m||'N/A')+'</div></div></div>'
     +'<div><div class="meta-label" style="margin-bottom:10px">Ingredients</div><table class="ing-table"><thead><tr><th>Amount</th><th>Ingredient</th></tr></thead><tbody>'+r.i.map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>'}).join('')+'</tbody></table></div>'
     +(TIPS[r.meat]?'<div class="pro-tip" style="background:linear-gradient(135deg,'+c.bd+'15,'+c.bd+'08);border:1px solid '+c.bd+'30"><div class="meta-label" style="color:'+c.tx+'">Pro Tip</div><p>'+TIPS[r.meat]+'</p></div>':'')
@@ -747,6 +751,17 @@ function submitRecipe(){
     showCreateError("Error: "+err.code+" - "+err.message);
     btn.disabled=false;
     btn.textContent="\u{1F969} Save Recipe";
+  });
+}
+
+function deleteRecipe(recipeId){
+  if(!currentUser)return;
+  if(!confirm("Delete this recipe? This cannot be undone."))return;
+  db.collection("users").doc(currentUser.uid).collection("recipes").doc(recipeId).delete().then(function(){
+    closeModal();
+    showToast("\u{1F5D1} Recipe deleted");
+  }).catch(function(err){
+    showToast("Error deleting: "+err.message);
   });
 }
 
