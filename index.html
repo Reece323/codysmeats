@@ -119,7 +119,7 @@ a{-webkit-tap-highlight-color:transparent}
 .card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--card-radius,12px);padding:16px 16px 16px 20px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:8px;min-height:180px;position:relative;-webkit-tap-highlight-color:transparent;box-shadow:var(--card-glow,none);animation:cardIn .5s cubic-bezier(.4,0,.2,1) both;overflow:hidden}
 /* OVERHAUL 1: Meat-type color accent bar on left */
 .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:12px 0 0 12px;background:var(--accent-color,var(--red));opacity:0.5;transition:opacity .2s,width .2s}
-.card:hover{background:var(--card-hover);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+.card:hover{background:var(--card-hover)}
 .card:hover::before{opacity:1;width:5px}
 .card:active{transform:scale(0.98)}
 /* OVERHAUL 4: Hover overlay with quick stats */
