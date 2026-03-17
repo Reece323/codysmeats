@@ -83,7 +83,10 @@ a{-webkit-tap-highlight-color:transparent}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,6vw,72px);font-weight:900;margin:0 0 12px;line-height:1;letter-spacing:-.03em}
 .hero h1 .grad{background:linear-gradient(135deg,var(--red),var(--red-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{font-size:15px;color:var(--text-dim);max-width:500px;margin:0 auto 24px;line-height:1.6}
-.stats{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+/* OVERHAUL 3: Glass pill stats */
+.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.stats>div{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:14px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .2s,box-shadow .2s}
+.stats>div:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
 .stat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:var(--red)}
 .stat-label{font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dimmer);text-transform:uppercase;letter-spacing:.1em}
 
@@ -111,9 +114,21 @@ a{-webkit-tap-highlight-color:transparent}
 .empty p{color:var(--text-dimmer);font-size:13px}
 
 /* === RECIPE CARDS === */
-.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--card-radius,12px);padding:16px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:8px;min-height:180px;position:relative;-webkit-tap-highlight-color:transparent;box-shadow:var(--card-glow,none)}
-.card:hover{background:var(--card-hover);transform:translateY(-2px)}
+/* OVERHAUL 2: Staggered entrance */
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--card-radius,12px);padding:16px 16px 16px 20px;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:8px;min-height:180px;position:relative;-webkit-tap-highlight-color:transparent;box-shadow:var(--card-glow,none);animation:cardIn .5s cubic-bezier(.4,0,.2,1) both;overflow:hidden}
+/* OVERHAUL 1: Meat-type color accent bar on left */
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:12px 0 0 12px;background:var(--accent-color,var(--red));opacity:0.5;transition:opacity .2s,width .2s}
+.card:hover{background:var(--card-hover);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+.card:hover::before{opacity:1;width:5px}
 .card:active{transform:scale(0.98)}
+/* OVERHAUL 4: Hover overlay with quick stats */
+.card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.85) 100%);opacity:0;transition:opacity .25s;display:flex;align-items:flex-end;padding:16px;border-radius:var(--card-radius,12px);pointer-events:none;z-index:5}
+.card:hover .card-overlay{opacity:1}
+.card-overlay-content{display:flex;gap:12px;width:100%;justify-content:space-around}
+.card-overlay-stat{text-align:center}
+.card-overlay-stat .val{font-size:16px;font-weight:800;font-family:'Playfair Display',serif;color:#fff}
+.card-overlay-stat .lbl{font-size:9px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start}
 .card-tags{display:flex;gap:5px;flex-wrap:wrap}
 .tag{border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em}
@@ -122,6 +137,10 @@ a{-webkit-tap-highlight-color:transparent}
 .card-desc{font-size:13px;color:var(--text-dim);line-height:1.5;flex:1}
 .card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
 .card-time{font-size:11px;color:var(--text-dimmer);font-family:'DM Mono',monospace}
+/* OVERHAUL 5: Flame bar spice indicator */
+.spice-bar{display:flex;gap:2px;align-items:center;height:12px}
+.spice-seg{width:10px;height:100%;border-radius:2px;background:var(--dot-off);transition:all .3s}
+.spice-seg.lit{box-shadow:0 0 6px currentColor}
 .spice-dots{display:flex;gap:3px;align-items:center}
 .spice-dot{width:8px;height:8px;border-radius:50%;background:var(--dot-off);transition:background .3s}
 
@@ -644,23 +663,31 @@ function getRecommendations(){
 function getShareUrl(){if(!currentUser)return null;return window.location.origin+window.location.pathname+"?share="+currentUser.uid}
 function copyShareLink(){if(!currentUser){showAuthModal();return}navigator.clipboard.writeText(getShareUrl()).then(function(){showToast("\u{1F517} Share link copied!")}).catch(function(){showToast("Couldn't copy")})}
 function shareNative(){if(!currentUser){showAuthModal();return}if(navigator.share){navigator.share({title:"My jerky favorites!",text:(currentUser.displayName||"Someone")+"'s favorites on Cody's Meats",url:getShareUrl()}).catch(function(){})}else copyShareLink()}
-async function loadSharedList(uid){try{var snap=await db.collection("users").doc(uid).collection("favorites").get();var ids=[];snap.forEach(function(doc){ids.push(doc.id)});if(!ids.length){showToast("No favorites found");return}var userName="A Fellow Jerky Lover";try{var u=await db.collection("users").doc(uid).get();if(u.exists&&u.data().displayName)userName=u.data().displayName}catch(e){}state.page="favorites";switchPage("favorites");document.getElementById("fav-content").style.display="none";document.getElementById("fav-login-prompt").style.display="none";var sv=document.getElementById("shared-view");sv.style.display="block";document.getElementById("shared-name").textContent=userName+"'s Favorites";document.getElementById("shared-count").textContent=ids.length+" recipes";var shared=R.filter(function(r){return ids.includes(String(r.id))});document.getElementById("shared-grid").innerHTML=shared.map(renderCard).join("");attachCardListeners(document.getElementById("shared-grid"))}catch(e){showToast("Couldn't load shared list")}}
+async function loadSharedList(uid){try{var snap=await db.collection("users").doc(uid).collection("favorites").get();var ids=[];snap.forEach(function(doc){ids.push(doc.id)});if(!ids.length){showToast("No favorites found");return}var userName="A Fellow Jerky Lover";try{var u=await db.collection("users").doc(uid).get();if(u.exists&&u.data().displayName)userName=u.data().displayName}catch(e){}state.page="favorites";switchPage("favorites");document.getElementById("fav-content").style.display="none";document.getElementById("fav-login-prompt").style.display="none";var sv=document.getElementById("shared-view");sv.style.display="block";document.getElementById("shared-name").textContent=userName+"'s Favorites";document.getElementById("shared-count").textContent=ids.length+" recipes";var shared=R.filter(function(r){return ids.includes(String(r.id))});document.getElementById("shared-grid").innerHTML=shared.map(function(r,i){return renderCard(r,i)}).join("");attachCardListeners(document.getElementById("shared-grid"))}catch(e){showToast("Couldn't load shared list")}}
 
 // Rendering
 function spiceDots(l){return [1,2,3,4,5].map(function(i){return '<div class="spice-dot" style="background:'+(i<=l?SC[l]:'rgba(255,255,255,0.15)')+'"></div>'}).join("")}
 
-function renderCard(r){
+function renderCard(r,idx){
   var c=MC[r.meat]||MC.Beef;
   var idStr=String(r.id);
   var fav=isFav(idStr);
   var isUser=typeof r.id==="string"&&!r.id.match(/^\d+$/);
-  return '<div class="card" data-id="'+idStr+'">'
+  var delay=Math.min((idx||0)*0.04,0.8);
+  var flames='';
+  for(var fi=1;fi<=5;fi++){
+    var lit=fi<=r.spice;
+    var col=lit?SC[r.spice]:'';
+    flames+='<div class="spice-seg'+(lit?' lit':'')+'" style="'+(lit?'background:'+col+';color:'+col:'')+'"></div>';
+  }
+  return '<div class="card" data-id="'+idStr+'" style="--accent-color:'+c.bd+';animation-delay:'+delay+'s">'
     +(isUser?'<div class="rec-tag">\u270D Mine</div>':'')
+    +'<div class="card-overlay"><div class="card-overlay-content"><div class="card-overlay-stat"><div class="val">'+r.t+'\u00b0</div><div class="lbl">Temp</div></div><div class="card-overlay-stat"><div class="val">'+r.d+'</div><div class="lbl">Hours</div></div><div class="card-overlay-stat"><div class="val">'+SL[r.spice]+'</div><div class="lbl">Heat</div></div></div></div>'
     +'<button class="fav-btn'+(fav?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)">'+(fav?'\u2764\uFE0F':'\u{1F90D}')+'</button>'
     +'<div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div>'
     +'<h3>'+r.name+'</h3>'
     +'<p class="card-desc">'+r.desc+'</p>'
-    +'<div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>';
+    +'<div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-bar">'+flames+'</div></div></div>';
 }
 
 function renderModal(r){
@@ -704,7 +731,7 @@ function render(){
   var f=filter();
   var g=document.getElementById("recipe-grid"),e=document.getElementById("empty-state");
   if(!f.length){g.innerHTML="";e.style.display="block"}
-  else{e.style.display="none";g.innerHTML=f.map(renderCard).join("")}
+  else{e.style.display="none";g.innerHTML=f.map(function(r,i){return renderCard(r,i)}).join("")}
   var all=getAllRecipes();
   document.getElementById("filter-count").textContent="Showing "+f.length+" of "+all.length+" recipes";
   attachCardListeners(g);
@@ -743,7 +770,7 @@ function renderFavPage(){
   var fe=document.getElementById("fav-empty");
   document.getElementById("fav-count-label").textContent=favRecipes.length+" recipe"+(favRecipes.length!==1?"s":"");
   if(!favRecipes.length){fg.innerHTML="";fe.style.display="block"}
-  else{fe.style.display="none";fg.innerHTML=favRecipes.map(renderCard).join("");attachCardListeners(fg)}
+  else{fe.style.display="none";fg.innerHTML=favRecipes.map(function(r,i){return renderCard(r,i)}).join("");attachCardListeners(fg)}
   var recs=getRecommendations();
   var recS=document.getElementById("fav-recs");
   var recG=document.getElementById("rec-grid");
@@ -760,7 +787,7 @@ function renderMyRecipesPage(){
   var me=document.getElementById("myrecipes-empty");
   document.getElementById("myrecipes-count-label").textContent=userRecipes.length+" recipe"+(userRecipes.length!==1?"s":"");
   if(!userRecipes.length){mg.innerHTML="";me.style.display="block"}
-  else{me.style.display="none";mg.innerHTML=userRecipes.map(renderCard).join("");attachCardListeners(mg)}
+  else{me.style.display="none";mg.innerHTML=userRecipes.map(function(r,i){return renderCard(r,i)}).join("");attachCardListeners(mg)}
 }
 
 // Create Recipe
