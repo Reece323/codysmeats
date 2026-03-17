@@ -469,7 +469,7 @@ function showAuthModal(){document.getElementById("auth-overlay").classList.add("
 function hideAuthModal(){document.getElementById("auth-overlay").classList.remove("open")}
 function handleAuthClick(){if(currentUser){document.getElementById("auth-dropdown").classList.toggle("open")}else{showAuthModal()}}
 document.addEventListener("click",function(e){var dd=document.getElementById("auth-dropdown");var btn=document.getElementById("auth-btn");if(!dd.contains(e.target)&&!btn.contains(e.target))dd.classList.remove("open")});
-function signInWithGoogle(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(function(){hideAuthModal();showToast("Signed in!")}).catch(function(err){showAuthError(err.message)})}
+function signInWithGoogle(){var provider=new firebase.auth.GoogleAuthProvider();var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);if(isMobile){auth.signInWithRedirect(provider)}else{auth.signInWithPopup(provider).then(function(){hideAuthModal();showToast("Signed in!")}).catch(function(err){showAuthError(err.message)})}}
 function toggleAuthMode(){authMode=authMode==="signin"?"signup":"signin";document.getElementById("auth-submit").textContent=authMode==="signin"?"Sign In":"Create Account";document.getElementById("auth-toggle").textContent=authMode==="signin"?"Need an account? Sign up":"Already have an account? Sign in";document.getElementById("auth-error").style.display="none"}
 function emailAuth(){var email=document.getElementById("auth-email").value;var pass=document.getElementById("auth-password").value;if(!email||!pass){showAuthError("Please enter email and password");return}var fn=authMode==="signin"?auth.signInWithEmailAndPassword.bind(auth):auth.createUserWithEmailAndPassword.bind(auth);fn(email,pass).then(function(){hideAuthModal();showToast(authMode==="signin"?"Signed in!":"Account created!")}).catch(function(err){var msg=err.message;if(err.code==="auth/wrong-password")msg="Wrong password";if(err.code==="auth/user-not-found")msg="No account found. Sign up instead?";if(err.code==="auth/email-already-in-use")msg="Email already in use. Sign in instead?";if(err.code==="auth/weak-password")msg="Password must be at least 6 characters";showAuthError(msg)})}
 function showAuthError(msg){var el=document.getElementById("auth-error");el.textContent=msg;el.style.display="block"}
@@ -818,6 +818,7 @@ auth.onAuthStateChanged(function(user){
 });
 
 // Init
+auth.getRedirectResult().then(function(result){if(result.user){hideAuthModal();showToast("Signed in!")}}).catch(function(err){if(err.code)console.error("Redirect error:",err)});
 updateRecipeCount();
 document.getElementById("search").addEventListener("input",function(e){state.search=e.target.value;render()});
 document.getElementById("modal-overlay").addEventListener("click",function(e){if(e.target===e.currentTarget)closeModal()});
