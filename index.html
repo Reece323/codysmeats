@@ -294,6 +294,7 @@ body{padding-bottom:0}
 <div class="desktop-links">
 <button class="nav-link active" data-page="recipes">Recipes</button>
 <button class="nav-link" data-page="favorites">&#x2764; Favorites <span class="nav-fav-count" id="nav-fav-count" style="display:none">0</span></button>
+<button class="nav-link" data-page="myrecipes">My Recipes</button>
 <button class="nav-link" data-page="create">+ Create</button>
 <button class="nav-link" data-page="shop">Shop</button>
 </div>
@@ -306,7 +307,8 @@ body{padding-bottom:0}
 <!-- MOBILE TAB BAR -->
 <div class="tab-bar"><div class="tab-bar-inner">
 <button class="tab-btn active" data-page="recipes"><span class="tab-icon">&#x1F969;</span><span class="tab-label">Recipes</span></button>
-<button class="tab-btn" data-page="favorites"><span class="tab-icon">&#x2764;&#xFE0F;</span><span class="tab-label">Favorites</span><span class="tab-badge" id="tab-fav-badge">0</span></button>
+<button class="tab-btn" data-page="favorites"><span class="tab-icon">&#x2764;&#xFE0F;</span><span class="tab-label">Favs</span><span class="tab-badge" id="tab-fav-badge">0</span></button>
+<button class="tab-btn" data-page="myrecipes"><span class="tab-icon">&#x1F4D6;</span><span class="tab-label">Mine</span></button>
 <button class="tab-btn" data-page="create"><span class="tab-icon">&#x2795;</span><span class="tab-label">Create</span></button>
 <button class="tab-btn" data-page="shop"><span class="tab-icon">&#x1F6D2;</span><span class="tab-label">Shop</span></button>
 </div></div>
@@ -334,6 +336,18 @@ body{padding-bottom:0}
 </div>
 
 <!-- CREATE RECIPE PAGE -->
+<div class="page" id="myrecipes-page">
+<div class="page-header"><h2>My <span class="grad">Recipes</span></h2><p>Your custom jerky creations, saved to your account.</p></div>
+<div id="myrecipes-login-prompt" class="login-prompt" style="display:none"><div class="icon">&#x1F4D6;</div><h3>Sign in to see your recipes</h3><p>Create and save your own jerky recipes.</p><button class="login-btn" onclick="showAuthModal()">Sign In</button></div>
+<div id="myrecipes-content" style="display:none">
+<div style="margin-bottom:20px"><button class="share-btn" onclick="switchPage('create')"><span>&#x2795;</span> Create New Recipe</button></div>
+<div class="fav-section-sub" id="myrecipes-count-label">0 recipes</div>
+<div class="grid" id="myrecipes-grid"></div>
+<div class="empty" id="myrecipes-empty" style="display:none"><div class="empty-icon">&#x1F4DD;</div><h3>No recipes yet</h3><p>Tap Create to build your first custom jerky recipe.</p></div>
+</div>
+</div>
+
+<!-- CREATE FORM PAGE -->
 <div class="create-page" id="create-page">
 <div class="create-header"><h2><span class="grad">Create</span> Recipe</h2><p>Build your own custom jerky recipe. It'll be saved to your account and show up in your favorites.</p></div>
 <div id="create-login-prompt" class="login-prompt" style="display:none"><div class="icon">&#x270D;&#xFE0F;</div><h3>Sign in to create recipes</h3><p>Your custom recipes are saved to your account and synced across devices.</p><button class="login-btn" onclick="showAuthModal()">Sign In</button></div>
@@ -419,6 +433,7 @@ const firebaseConfig = {
   appId: "1:1058395413076:web:32dcaaf997d04e4861abc1",
   measurementId: "G-031XKDJ0WV"
 };
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -447,99 +462,365 @@ const styles=["All",...[...new Set(R.map(r=>r.style))]];
 
 function getAllRecipes(){return [...R,...userRecipes]}
 
-// ===== Toast =====
-function showToast(msg,duration=2500){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),duration)}
+// Toast
+function showToast(msg,dur){dur=dur||2500;var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},dur)}
 
-// ===== Auth =====
+// Auth UI
 function showAuthModal(){document.getElementById("auth-overlay").classList.add("open");document.getElementById("auth-error").style.display="none"}
 function hideAuthModal(){document.getElementById("auth-overlay").classList.remove("open")}
 function handleAuthClick(){if(currentUser){document.getElementById("auth-dropdown").classList.toggle("open")}else{showAuthModal()}}
-document.addEventListener("click",e=>{const dd=document.getElementById("auth-dropdown");const btn=document.getElementById("auth-btn");if(!dd.contains(e.target)&&!btn.contains(e.target))dd.classList.remove("open")});
-function signInWithGoogle(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>{hideAuthModal();showToast("Signed in!")}).catch(err=>showAuthError(err.message))}
+document.addEventListener("click",function(e){var dd=document.getElementById("auth-dropdown");var btn=document.getElementById("auth-btn");if(!dd.contains(e.target)&&!btn.contains(e.target))dd.classList.remove("open")});
+function signInWithGoogle(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(function(){hideAuthModal();showToast("Signed in!")}).catch(function(err){showAuthError(err.message)})}
 function toggleAuthMode(){authMode=authMode==="signin"?"signup":"signin";document.getElementById("auth-submit").textContent=authMode==="signin"?"Sign In":"Create Account";document.getElementById("auth-toggle").textContent=authMode==="signin"?"Need an account? Sign up":"Already have an account? Sign in";document.getElementById("auth-error").style.display="none"}
-function emailAuth(){const email=document.getElementById("auth-email").value;const pass=document.getElementById("auth-password").value;if(!email||!pass){showAuthError("Please enter email and password");return}const fn=authMode==="signin"?auth.signInWithEmailAndPassword.bind(auth):auth.createUserWithEmailAndPassword.bind(auth);fn(email,pass).then(()=>{hideAuthModal();showToast(authMode==="signin"?"Signed in!":"Account created!")}).catch(err=>{let msg=err.message;if(err.code==="auth/wrong-password")msg="Wrong password";if(err.code==="auth/user-not-found")msg="No account found. Sign up instead?";if(err.code==="auth/email-already-in-use")msg="Email already in use. Sign in instead?";if(err.code==="auth/weak-password")msg="Password must be at least 6 characters";showAuthError(msg)})}
-function showAuthError(msg){const el=document.getElementById("auth-error");el.textContent=msg;el.style.display="block"}
+function emailAuth(){var email=document.getElementById("auth-email").value;var pass=document.getElementById("auth-password").value;if(!email||!pass){showAuthError("Please enter email and password");return}var fn=authMode==="signin"?auth.signInWithEmailAndPassword.bind(auth):auth.createUserWithEmailAndPassword.bind(auth);fn(email,pass).then(function(){hideAuthModal();showToast(authMode==="signin"?"Signed in!":"Account created!")}).catch(function(err){var msg=err.message;if(err.code==="auth/wrong-password")msg="Wrong password";if(err.code==="auth/user-not-found")msg="No account found. Sign up instead?";if(err.code==="auth/email-already-in-use")msg="Email already in use. Sign in instead?";if(err.code==="auth/weak-password")msg="Password must be at least 6 characters";showAuthError(msg)})}
+function showAuthError(msg){var el=document.getElementById("auth-error");el.textContent=msg;el.style.display="block"}
 function signOut(){auth.signOut();document.getElementById("auth-dropdown").classList.remove("open");showToast("Signed out")}
-function updateAuthUI(user){const btn=document.getElementById("auth-btn");const dd=document.getElementById("dropdown-email");if(user){const name=user.displayName||user.email.split("@")[0];const photo=user.photoURL;btn.innerHTML=photo?'<img class="avatar" src="'+photo+'" alt=""><span class="user-name">'+name+'</span>':'<span class="user-name">'+name+'</span>';dd.textContent=user.email}else{btn.innerHTML="Sign In"}}
+function updateAuthUI(user){var btn=document.getElementById("auth-btn");var dd=document.getElementById("dropdown-email");if(user){var name=user.displayName||user.email.split("@")[0];var photo=user.photoURL;btn.innerHTML=photo?'<img class="avatar" src="'+photo+'" alt=""><span class="user-name">'+name+'</span>':'<span class="user-name">'+name+'</span>';dd.textContent=user.email}else{btn.innerHTML="Sign In"}}
 
-// ===== Favorites =====
-function isFav(id){return favorites.has(id)}
-function toggleFav(id,e){if(e){e.stopPropagation();e.preventDefault()}if(!currentUser){showAuthModal();return}const ref=db.collection("users").doc(currentUser.uid).collection("favorites").doc(String(id));if(favorites.has(id)){ref.delete();favorites.delete(id);showToast("Removed from favorites")}else{const all=getAllRecipes();const recipe=all.find(r=>r.id===id);if(!recipe)return;ref.set({id:id,name:recipe.name,meat:recipe.meat,style:recipe.style,spice:recipe.spice,addedAt:firebase.firestore.FieldValue.serverTimestamp()});favorites.add(id);showToast("\u2764\uFE0F Added to favorites!")}updateFavUI();render();if(state.page==="favorites")renderFavPage()}
-function updateFavUI(){const count=favorites.size;const badge=document.getElementById("nav-fav-count");const tabBadge=document.getElementById("tab-fav-badge");if(count>0){badge.style.display="inline-flex";badge.textContent=count;tabBadge.style.display="flex";tabBadge.textContent=count}else{badge.style.display="none";tabBadge.style.display="none"}document.querySelectorAll(".fav-btn").forEach(b=>{const id=b.dataset.id;const isFaved=favorites.has(id.startsWith("user_")?id:+id);if(isFaved){b.classList.add("active");b.innerHTML="\u2764\uFE0F"}else{b.classList.remove("active");b.innerHTML="\u{1F90D}"}});const mfb=document.querySelector(".modal-fav-btn");if(mfb){const id=mfb.dataset.id;const isFaved=favorites.has(id.startsWith("user_")?id:+id);if(isFaved){mfb.classList.add("active");mfb.innerHTML='<span class="heart">\u2764\uFE0F</span> Saved to Favorites'}else{mfb.classList.remove("active");mfb.innerHTML='<span class="heart">\u{1F90D}</span> Add to Favorites'}}}
-function subscribeFavorites(uid){if(unsubFavorites)unsubFavorites();unsubFavorites=db.collection("users").doc(uid).collection("favorites").onSnapshot(snap=>{favorites=new Set();snap.forEach(doc=>{const d=doc.data();favorites.add(typeof d.id==="string"?d.id:+d.id)});updateFavUI();if(state.page==="favorites")renderFavPage()})}
+// Favorites
+function isFav(id){return favorites.has(String(id))}
 
-// ===== User Recipes =====
-function subscribeUserRecipes(uid){if(unsubUserRecipes)unsubUserRecipes();unsubUserRecipes=db.collection("users").doc(uid).collection("recipes").orderBy("createdAt","desc").onSnapshot(snap=>{userRecipes=[];snap.forEach(doc=>{const d=doc.data();d.id=doc.id;userRecipes.push(d)});updateRecipeCount();render();if(state.page==="favorites")renderFavPage()})}
-function updateRecipeCount(){const all=getAllRecipes();document.getElementById("footer-count").textContent=all.length;document.getElementById("hero-desc").textContent=all.length+" handcrafted recipes with full ingredients, dehydrator temps & times. "+meats.length+" meat types, "+(styles.length-1)+" flavor styles.";document.getElementById("hero-stats").innerHTML=[{n:all.length,l:"Recipes"},{n:meats.length-1,l:"Meat Types"},{n:styles.length-1,l:"Styles"},{n:all.filter(r=>r.spice===5).length,l:"Extreme Heat"}].map(s=>'<div><div class="stat-num">'+s.n+'</div><div class="stat-label">'+s.l+'</div></div>').join("")}
+function handleFav(idStr, evt){
+  if(evt){evt.stopPropagation();evt.preventDefault()}
+  if(!currentUser){showAuthModal();return}
+  var ref=db.collection("users").doc(currentUser.uid).collection("favorites").doc(idStr);
+  if(favorites.has(idStr)){
+    ref.delete();
+    showToast("Removed from favorites");
+  }else{
+    var all=getAllRecipes();
+    var recipe=all.find(function(r){return String(r.id)===idStr});
+    if(!recipe)return;
+    ref.set({id:recipe.id,name:recipe.name,meat:recipe.meat,style:recipe.style,spice:recipe.spice,addedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    showToast("\u2764\uFE0F Added to favorites!");
+  }
+}
 
-// ===== Recommendations =====
-function getRecommendations(){if(favorites.size<2)return[];const all=getAllRecipes();const favRecipes=all.filter(r=>favorites.has(r.id));const meatPref={},stylePref={},spicePref={};favRecipes.forEach(r=>{meatPref[r.meat]=(meatPref[r.meat]||0)+1;stylePref[r.style]=(stylePref[r.style]||0)+1;spicePref[r.spice]=(spicePref[r.spice]||0)+1});const scored=all.filter(r=>!favorites.has(r.id)).map(r=>{let score=0;score+=(meatPref[r.meat]||0)*3;score+=(stylePref[r.style]||0)*2;score+=(spicePref[r.spice]||0)*1;return{...r,score}}).filter(r=>r.score>0);scored.sort((a,b)=>b.score-a.score);return scored.slice(0,6)}
+function updateFavUI(){
+  var count=favorites.size;
+  var badge=document.getElementById("nav-fav-count");
+  var tabBadge=document.getElementById("tab-fav-badge");
+  if(count>0){badge.style.display="inline-flex";badge.textContent=count;tabBadge.style.display="flex";tabBadge.textContent=count}
+  else{badge.style.display="none";tabBadge.style.display="none"}
+  document.querySelectorAll(".fav-btn").forEach(function(b){
+    var idStr=b.getAttribute("data-fav-id");
+    if(favorites.has(idStr)){b.classList.add("active");b.innerHTML="\u2764\uFE0F"}
+    else{b.classList.remove("active");b.innerHTML="\u{1F90D}"}
+  });
+  var mfb=document.querySelector(".modal-fav-btn");
+  if(mfb){
+    var idStr=mfb.getAttribute("data-fav-id");
+    if(favorites.has(idStr)){mfb.classList.add("active");mfb.innerHTML='<span class="heart">\u2764\uFE0F</span> Saved to Favorites'}
+    else{mfb.classList.remove("active");mfb.innerHTML='<span class="heart">\u{1F90D}</span> Add to Favorites'}
+  }
+}
 
-// ===== Sharing =====
+function subscribeFavorites(uid){
+  if(unsubFavorites)unsubFavorites();
+  unsubFavorites=db.collection("users").doc(uid).collection("favorites").onSnapshot(function(snap){
+    favorites=new Set();
+    snap.forEach(function(doc){favorites.add(doc.id)});
+    updateFavUI();
+    if(state.page==="favorites")renderFavPage();
+  });
+}
+
+// User Recipes
+function subscribeUserRecipes(uid){
+  if(unsubUserRecipes)unsubUserRecipes();
+  unsubUserRecipes=db.collection("users").doc(uid).collection("recipes").onSnapshot(function(snap){
+    userRecipes=[];
+    snap.forEach(function(doc){
+      var d=doc.data();
+      d.id=doc.id;
+      userRecipes.push(d);
+    });
+    // Sort by name since orderBy requires index
+    userRecipes.sort(function(a,b){return(a.name||"").localeCompare(b.name||"")});
+    updateRecipeCount();
+    render();
+    if(state.page==="favorites")renderFavPage();
+    if(state.page==="myrecipes")renderMyRecipesPage();
+  });
+}
+
+function updateRecipeCount(){
+  var all=getAllRecipes();
+  document.getElementById("footer-count").textContent=all.length;
+  document.getElementById("hero-desc").textContent=all.length+" handcrafted recipes with full ingredients, dehydrator temps & times. "+(meats.length-1)+" meat types, "+(styles.length-1)+" flavor styles.";
+  document.getElementById("hero-stats").innerHTML=[{n:all.length,l:"Recipes"},{n:meats.length-1,l:"Meat Types"},{n:styles.length-1,l:"Styles"},{n:all.filter(function(r){return r.spice===5}).length,l:"Extreme Heat"}].map(function(s){return '<div><div class="stat-num">'+s.n+'</div><div class="stat-label">'+s.l+'</div></div>'}).join("");
+}
+
+// Recommendations
+function getRecommendations(){
+  if(favorites.size<2)return[];
+  var all=getAllRecipes();
+  var favRecipes=all.filter(function(r){return favorites.has(String(r.id))});
+  var meatPref={},stylePref={},spicePref={};
+  favRecipes.forEach(function(r){meatPref[r.meat]=(meatPref[r.meat]||0)+1;stylePref[r.style]=(stylePref[r.style]||0)+1;spicePref[r.spice]=(spicePref[r.spice]||0)+1});
+  var scored=all.filter(function(r){return !favorites.has(String(r.id))}).map(function(r){var score=0;score+=(meatPref[r.meat]||0)*3;score+=(stylePref[r.style]||0)*2;score+=(spicePref[r.spice]||0)*1;return Object.assign({},r,{score:score})}).filter(function(r){return r.score>0});
+  scored.sort(function(a,b){return b.score-a.score});
+  return scored.slice(0,6);
+}
+
+// Sharing
 function getShareUrl(){if(!currentUser)return null;return window.location.origin+window.location.pathname+"?share="+currentUser.uid}
-function copyShareLink(){if(!currentUser){showAuthModal();return}navigator.clipboard.writeText(getShareUrl()).then(()=>showToast("\u{1F517} Share link copied!")).catch(()=>showToast("Couldn't copy"))}
-function shareNative(){if(!currentUser){showAuthModal();return}if(navigator.share){navigator.share({title:"My jerky favorites!",text:(currentUser.displayName||"Someone")+"'s favorites on Cody's Meats",url:getShareUrl()}).catch(()=>{})}else copyShareLink()}
-async function loadSharedList(uid){try{const snap=await db.collection("users").doc(uid).collection("favorites").get();const ids=[];snap.forEach(doc=>ids.push(doc.data().id));if(!ids.length){showToast("No favorites found");return}let userName="A Fellow Jerky Lover";try{const u=await db.collection("users").doc(uid).get();if(u.exists&&u.data().displayName)userName=u.data().displayName}catch(e){}state.page="favorites";switchPage("favorites");document.getElementById("fav-content").style.display="none";document.getElementById("fav-login-prompt").style.display="none";const sv=document.getElementById("shared-view");sv.style.display="block";document.getElementById("shared-name").textContent=userName+"'s Favorites";document.getElementById("shared-count").textContent=ids.length+" recipes";const shared=R.filter(r=>ids.includes(r.id));document.getElementById("shared-grid").innerHTML=shared.map(renderCard).join("");attachCardListeners(document.getElementById("shared-grid"))}catch(e){showToast("Couldn't load shared list")}}
+function copyShareLink(){if(!currentUser){showAuthModal();return}navigator.clipboard.writeText(getShareUrl()).then(function(){showToast("\u{1F517} Share link copied!")}).catch(function(){showToast("Couldn't copy")})}
+function shareNative(){if(!currentUser){showAuthModal();return}if(navigator.share){navigator.share({title:"My jerky favorites!",text:(currentUser.displayName||"Someone")+"'s favorites on Cody's Meats",url:getShareUrl()}).catch(function(){})}else copyShareLink()}
+async function loadSharedList(uid){try{var snap=await db.collection("users").doc(uid).collection("favorites").get();var ids=[];snap.forEach(function(doc){ids.push(doc.id)});if(!ids.length){showToast("No favorites found");return}var userName="A Fellow Jerky Lover";try{var u=await db.collection("users").doc(uid).get();if(u.exists&&u.data().displayName)userName=u.data().displayName}catch(e){}state.page="favorites";switchPage("favorites");document.getElementById("fav-content").style.display="none";document.getElementById("fav-login-prompt").style.display="none";var sv=document.getElementById("shared-view");sv.style.display="block";document.getElementById("shared-name").textContent=userName+"'s Favorites";document.getElementById("shared-count").textContent=ids.length+" recipes";var shared=R.filter(function(r){return ids.includes(String(r.id))});document.getElementById("shared-grid").innerHTML=shared.map(renderCard).join("");attachCardListeners(document.getElementById("shared-grid"))}catch(e){showToast("Couldn't load shared list")}}
 
-// ===== Rendering =====
-function spiceDots(l){return [1,2,3,4,5].map(i=>'<div class="spice-dot" style="background:'+(i<=l?SC[l]:'rgba(255,255,255,0.15)')+'"></div>').join("")}
-function renderCard(r){const c=MC[r.meat]||MC.Beef;const fav=isFav(r.id);const isUser=typeof r.id==="string"&&r.id.startsWith("user_");return '<div class="card" data-id="'+r.id+'">'+(isUser?'<div class="rec-tag">\u270D\uFE0F My Recipe</div>':'')+'<button class="fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav(\''+(typeof r.id==="string"?"'+r.id+'":""+r.id)+'\',event)">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>'}
+// Rendering
+function spiceDots(l){return [1,2,3,4,5].map(function(i){return '<div class="spice-dot" style="background:'+(i<=l?SC[l]:'rgba(255,255,255,0.15)')+'"></div>'}).join("")}
 
-function renderModal(r){const c=MC[r.meat]||MC.Beef;const fav=isFav(r.id);const favId=typeof r.id==="string"?"'"+r.id+"'":r.id;return '<div class="modal-head" style="background:linear-gradient(135deg,'+c.bd+'22,transparent);border-bottom:1px solid '+c.bd+'20"><button class="modal-close" onclick="closeModal()">\u2715</button><div class="modal-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+(SI[r.style]||"")+' '+r.style+'</span></div><h2>'+r.name+'</h2><p class="modal-desc">'+r.desc+'</p></div><div class="modal-body"><button class="modal-fav-btn'+(fav?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+favId+',event)"><span class="heart">'+(fav?"\u2764\uFE0F":"\u{1F90D}")+'</span> '+(fav?"Saved to Favorites":"Add to Favorites")+'</button><div class="modal-meta"><div class="meta-box"><div class="meta-label">Spice Level</div><div class="meta-val"><div class="spice-dots">'+spiceDots(r.spice)+'</div>'+SL[r.spice]+' '+SE[r.spice]+'</div></div><div class="meta-box"><div class="meta-label">Dehydrator Temp</div><div class="meta-val">\u{1F321} '+r.t+'\u00b0F</div></div><div class="meta-box"><div class="meta-label">Dry Time</div><div class="meta-val">\u23F1 '+r.d+' hrs</div></div><div class="meta-box"><div class="meta-label">Marinate</div><div class="meta-val">\u{1F550} '+(r.m||"N/A")+'</div></div></div><div><div class="meta-label" style="margin-bottom:10px">Ingredients</div><table class="ing-table"><thead><tr><th>Amount</th><th>Ingredient</th></tr></thead><tbody>'+r.i.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>').join("")+'</tbody></table></div>'+(TIPS[r.meat]?'<div class="pro-tip" style="background:linear-gradient(135deg,'+c.bd+'15,'+c.bd+'08);border:1px solid '+c.bd+'30"><div class="meta-label" style="color:'+c.tx+'">Pro Tip</div><p>'+TIPS[r.meat]+'</p></div>':'')+'</div>'}
+function renderCard(r){
+  var c=MC[r.meat]||MC.Beef;
+  var idStr=String(r.id);
+  var fav=isFav(idStr);
+  var isUser=typeof r.id==="string"&&!r.id.match(/^\d+$/);
+  return '<div class="card" data-id="'+idStr+'">'
+    +(isUser?'<div class="rec-tag">\u270D\uFE0F My Recipe</div>':'')
+    +'<button class="fav-btn'+(fav?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)">'+(fav?'\u2764\uFE0F':'\u{1F90D}')+'</button>'
+    +'<div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div>'
+    +'<h3>'+r.name+'</h3>'
+    +'<p class="card-desc">'+r.desc+'</p>'
+    +'<div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>';
+}
 
-function attachCardListeners(container){container.querySelectorAll(".card").forEach(c=>{c.addEventListener("click",e=>{if(e.target.closest(".fav-btn"))return;const all=getAllRecipes();const id=c.dataset.id;const r=all.find(x=>String(x.id)===id);if(r)openModal(r)})})}
-function filter(){const all=getAllRecipes();return all.filter(r=>{if(state.meat!=="All"&&r.meat!==state.meat)return false;if(state.style!=="All"&&r.style!==state.style)return false;if(state.spice>0&&r.spice!==state.spice)return false;if(state.search){const s=state.search.toLowerCase();return r.name.toLowerCase().includes(s)||r.desc.toLowerCase().includes(s)||r.i.some(x=>x[1].toLowerCase().includes(s))||r.meat.toLowerCase().includes(s)||r.style.toLowerCase().includes(s)}return true})}
-function render(){const f=filter();const g=document.getElementById("recipe-grid"),e=document.getElementById("empty-state");if(!f.length){g.innerHTML="";e.style.display="block"}else{e.style.display="none";g.innerHTML=f.map(renderCard).join("")}const all=getAllRecipes();document.getElementById("filter-count").textContent="Showing "+f.length+" of "+all.length+" recipes";attachCardListeners(g)}
-function openModal(r){const m=document.getElementById("modal"),o=document.getElementById("modal-overlay");m.innerHTML=renderModal(r);const c=MC[r.meat]||MC.Beef;m.style.borderColor=c.bd;o.classList.add("open");document.body.style.overflow="hidden"}
+function renderModal(r){
+  var c=MC[r.meat]||MC.Beef;
+  var idStr=String(r.id);
+  var fav=isFav(idStr);
+  return '<div class="modal-head" style="background:linear-gradient(135deg,'+c.bd+'22,transparent);border-bottom:1px solid '+c.bd+'20"><button class="modal-close" onclick="closeModal()">\u2715</button><div class="modal-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+(SI[r.style]||'')+' '+r.style+'</span></div><h2>'+r.name+'</h2><p class="modal-desc">'+r.desc+'</p></div>'
+    +'<div class="modal-body"><button class="modal-fav-btn'+(fav?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)"><span class="heart">'+(fav?'\u2764\uFE0F':'\u{1F90D}')+'</span> '+(fav?'Saved to Favorites':'Add to Favorites')+'</button>'
+    +'<div class="modal-meta"><div class="meta-box"><div class="meta-label">Spice Level</div><div class="meta-val"><div class="spice-dots">'+spiceDots(r.spice)+'</div>'+SL[r.spice]+' '+SE[r.spice]+'</div></div><div class="meta-box"><div class="meta-label">Dehydrator Temp</div><div class="meta-val">\u{1F321} '+r.t+'\u00b0F</div></div><div class="meta-box"><div class="meta-label">Dry Time</div><div class="meta-val">\u23F1 '+r.d+' hrs</div></div><div class="meta-box"><div class="meta-label">Marinate</div><div class="meta-val">\u{1F550} '+(r.m||'N/A')+'</div></div></div>'
+    +'<div><div class="meta-label" style="margin-bottom:10px">Ingredients</div><table class="ing-table"><thead><tr><th>Amount</th><th>Ingredient</th></tr></thead><tbody>'+r.i.map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>'}).join('')+'</tbody></table></div>'
+    +(TIPS[r.meat]?'<div class="pro-tip" style="background:linear-gradient(135deg,'+c.bd+'15,'+c.bd+'08);border:1px solid '+c.bd+'30"><div class="meta-label" style="color:'+c.tx+'">Pro Tip</div><p>'+TIPS[r.meat]+'</p></div>':'')
+    +'</div>';
+}
+
+function attachCardListeners(container){
+  container.querySelectorAll(".card").forEach(function(c){
+    c.addEventListener("click",function(e){
+      if(e.target.closest(".fav-btn"))return;
+      var all=getAllRecipes();
+      var idStr=c.getAttribute("data-id");
+      var r=all.find(function(x){return String(x.id)===idStr});
+      if(r)openModal(r);
+    });
+  });
+}
+
+function filter(){
+  var all=getAllRecipes();
+  return all.filter(function(r){
+    if(state.meat!=="All"&&r.meat!==state.meat)return false;
+    if(state.style!=="All"&&r.style!==state.style)return false;
+    if(state.spice>0&&r.spice!==state.spice)return false;
+    if(state.search){var s=state.search.toLowerCase();return r.name.toLowerCase().includes(s)||r.desc.toLowerCase().includes(s)||r.i.some(function(x){return x[1].toLowerCase().includes(s)})||r.meat.toLowerCase().includes(s)||r.style.toLowerCase().includes(s)}
+    return true;
+  });
+}
+
+function render(){
+  var f=filter();
+  var g=document.getElementById("recipe-grid"),e=document.getElementById("empty-state");
+  if(!f.length){g.innerHTML="";e.style.display="block"}
+  else{e.style.display="none";g.innerHTML=f.map(renderCard).join("")}
+  var all=getAllRecipes();
+  document.getElementById("filter-count").textContent="Showing "+f.length+" of "+all.length+" recipes";
+  attachCardListeners(g);
+}
+
+function openModal(r){
+  var m=document.getElementById("modal"),o=document.getElementById("modal-overlay");
+  m.innerHTML=renderModal(r);
+  var c=MC[r.meat]||MC.Beef;
+  m.style.borderColor=c.bd;
+  o.classList.add("open");
+  document.body.style.overflow="hidden";
+}
 function closeModal(){document.getElementById("modal-overlay").classList.remove("open");document.body.style.overflow=""}
-function renderFilters(){const mf=document.getElementById("meat-filters");mf.innerHTML=meats.map(m=>{const c=MC[m];const a=state.meat===m;const bg=a?(m==="All"?"rgba(255,255,255,0.12)":c?c.bg:""):"";const bd=a?(m==="All"?"rgba(255,255,255,0.3)":c?c.bd:""):"";const tx=a?(m==="All"?"#fff":c?c.tx:""):"";return '<button class="fbtn'+(a?" active":"")+'" data-meat="'+m+'" style="'+(a?"background:"+bg+";border-color:"+bd+";color:"+tx:"")+'">'+m+'</button>'}).join("");const sf=document.getElementById("style-filters");sf.innerHTML=styles.map(s=>'<button class="fbtn'+(state.style===s?" active":"")+'" data-style="'+s+'">'+(s!=="All"&&SI[s]?SI[s]+" ":"")+s+'</button>').join("");const pf=document.getElementById("spice-filters");pf.innerHTML='<button class="fbtn'+(state.spice===0?" active":"")+'" data-spice="0">All</button>'+[1,2,3,4,5].map(s=>'<button class="fbtn'+(state.spice===s?" active":"")+'" data-spice="'+s+'">'+SE[s]+'</button>').join("");mf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.meat=b.dataset.meat;renderFilters();render()}));sf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.style=b.dataset.style;renderFilters();render()}));pf.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.spice=+b.dataset.spice;renderFilters();render()}))}
-function renderFavPage(){if(!currentUser){document.getElementById("fav-login-prompt").style.display="block";document.getElementById("fav-content").style.display="none";return}document.getElementById("fav-login-prompt").style.display="none";document.getElementById("fav-content").style.display="block";const all=getAllRecipes();const favRecipes=all.filter(r=>favorites.has(r.id));const fg=document.getElementById("fav-grid");const fe=document.getElementById("fav-empty");document.getElementById("fav-count-label").textContent=favRecipes.length+" recipe"+(favRecipes.length!==1?"s":"");if(!favRecipes.length){fg.innerHTML="";fe.style.display="block"}else{fe.style.display="none";fg.innerHTML=favRecipes.map(renderCard).join("");attachCardListeners(fg)}const recs=getRecommendations();const recS=document.getElementById("fav-recs");const recG=document.getElementById("rec-grid");if(recs.length>0){recS.style.display="block";recG.innerHTML=recs.map(r=>{const c=MC[r.meat]||MC.Beef;return '<div class="card" data-id="'+r.id+'"><div class="rec-tag">\u2728 Recommended</div><button class="fav-btn'+(isFav(r.id)?" active":"")+'" data-id="'+r.id+'" onclick="toggleFav('+r.id+',event)">'+(isFav(r.id)?"\u2764\uFE0F":"\u{1F90D}")+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>'}).join("");attachCardListeners(recG)}else{recS.style.display="none"}}
 
-// ===== Create Recipe =====
-function pickSpice(n){createSpice=n;document.querySelectorAll(".spice-pick").forEach(b=>{b.classList.toggle("active",+b.dataset.spice===n)});const labels=["","Mild \u{1F336}","Medium \u{1F336}\u{1F336}","Hot \u{1F525}","Very Hot \u{1F525}\u{1F525}","Extreme \u{1F480}"];document.getElementById("cr-spice-label").textContent="Selected: "+labels[n]}
-function addIngRow(){const container=document.getElementById("cr-ingredients");const row=document.createElement("div");row.className="ing-row";row.innerHTML='<input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button>';container.appendChild(row);row.querySelector(".ingredient").focus()}
-function removeIng(btn){const rows=document.querySelectorAll("#cr-ingredients .ing-row");if(rows.length>1){btn.closest(".ing-row").remove()}else{showToast("Need at least one ingredient")}}
-function submitRecipe(){if(!currentUser){showAuthModal();return}const name=document.getElementById("cr-name").value.trim();const desc=document.getElementById("cr-desc").value.trim();const meat=document.getElementById("cr-meat").value;const style=document.getElementById("cr-style").value;const temp=document.getElementById("cr-temp").value;const time=document.getElementById("cr-time").value.trim();const marinate=document.getElementById("cr-marinate").value.trim();const errEl=document.getElementById("cr-error");errEl.style.display="none";
-if(!name){showCreateError("Give your recipe a name!");return}
-if(!meat){showCreateError("Select a meat type");return}
-if(!style){showCreateError("Select a flavor style");return}
-if(!createSpice){showCreateError("Tap a spice level (1-5)");return}
-if(!temp){showCreateError("Enter dehydrator temperature");return}
-if(!time){showCreateError("Enter dry time");return}
-const ings=[];document.querySelectorAll("#cr-ingredients .ing-row").forEach(row=>{const amt=row.querySelector(".amount").value.trim();const ing=row.querySelector(".ingredient").value.trim();if(ing)ings.push([amt,ing])});
-if(ings.length===0){showCreateError("Add at least one ingredient");return}
-const recipe={name:name,desc:desc,meat:meat,style:style,spice:createSpice,t:+temp,d:time,m:marinate||"N/A",i:ings,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:currentUser.uid};
-const btn=document.getElementById("cr-submit");btn.disabled=true;btn.textContent="Saving...";
-db.collection("users").doc(currentUser.uid).collection("recipes").add(recipe).then(doc=>{showToast("\u{1F969} Recipe saved!");clearCreateForm();btn.disabled=false;btn.textContent="\u{1F969} Save Recipe";switchPage("recipes")}).catch(err=>{showCreateError("Error saving: "+err.message);btn.disabled=false;btn.textContent="\u{1F969} Save Recipe"})}
-function showCreateError(msg){const el=document.getElementById("cr-error");el.textContent=msg;el.style.display="block";el.scrollIntoView({behavior:"smooth",block:"center"})}
-function clearCreateForm(){document.getElementById("cr-name").value="";document.getElementById("cr-desc").value="";document.getElementById("cr-meat").value="";document.getElementById("cr-style").value="";document.getElementById("cr-temp").value="";document.getElementById("cr-time").value="";document.getElementById("cr-marinate").value="";createSpice=0;document.querySelectorAll(".spice-pick").forEach(b=>b.classList.remove("active"));document.getElementById("cr-spice-label").textContent="Tap to select: 1=Mild \u{1F336}  2=Medium \u{1F336}\u{1F336}  3=Hot \u{1F525}  4=Very Hot \u{1F525}\u{1F525}  5=Extreme \u{1F480}";const container=document.getElementById("cr-ingredients");container.innerHTML='<div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div><div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div><div class="ing-row"><input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div>';document.getElementById("cr-error").style.display="none"}
-function renderCreatePage(){if(!currentUser){document.getElementById("create-login-prompt").style.display="block";document.getElementById("create-form").style.display="none"}else{document.getElementById("create-login-prompt").style.display="none";document.getElementById("create-form").style.display="block"}}
+function renderFilters(){
+  var mf=document.getElementById("meat-filters");
+  mf.innerHTML=meats.map(function(m){var c=MC[m];var a=state.meat===m;var bg=a?(m==="All"?"rgba(255,255,255,0.12)":c?c.bg:""):"";var bd=a?(m==="All"?"rgba(255,255,255,0.3)":c?c.bd:""):"";var tx=a?(m==="All"?"#fff":c?c.tx:""):"";return '<button class="fbtn'+(a?" active":"")+'" data-meat="'+m+'" style="'+(a?"background:"+bg+";border-color:"+bd+";color:"+tx:"")+'">'+m+'</button>'}).join("");
+  var sf=document.getElementById("style-filters");
+  sf.innerHTML=styles.map(function(s){return '<button class="fbtn'+(state.style===s?" active":"")+'" data-style="'+s+'">'+(s!=="All"&&SI[s]?SI[s]+" ":"")+s+'</button>'}).join("");
+  var pf=document.getElementById("spice-filters");
+  pf.innerHTML='<button class="fbtn'+(state.spice===0?" active":"")+'" data-spice="0">All</button>'+[1,2,3,4,5].map(function(s){return '<button class="fbtn'+(state.spice===s?" active":"")+'" data-spice="'+s+'">'+SE[s]+'</button>'}).join("");
+  mf.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){state.meat=b.dataset.meat;renderFilters();render()})});
+  sf.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){state.style=b.dataset.style;renderFilters();render()})});
+  pf.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){state.spice=+b.dataset.spice;renderFilters();render()})});
+}
 
-// ===== Page Navigation =====
-function switchPage(page){state.page=page;
-document.querySelectorAll(".nav-link").forEach(x=>x.classList.remove("active"));document.querySelectorAll('.nav-link[data-page="'+page+'"]').forEach(x=>x.classList.add("active"));
-document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));document.querySelectorAll('.tab-btn[data-page="'+page+'"]').forEach(x=>x.classList.add("active"));
-document.getElementById("recipes-page").style.display=page==="recipes"?"block":"none";
-document.getElementById("fav-page").classList.toggle("visible",page==="favorites");
-document.getElementById("create-page").classList.toggle("visible",page==="create");
-document.getElementById("shop-page").classList.toggle("visible",page==="shop");
-if(page==="favorites"){document.getElementById("shared-view").style.display="none";renderFavPage()}
-if(page==="create")renderCreatePage();
-window.scrollTo({top:0,behavior:"smooth"})}
+// Favorites page
+function renderFavPage(){
+  if(!currentUser){document.getElementById("fav-login-prompt").style.display="block";document.getElementById("fav-content").style.display="none";return}
+  document.getElementById("fav-login-prompt").style.display="none";
+  document.getElementById("fav-content").style.display="block";
+  var all=getAllRecipes();
+  var favRecipes=all.filter(function(r){return favorites.has(String(r.id))});
+  var fg=document.getElementById("fav-grid");
+  var fe=document.getElementById("fav-empty");
+  document.getElementById("fav-count-label").textContent=favRecipes.length+" recipe"+(favRecipes.length!==1?"s":"");
+  if(!favRecipes.length){fg.innerHTML="";fe.style.display="block"}
+  else{fe.style.display="none";fg.innerHTML=favRecipes.map(renderCard).join("");attachCardListeners(fg)}
+  var recs=getRecommendations();
+  var recS=document.getElementById("fav-recs");
+  var recG=document.getElementById("rec-grid");
+  if(recs.length>0){recS.style.display="block";recG.innerHTML=recs.map(function(r){var c=MC[r.meat]||MC.Beef;var idStr=String(r.id);return '<div class="card" data-id="'+idStr+'"><div class="rec-tag">\u2728 Recommended</div><button class="fav-btn'+(isFav(idStr)?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)">'+(isFav(idStr)?'\u2764\uFE0F':'\u{1F90D}')+'</button><div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div><h3>'+r.name+'</h3><p class="card-desc">'+r.desc+'</p><div class="card-bottom"><span class="card-time">\u{1F321} '+r.t+'\u00b0F \u00b7 \u23F1 '+r.d+' hrs</span><div class="spice-dots">'+spiceDots(r.spice)+'</div></div></div>'}).join("");attachCardListeners(recG)}
+  else{recS.style.display="none"}
+}
 
-// ===== Auth State =====
-auth.onAuthStateChanged(user=>{currentUser=user;updateAuthUI(user);if(user){db.collection("users").doc(user.uid).set({displayName:user.displayName||user.email.split("@")[0],email:user.email,photoURL:user.photoURL||null,lastSeen:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});subscribeFavorites(user.uid);subscribeUserRecipes(user.uid)}else{if(unsubFavorites){unsubFavorites();unsubFavorites=null}if(unsubUserRecipes){unsubUserRecipes();unsubUserRecipes=null}favorites=new Set();userRecipes=[];updateFavUI();updateRecipeCount();render();if(state.page==="favorites")renderFavPage();if(state.page==="create")renderCreatePage()}});
+// My Recipes page
+function renderMyRecipesPage(){
+  if(!currentUser){document.getElementById("myrecipes-login-prompt").style.display="block";document.getElementById("myrecipes-content").style.display="none";return}
+  document.getElementById("myrecipes-login-prompt").style.display="none";
+  document.getElementById("myrecipes-content").style.display="block";
+  var mg=document.getElementById("myrecipes-grid");
+  var me=document.getElementById("myrecipes-empty");
+  document.getElementById("myrecipes-count-label").textContent=userRecipes.length+" recipe"+(userRecipes.length!==1?"s":"");
+  if(!userRecipes.length){mg.innerHTML="";me.style.display="block"}
+  else{me.style.display="none";mg.innerHTML=userRecipes.map(renderCard).join("");attachCardListeners(mg)}
+}
 
-// ===== Init =====
+// Create Recipe
+function pickSpice(n){createSpice=n;document.querySelectorAll(".spice-pick").forEach(function(b){b.classList.toggle("active",+b.dataset.spice===n)});var labels=["","Mild \u{1F336}","Medium \u{1F336}\u{1F336}","Hot \u{1F525}","Very Hot \u{1F525}\u{1F525}","Extreme \u{1F480}"];document.getElementById("cr-spice-label").textContent="Selected: "+labels[n]}
+function addIngRow(){var container=document.getElementById("cr-ingredients");var row=document.createElement("div");row.className="ing-row";row.innerHTML='<input class="amount" placeholder="Amount" value=""><input class="ingredient" placeholder="Ingredient" value=""><button class="remove-ing" onclick="removeIng(this)">\u2715</button>';container.appendChild(row);row.querySelector(".ingredient").focus()}
+function removeIng(btn){var rows=document.querySelectorAll("#cr-ingredients .ing-row");if(rows.length>1)btn.closest(".ing-row").remove();else showToast("Need at least one ingredient")}
+
+function submitRecipe(){
+  if(!currentUser){showAuthModal();return}
+  var name=document.getElementById("cr-name").value.trim();
+  var desc=document.getElementById("cr-desc").value.trim();
+  var meat=document.getElementById("cr-meat").value;
+  var style=document.getElementById("cr-style").value;
+  var temp=document.getElementById("cr-temp").value;
+  var time=document.getElementById("cr-time").value.trim();
+  var marinate=document.getElementById("cr-marinate").value.trim();
+  document.getElementById("cr-error").style.display="none";
+  if(!name){showCreateError("Give your recipe a name!");return}
+  if(!desc){showCreateError("Add a short description");return}
+  if(!meat){showCreateError("Select a meat type");return}
+  if(!style){showCreateError("Select a flavor style");return}
+  if(!createSpice){showCreateError("Tap a spice level (1-5)");return}
+  if(!temp){showCreateError("Enter dehydrator temperature");return}
+  if(!time){showCreateError("Enter dry time");return}
+  var ings=[];
+  document.querySelectorAll("#cr-ingredients .ing-row").forEach(function(row){
+    var amt=row.querySelector(".amount").value.trim();
+    var ing=row.querySelector(".ingredient").value.trim();
+    if(ing)ings.push([amt,ing]);
+  });
+  if(ings.length===0){showCreateError("Add at least one ingredient");return}
+
+  var recipe={
+    name:name,
+    desc:desc,
+    meat:meat,
+    style:style,
+    spice:createSpice,
+    t:Number(temp),
+    d:time,
+    m:marinate||"N/A",
+    i:ings,
+    createdBy:currentUser.uid
+  };
+
+  var btn=document.getElementById("cr-submit");
+  btn.disabled=true;
+  btn.textContent="Saving...";
+
+  db.collection("users").doc(currentUser.uid).collection("recipes").add(recipe).then(function(docRef){
+    showToast("\u{1F969} Recipe saved!");
+    clearCreateForm();
+    btn.disabled=false;
+    btn.textContent="\u{1F969} Save Recipe";
+    switchPage("myrecipes");
+  }).catch(function(err){
+    showCreateError("Error saving: "+err.message);
+    btn.disabled=false;
+    btn.textContent="\u{1F969} Save Recipe";
+  });
+}
+
+function showCreateError(msg){var el=document.getElementById("cr-error");el.textContent=msg;el.style.display="block";el.scrollIntoView({behavior:"smooth",block:"center"})}
+
+function clearCreateForm(){
+  document.getElementById("cr-name").value="";
+  document.getElementById("cr-desc").value="";
+  document.getElementById("cr-meat").value="";
+  document.getElementById("cr-style").value="";
+  document.getElementById("cr-temp").value="";
+  document.getElementById("cr-time").value="";
+  document.getElementById("cr-marinate").value="";
+  createSpice=0;
+  document.querySelectorAll(".spice-pick").forEach(function(b){b.classList.remove("active")});
+  document.getElementById("cr-spice-label").textContent="Tap to select: 1=Mild \u{1F336}  2=Medium \u{1F336}\u{1F336}  3=Hot \u{1F525}  4=Very Hot \u{1F525}\u{1F525}  5=Extreme \u{1F480}";
+  document.getElementById("cr-ingredients").innerHTML='<div class="ing-row"><input class="amount" placeholder="Amount"><input class="ingredient" placeholder="Ingredient"><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div><div class="ing-row"><input class="amount" placeholder="Amount"><input class="ingredient" placeholder="Ingredient"><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div><div class="ing-row"><input class="amount" placeholder="Amount"><input class="ingredient" placeholder="Ingredient"><button class="remove-ing" onclick="removeIng(this)">\u2715</button></div>';
+  document.getElementById("cr-error").style.display="none";
+}
+
+function renderCreatePage(){
+  if(!currentUser){document.getElementById("create-login-prompt").style.display="block";document.getElementById("create-form").style.display="none"}
+  else{document.getElementById("create-login-prompt").style.display="none";document.getElementById("create-form").style.display="block"}
+}
+
+// Page Navigation
+function switchPage(page){
+  state.page=page;
+  document.querySelectorAll(".nav-link").forEach(function(x){x.classList.remove("active")});
+  document.querySelectorAll('.nav-link[data-page="'+page+'"]').forEach(function(x){x.classList.add("active")});
+  document.querySelectorAll(".tab-btn").forEach(function(x){x.classList.remove("active")});
+  document.querySelectorAll('.tab-btn[data-page="'+page+'"]').forEach(function(x){x.classList.add("active")});
+  document.getElementById("recipes-page").style.display=page==="recipes"?"block":"none";
+  document.getElementById("fav-page").classList.toggle("visible",page==="favorites");
+  document.getElementById("myrecipes-page").classList.toggle("visible",page==="myrecipes");
+  document.getElementById("create-page").classList.toggle("visible",page==="create");
+  document.getElementById("shop-page").classList.toggle("visible",page==="shop");
+  if(page==="favorites"){document.getElementById("shared-view").style.display="none";renderFavPage()}
+  if(page==="myrecipes")renderMyRecipesPage();
+  if(page==="create")renderCreatePage();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// Auth state
+auth.onAuthStateChanged(function(user){
+  currentUser=user;
+  updateAuthUI(user);
+  if(user){
+    db.collection("users").doc(user.uid).set({
+      displayName:user.displayName||user.email.split("@")[0],
+      email:user.email,
+      photoURL:user.photoURL||null,
+      lastSeen:firebase.firestore.FieldValue.serverTimestamp()
+    },{merge:true});
+    subscribeFavorites(user.uid);
+    subscribeUserRecipes(user.uid);
+  }else{
+    if(unsubFavorites){unsubFavorites();unsubFavorites=null}
+    if(unsubUserRecipes){unsubUserRecipes();unsubUserRecipes=null}
+    favorites=new Set();
+    userRecipes=[];
+    updateFavUI();
+    updateRecipeCount();
+    render();
+    if(state.page==="favorites")renderFavPage();
+    if(state.page==="myrecipes")renderMyRecipesPage();
+    if(state.page==="create")renderCreatePage();
+  }
+});
+
+// Init
 updateRecipeCount();
-document.getElementById("search").addEventListener("input",e=>{state.search=e.target.value;render()});
-document.getElementById("modal-overlay").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal()});
-document.getElementById("auth-overlay").addEventListener("click",e=>{if(e.target===e.currentTarget)hideAuthModal()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();hideAuthModal()}});
-document.querySelectorAll(".nav-link").forEach(l=>l.addEventListener("click",()=>switchPage(l.dataset.page)));
-document.querySelectorAll(".tab-btn").forEach(l=>l.addEventListener("click",()=>switchPage(l.dataset.page)));
-const urlParams=new URLSearchParams(window.location.search);
-const shareUid=urlParams.get("share");
+document.getElementById("search").addEventListener("input",function(e){state.search=e.target.value;render()});
+document.getElementById("modal-overlay").addEventListener("click",function(e){if(e.target===e.currentTarget)closeModal()});
+document.getElementById("auth-overlay").addEventListener("click",function(e){if(e.target===e.currentTarget)hideAuthModal()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeModal();hideAuthModal()}});
+document.querySelectorAll(".nav-link").forEach(function(l){l.addEventListener("click",function(){switchPage(l.dataset.page)})});
+document.querySelectorAll(".tab-btn").forEach(function(l){l.addEventListener("click",function(){switchPage(l.dataset.page)})});
+var urlParams=new URLSearchParams(window.location.search);
+var shareUid=urlParams.get("share");
 if(shareUid)loadSharedList(shareUid);
 renderFilters();render();
 </script>
