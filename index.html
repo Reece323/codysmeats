@@ -123,12 +123,7 @@ a{-webkit-tap-highlight-color:transparent}
 .card:hover::before{opacity:1;width:5px}
 .card:active{transform:scale(0.98)}
 /* OVERHAUL 4: Hover overlay with quick stats */
-.card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.85) 100%);opacity:0;transition:opacity .25s;display:flex;align-items:flex-end;padding:16px;border-radius:var(--card-radius,12px);pointer-events:none;z-index:5}
-.card:hover .card-overlay{opacity:1}
-.card-overlay-content{display:flex;gap:12px;width:100%;justify-content:space-around}
-.card-overlay-stat{text-align:center}
-.card-overlay-stat .val{font-size:16px;font-weight:800;font-family:'Playfair Display',serif;color:#fff}
-.card-overlay-stat .lbl{font-size:9px;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em}
+
 .card-top{display:flex;justify-content:space-between;align-items:flex-start}
 .card-tags{display:flex;gap:5px;flex-wrap:wrap}
 .tag{border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em}
@@ -682,7 +677,6 @@ function renderCard(r,idx){
   }
   return '<div class="card" data-id="'+idStr+'" style="--accent-color:'+c.bd+';animation-delay:'+delay+'s">'
     +(isUser?'<div class="rec-tag">\u270D Mine</div>':'')
-    +'<div class="card-overlay"><div class="card-overlay-content"><div class="card-overlay-stat"><div class="val">'+r.t+'\u00b0</div><div class="lbl">Temp</div></div><div class="card-overlay-stat"><div class="val">'+r.d+'</div><div class="lbl">Hours</div></div><div class="card-overlay-stat"><div class="val">'+SL[r.spice]+'</div><div class="lbl">Heat</div></div></div></div>'
     +'<button class="fav-btn'+(fav?' active':'')+'" data-fav-id="'+idStr+'" onclick="handleFav(\''+idStr+'\',event)">'+(fav?'\u2764\uFE0F':'\u{1F90D}')+'</button>'
     +'<div class="card-top"><div class="card-tags"><span class="tag" style="background:'+c.bg+';color:'+c.tx+';border:1px solid '+c.bd+'">'+r.meat+'</span><span class="tag tag-style">'+r.style+'</span></div></div>'
     +'<h3>'+r.name+'</h3>'
