@@ -433,7 +433,6 @@ const firebaseConfig = {
   appId: "1:1058395413076:web:32dcaaf997d04e4861abc1",
   measurementId: "G-031XKDJ0WV"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -533,14 +532,20 @@ function subscribeUserRecipes(uid){
     snap.forEach(function(doc){
       var d=doc.data();
       d.id=doc.id;
+      // Convert ingredients from objects back to arrays for rendering
+      if(d.ingredients&&!d.i){
+        d.i=d.ingredients.map(function(ing){return [ing.a||"",ing.n||""]});
+      }
+      if(!d.i)d.i=[];
       userRecipes.push(d);
     });
-    // Sort by name since orderBy requires index
     userRecipes.sort(function(a,b){return(a.name||"").localeCompare(b.name||"")});
     updateRecipeCount();
     render();
     if(state.page==="favorites")renderFavPage();
     if(state.page==="myrecipes")renderMyRecipesPage();
+  },function(err){
+    console.error("Recipe subscription error:",err);
   });
 }
 
@@ -710,7 +715,7 @@ function submitRecipe(){
   document.querySelectorAll("#cr-ingredients .ing-row").forEach(function(row){
     var amt=row.querySelector(".amount").value.trim();
     var ing=row.querySelector(".ingredient").value.trim();
-    if(ing)ings.push([amt,ing]);
+    if(ing)ings.push({a:amt,n:ing});
   });
   if(ings.length===0){showCreateError("Add at least one ingredient");return}
 
@@ -723,7 +728,7 @@ function submitRecipe(){
     t:Number(temp),
     d:time,
     m:marinate||"N/A",
-    i:ings,
+    ingredients:ings,
     createdBy:currentUser.uid
   };
 
@@ -738,7 +743,8 @@ function submitRecipe(){
     btn.textContent="\u{1F969} Save Recipe";
     switchPage("myrecipes");
   }).catch(function(err){
-    showCreateError("Error saving: "+err.message);
+    console.error("Save error:",err);
+    showCreateError("Error: "+err.code+" - "+err.message);
     btn.disabled=false;
     btn.textContent="\u{1F969} Save Recipe";
   });
