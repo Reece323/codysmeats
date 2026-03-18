@@ -853,6 +853,38 @@ function openModal(r){
 }
 function closeModal(){resetTimer();document.getElementById("modal-overlay").classList.remove("open");document.body.style.overflow="";}
 
+function attachCardListeners(container){
+  container.querySelectorAll(".card").forEach(function(c){
+    c.addEventListener("click",function(e){
+      if(e.target.closest(".fav-btn"))return;
+      var all=getAllRecipes();
+      var idStr=c.getAttribute("data-id");
+      var r=all.find(function(x){return String(x.id)===idStr});
+      if(r)openModal(r);
+    });
+  });
+}
+
+function filter(){
+  var all=getAllRecipes();
+  return all.filter(function(r){
+    if(state.meat!=="All"&&r.meat!==state.meat)return false;
+    if(state.style!=="All"&&r.style!==state.style)return false;
+    if(state.spice>0&&r.spice!==state.spice)return false;
+    if(state.search){var s=state.search.toLowerCase();return r.name.toLowerCase().includes(s)||r.desc.toLowerCase().includes(s)||r.i.some(function(x){return x[1].toLowerCase().includes(s)})||r.meat.toLowerCase().includes(s)||r.style.toLowerCase().includes(s)}
+    return true;
+  });
+}
+
+function render(){
+  var f=filter();
+  var g=document.getElementById("recipe-grid"),e=document.getElementById("empty-state");
+  if(!f.length){g.innerHTML="";e.style.display="block"}
+  else{e.style.display="none";g.innerHTML=f.map(function(r,i){return renderCard(r,i)}).join("")}
+  var all=getAllRecipes();
+  document.getElementById("filter-count").textContent="Showing "+f.length+" of "+all.length+" recipes";
+  attachCardListeners(g);
+}
 
 function renderFilters(){
   var mf=document.getElementById("meat-filters");
