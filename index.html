@@ -407,7 +407,7 @@ body{padding-bottom:0}
 <div class="desktop-links">
 <button class="nav-link active" data-page="recipes">Recipes</button>
 <button class="nav-link" data-page="favorites">&#x2764; Favorites <span class="nav-fav-count" id="nav-fav-count" style="display:none">0</span></button>
-<button class="nav-link" data-page="myrecipes">My Recipes</button>
+<button class="nav-link" data-page="myrecipes">My Recipes <span class="nav-fav-count" id="nav-myrecipes-count" style="display:none">0</span></button>
 <button class="nav-link" data-page="create">+ Create</button>
 <button class="nav-link" data-page="shop">Shop</button>
 </div>
@@ -433,7 +433,7 @@ body{padding-bottom:0}
 <div class="tab-bar"><div class="tab-bar-inner">
 <button class="tab-btn active" data-page="recipes"><span class="tab-icon">&#x1F969;</span><span class="tab-label">Recipes</span></button>
 <button class="tab-btn" data-page="favorites"><span class="tab-icon">&#x2764;&#xFE0F;</span><span class="tab-label">Favs</span><span class="tab-badge" id="tab-fav-badge">0</span></button>
-<button class="tab-btn" data-page="myrecipes"><span class="tab-icon">&#x1F4D6;</span><span class="tab-label">Mine</span></button>
+<button class="tab-btn" data-page="myrecipes"><span class="tab-icon">&#x1F4D6;</span><span class="tab-label">Mine</span><span class="tab-badge" id="tab-myrecipes-badge">0</span></button>
 <button class="tab-btn" data-page="create"><span class="tab-icon">&#x2795;</span><span class="tab-label">Create</span></button>
 <button class="tab-btn" data-page="shop"><span class="tab-icon">&#x1F6D2;</span><span class="tab-label">Shop</span></button>
 </div></div>
@@ -702,6 +702,11 @@ function updateRecipeCount(){
   document.getElementById("footer-count").textContent=all.length;
   document.getElementById("hero-desc").textContent=all.length+" handcrafted recipes with full ingredients, dehydrator temps & times. "+(meats.length-1)+" meat types, "+(styles.length-1)+" flavor styles.";
   document.getElementById("hero-stats").innerHTML=[{n:all.length,l:"Recipes"},{n:meats.length-1,l:"Meat Types"},{n:styles.length-1,l:"Styles"},{n:all.filter(function(r){return r.spice===5}).length,l:"Extreme Heat"}].map(function(s){return '<div><div class="stat-num">'+s.n+'</div><div class="stat-label">'+s.l+'</div></div>'}).join("");
+  var myCount=userRecipes.length;
+  var navBadge=document.getElementById("nav-myrecipes-count");
+  var tabBadge=document.getElementById("tab-myrecipes-badge");
+  if(myCount>0){navBadge.style.display="inline-flex";navBadge.textContent=myCount;tabBadge.style.display="flex";tabBadge.textContent=myCount}
+  else{navBadge.style.display="none";tabBadge.style.display="none"}
 }
 
 // Recommendations
